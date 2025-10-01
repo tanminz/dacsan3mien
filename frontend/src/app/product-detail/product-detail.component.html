@@ -1,0 +1,59 @@
+<div class="product-details-container">
+  <div class="thumbnail-images">
+    <img *ngFor="let image of images; let i = index" [src]="image" alt="Thumbnail" (click)="selectImage(i)"
+      [class.selected]="i === selectedImageIndex" />
+  </div>
+
+  <div class="main-image">
+    <img [src]="images[selectedImageIndex]" alt="{{ product.product_name }}" />
+  </div>
+
+  <div class="product-info">
+    <p>Mã: {{ product._id || 'OLED42C2PSA' }}</p>
+    <p>
+      Tình trạng:
+      <span [ngClass]="{ 'in-stock': product.stocked_quantity > 0, 'out-of-stock': product.stocked_quantity === 0 }">
+        {{ product.stocked_quantity > 0 ? 'còn hàng (' + product.stocked_quantity + ')' : 'hết hàng' }}
+      </span>
+    </p>
+
+    <h1>{{ product.product_name || 'QUEENTIN' }}</h1>
+
+    <div class="rating-container">
+      <span *ngIf="isHovering" class="rating-value">{{ product.rating }}</span>
+      <div class="rating">
+        <div *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="star" (mouseenter)="onStarHover()"
+          (mouseleave)="onStarLeave()">
+          <div class="star-full" [ngStyle]="{ width: getStarFillPercentage(product.rating, star) + '%' }"></div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="product-specs">
+      <li>Kích cỡ: 51 - 20 - 156</li>
+      <li>Chiều ngang tròng (A): 51mm</li>
+      <li>Chiều dọc tròng (B): 42mm</li>
+      <li>Cầu mũi (C): 20mm</li>
+      <li>Chiều dài càng kính: 156mm</li>
+    </ul>
+
+    <h3 class="price">
+      <span *ngIf="getOriginalPrice() !== null" class="original-price">
+        {{ getOriginalPrice() | currency: 'VND' }}
+      </span>
+      <span class="current-price">{{ product.unit_price | currency: 'VND' }}</span>
+    </h3>
+
+    <div class="purchase-actions">
+      <div class="quantity-selector">
+        <button (click)="decreaseQuantity()" [disabled]="isOutOfStock">-</button>
+        <input type="number" [(ngModel)]="quantity" min="0" (input)="validateQuantity()" [disabled]="isOutOfStock" />
+        <button (click)="increaseQuantity()"
+          [disabled]="isOutOfStock || quantity >= product.stocked_quantity">+</button>
+      </div>
+      <button (click)="buyNow()" class="btn btn-primary" [disabled]="isOutOfStock">Mua ngay</button>
+      <button (click)="addToCart($event)" class="btn btn-outline-primary" [disabled]="isOutOfStock">Thêm vào
+        giỏ</button>
+    </div>
+  </div>
+</div>

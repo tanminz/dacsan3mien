@@ -1,0 +1,46 @@
+.slogan-container {
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background-color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.slogan-image {
+    max-width: 50%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.connect-button {
+    position: absolute;
+    bottom: 60px;
+    background-color: white;
+    color: #009cf8;
+    border: 2px solid #009cf8;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.connect-button:hover {
+    background-color: #009cf8;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .slogan-image {
+        max-width: 80%;
+    }
+
+    .connect-button {
+        display: none !important;
+    }
+}

@@ -1,0 +1,49 @@
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="section-title">Sản phẩm / {{ selectedCategory }} ({{ productCount }})</h5>
+    <div class="filter-controls d-flex">
+      <select (change)="filterByPrice($event)" class="form-select form-select-sm me-2">
+        <option value="">Lọc theo giá</option>
+        <option value="lowToHigh">Giá: Thấp đến Cao</option>
+        <option value="highToLow">Giá: Cao đến Thấp</option>
+      </select>
+      <select (change)="filterByTag($event)" class="form-select form-select-sm">
+        <option value="">Lọc theo tag</option>
+        <option value="new">Mới</option>
+        <option value="discount">Giảm giá</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="categories mb-2 text-center">
+    <div class="d-flex justify-content-center flex-wrap">
+      <div *ngFor="let category of categories" class="text-center mx-3 mb-2">
+        <div class="category-item" (click)="applyFilter(category.filterKey)">
+          <img [src]="category.image || 'default-category-image.jpg'" [alt]="category.name"
+            class="img-fluid rounded-circle category-image" [class.selected]="selectedCategory === category.filterKey">
+          <p [class.text-primary]="selectedCategory === category.filterKey" class="mt-2 small-text">
+            {{ category.name }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center">
+    Loading products...
+  </div>
+
+  <div *ngIf="!isLoading && errMessage" class="text-danger text-center">
+    {{ errMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && filteredProducts.length > 0" class="row">
+    <div *ngFor="let product of filteredProducts" class="col-lg-3 col-md-4 col-sm-6 d-flex align-items-stretch mb-4">
+      <app-product-item [product]="product"></app-product-item>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !filteredProducts.length" class="text-center">
+    <p class="text-muted">There are no products in this category.</p>
+  </div>
+</div>

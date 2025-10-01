@@ -1,0 +1,158 @@
+.product-details-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.thumbnail-images {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.thumbnail-images img {
+  width: 60px;
+  height: auto;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.thumbnail-images img.selected {
+  border-color: #009cf8;
+}
+
+.main-image {
+  flex: 1;
+  max-width: 400px;
+}
+
+.main-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.product-info {
+  max-width: 50%;
+  padding-left: 20px;
+}
+
+.product-info p {
+  margin: 0;
+  color: #777;
+}
+
+.product-info h1 {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.rating-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.rating-value {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  color: #000;
+  background: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.rating {
+  display: flex;
+  gap: 5px;
+}
+
+.star {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  background: #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.star:hover {
+  background-color: #f0e68c;
+}
+
+.star-full {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: #ffd700;
+  transition: width 0.3s ease-in-out;
+}
+
+.product-specs {
+  list-style: none;
+  padding: 0;
+  font-size: 14px;
+  color: #333;
+  margin-top: 15px;
+}
+
+.product-specs li {
+  margin-bottom: 5px;
+}
+
+.purchase-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.quantity-selector button {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.quantity-selector input {
+  width: 50px;
+  text-align: center;
+}
+
+.purchase-actions .btn {
+  padding: 10px 40px;
+  font-size: 16px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.current-price {
+  font-weight: 500;
+  color: #000;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #888;
+}

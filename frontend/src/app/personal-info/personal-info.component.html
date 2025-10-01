@@ -1,0 +1,87 @@
+<div class="container">
+    <div class="row g-4">
+        <div class="col-12 col-lg-7">
+            <h1 class="title">
+                <span class="gray">THÔNG TIN </span>
+                <span class="blue">TÀI KHOẢN</span>
+            </h1>
+
+            <p class="description">
+                Quản lý thông tin cá nhân của bạn để đảm bảo tính bảo mật và cập nhật các ưu đãi mới nhất từ Eyeconic.
+                Chúng tôi cam kết bảo vệ thông tin của bạn và mang đến trải nghiệm mua sắm tốt nhất.
+            </p>
+
+            <div class="info-card p-4">
+                <div class="info-item">
+                    <label class="info-label" for="profileName">Họ và tên</label>
+                    <div class="info-value" *ngIf="!isEditing">{{ personalInfo.profileName || 'Chưa cập nhật' }}</div>
+                    <input *ngIf="isEditing" id="profileName" [(ngModel)]="personalInfo.profileName"
+                        class="form-control" placeholder="Nhập họ và tên" title="Họ và tên" />
+                </div>
+
+                <div class="info-item">
+                    <label class="info-label" for="email">Email</label>
+                    <div class="info-value" *ngIf="!isEditing">{{ personalInfo.email || 'Chưa cập nhật' }}</div>
+                    <input *ngIf="isEditing" id="email" [(ngModel)]="personalInfo.email" class="form-control" disabled
+                        placeholder="Email" title="Email" />
+                </div>
+
+                <div class="info-item">
+                    <label class="info-label" for="phone">Số điện thoại</label>
+                    <div class="info-value" *ngIf="!isEditing">{{ personalInfo.phone || 'Chưa cập nhật' }}</div>
+                    <input *ngIf="isEditing" id="phone" [(ngModel)]="personalInfo.phone" class="form-control"
+                        placeholder="Nhập số điện thoại" title="Số điện thoại" autocomplete="tel" />
+                </div>
+
+                <div class="info-item">
+                    <label class="info-label" for="address">Địa chỉ</label>
+                    <div class="info-value" *ngIf="!isEditing">{{ personalInfo.address || 'Chưa cập nhật' }}</div>
+                    <input *ngIf="isEditing" id="address" [(ngModel)]="personalInfo.address" class="form-control"
+                        placeholder="Nhập địa chỉ" title="Địa chỉ" autocomplete="street-address" />
+                </div>
+
+                <div class="info-item">
+                    <label class="info-label">Ngày sinh</label>
+                    <div class="info-value" *ngIf="!isEditing">
+                        {{ personalInfo.birthDate?.day || 'DD' }}/
+                        {{ personalInfo.birthDate?.month || 'MM' }}/
+                        {{ personalInfo.birthDate?.year || 'YYYY' }}
+                    </div>
+                    <div *ngIf="isEditing" class="d-flex gap-2">
+                        <label for="day" class="visually-hidden">Ngày</label>
+                        <select id="day" class="form-select" [(ngModel)]="personalInfo.birthDate!.day" required
+                            title="Ngày sinh">
+                            <option value="">Ngày</option>
+                            <option *ngFor="let day of days" [value]="day">{{ day }}</option>
+                        </select>
+
+                        <label for="month" class="visually-hidden">Tháng</label>
+                        <select id="month" class="form-select" [(ngModel)]="personalInfo.birthDate!.month" required
+                            title="Tháng sinh">
+                            <option value="">Tháng</option>
+                            <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+                        </select>
+
+                        <label for="year" class="visually-hidden">Năm</label>
+                        <select id="year" class="form-select" [(ngModel)]="personalInfo.birthDate!.year" required
+                            title="Năm sinh">
+                            <option value="">Năm</option>
+                            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button *ngIf="!isEditing" class="btn btn-primary w-100 mt-3" (click)="editInfo()">Chỉnh sửa thông
+                tin</button>
+            <div *ngIf="isEditing" class="d-flex gap-2 mt-3">
+                <button class="btn btn-primary w-100" (click)="saveInfo()">Lưu</button>
+                <button class="btn btn-secondary w-100" (click)="cancelEdit()">Hủy</button>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-5 d-flex align-items-start justify-content-end">
+            <img src="assets/Logo.png" alt="Eyeconic decoration" class="img-fluid rounded mt-4" />
+        </div>
+    </div>
+</div>

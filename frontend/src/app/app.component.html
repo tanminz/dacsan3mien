@@ -1,0 +1,14 @@
+<ng-container *ngIf="!isAdminRoute">
+  <app-header></app-header>
+  <app-musicplayer></app-musicplayer>
+</ng-container>
+
+<div [ngClass]="{'content-with-padding': !isAdminRoute}">
+  <router-outlet></router-outlet>
+</div>
+
+<ng-container *ngIf="!isAdminRoute">
+  <app-support></app-support>
+  <app-chat></app-chat>
+  <app-footer></app-footer>
+</ng-container>
