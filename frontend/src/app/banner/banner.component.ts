@@ -1,0 +1,62 @@
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+
+@Component({
+  selector: 'app-banner',
+  templateUrl: './banner.component.html',
+  styleUrls: ['./banner.component.css']
+})
+export class BannerComponent implements AfterViewInit {
+  @ViewChild('video1', { static: true }) video1!: ElementRef<HTMLVideoElement>;
+  @ViewChild('video2', { static: true }) video2!: ElementRef<HTMLVideoElement>;
+
+  currentVideoIndex: number = 0;
+  videos: HTMLVideoElement[] = [];
+  progress: number[] = [0, 0];
+  intervalId: any;
+
+  ngAfterViewInit(): void {
+    this.videos = [this.video1.nativeElement, this.video2.nativeElement];
+    this.videos.forEach(video => (video.muted = true));
+    this.playVideo(0);
+  }
+
+  playVideo(index: number): void {
+    this.videos.forEach((video, i) => {
+      video.pause();
+      video.classList.remove('active');
+      video.currentTime = 0;
+      this.progress[i] = 0;
+    });
+
+    const video = this.videos[index];
+    video.classList.add('active');
+    video.play();
+    this.currentVideoIndex = index;
+
+    clearInterval(this.intervalId);
+    this.intervalId = setInterval(() => {
+      this.updateProgress(index);
+    }, 100);
+
+    video.onended = () => this.handleNextVideo();
+  }
+
+  updateProgress(index: number): void {
+    const video = this.videos[index];
+    const currentTime = video.currentTime;
+    const duration = video.duration;
+
+    if (duration > 0) {
+      this.progress[index] = (currentTime / duration) * 100;
+    }
+  }
+
+  handleNextVideo(): void {
+    const nextIndex = (this.currentVideoIndex + 1) % this.videos.length;
+    this.playVideo(nextIndex);
+  }
+
+  handleClick(index: number): void {
+    this.playVideo(index);
+  }
+}

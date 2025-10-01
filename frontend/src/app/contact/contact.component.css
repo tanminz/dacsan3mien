@@ -1,0 +1,43 @@
+.container {
+  padding-top: 20px;
+}
+
+.contact-card {
+  display: flex;
+  width: 100%;
+  max-width: 850px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.contact-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  background-color: #009cf8;
+  color: white;
+}
+
+.contact-info img {
+  max-width: 90%;
+  height: auto;
+}
+
+.contact-form .row {
+  margin-bottom: 1.5rem;
+}
+
+.contact-form label {
+  font-weight: 500;
+}
+
+.contact-form button {
+  padding: 10px 20px;
+}
+
+@media (max-width: 768px) {
+  .contact-card {
+    flex-direction: column !important;
+  }
+}

@@ -1,0 +1,48 @@
+.chatbot-container {
+    position: fixed;
+    bottom: 132px;
+    right: 11px;
+    z-index: 1050;
+}
+
+.chatbox {
+    width: 350px;
+    border-radius: 10px;
+}
+
+.card-body .badge {
+    max-width: 80%;
+    display: inline-block;
+    word-wrap: break-word;
+    font-weight: 500;
+    opacity: 1;
+}
+
+.card-body .text-end .badge {
+    background-color: #007bff;
+    color: white;
+    text-align: right;
+}
+
+.card-body .text-start .badge {
+    background-color: #f8f9fa;
+    color: #212529;
+    text-align: left;
+    font-weight: 500;
+    opacity: 1;
+}
+
+.unread-badge {
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

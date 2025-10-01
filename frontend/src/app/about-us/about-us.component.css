@@ -1,0 +1,26 @@
+.about img {
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.text-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.about h2 {
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.justified-text {
+  text-align: justify;
+  margin-top: 10px;
+}
+
+.text-blue {
+  color: #18A0FB;
+  font-weight: 500;
+}
