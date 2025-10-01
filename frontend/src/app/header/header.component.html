@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-1">
+  <div class="container-fluid d-flex align-items-center justify-content-between p-0">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse flex-grow-1 justify-content-start" id="navbarContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link text-primary fw-medium px-2" routerLink="/">Trang chủ</a></li>
+        <li class="nav-item"><a class="nav-link text-primary fw-medium px-2" routerLink="/catalog">Sản phẩm</a></li>
+        <li class="nav-item"><a class="nav-link text-primary fw-medium px-2" routerLink="/" fragment="events">Sự
+            kiện</a></li>
+        <li class="nav-item"><a class="nav-link text-primary fw-medium px-2" routerLink="/blog">Blog</a></li>
+        <li class="nav-item"><a class="nav-link text-primary fw-medium px-2" routerLink="/about">Giới thiệu</a></li>
+        <li class="nav-item"><a class="nav-link text-primary fw-medium px-2" routerLink="/contact">Liên hệ</a></li>
+        <li class="nav-item"><a class="nav-link text-primary fw-medium px-2" routerLink="/contact"
+            fragment="faqs">FAQs</a></li>
+      </ul>
+    </div>
+
+    <a class="navbar-brand mx-auto" routerLink="/">
+      <img src="assets/Logo.png" alt="Logo" width="120">
+    </a>
+
+    <div class="d-flex align-items-center justify-content-end flex-grow-1"
+      [ngClass]="{'is-logged-in': isLoggedIn, 'not-logged-in': !isLoggedIn}">
+      <form class="d-none d-lg-flex align-items-center" (submit)="performSearch(searchInput)">
+        <img src="assets/finding.png" width="24" alt="Search Icon" class="me-2">
+        <input #searchInput class="form-control form-control-sm me-2" type="search" name="search"
+          placeholder="Tìm kiếm sản phẩm....." aria-label="Search" [(ngModel)]="searchTerm" style="width: 150px;">
+      </form>
+
+      <div class="d-flex align-items-center ms-2">
+        <a routerLink="/cart" class="position-relative me-3">
+          <img src="assets/cart_icon.png" width="24" alt="Cart Icon">
+          <span *ngIf="cartItemCount > 0"
+            class="position-absolute top-0 start-100 translate-middle badge bg-danger text-white rounded-pill">
+            {{ cartItemCount }}
+          </span>
+        </a>
+
+        <a routerLink="/personal-info" class="position-relative me-3">
+          <i class="fa fa-user-circle"></i>
+        </a>
+
+        <button class="btn btn-outline-primary btn-sm px-3" (click)="handleLogout()">
+          {{ isLoggedIn ? 'Đăng xuất' : 'Đăng nhập' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>

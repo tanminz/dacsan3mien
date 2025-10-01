@@ -1,0 +1,26 @@
+.logo {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.about-text {
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.6;
+}
+
+.justified-text {
+    text-align: justify;
+    margin-top: 10px;
+}
+
+.larger-image {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (min-width: 768px) {
+    .larger-image {
+        margin-left: 150px;
+    }
+}

@@ -1,0 +1,107 @@
+<div class="container">
+    <div id="blogList" class="blog-list d-flex flex-column gap-3 mt-4">
+        <a href="javascript:void(0)" class="blog-item d-flex align-items-center text-decoration-none"
+            (click)="showBlogDetails('blog1')">
+            <img src="assets/anh1.jpg" alt="Contact Lens" class="img-fluid">
+            <div class="blog-content">
+                <h2>Nên sử dụng kính áp tròng hay kính có gọng?</h2>
+                <p>Chọn kính áp tròng hay kính gọng luôn là mối băn khoăn của nhiều người...</p>
+            </div>
+        </a>
+
+        <a href="javascript:void(0)" class="blog-item d-flex align-items-center text-decoration-none"
+            (click)="showBlogDetails('blog2')">
+            <img src="assets/matkinh.jpg" alt="Glasses" class="img-fluid">
+            <div class="blog-content">
+                <h2>Cách chọn mắt kính phù hợp với từng loại khuôn mặt</h2>
+                <p>Kính mắt là một phụ kiện thời trang quan trọng không chỉ để làm đẹp...</p>
+            </div>
+        </a>
+    </div>
+
+    <div id="blog1" class="blog-details" *ngIf="activeBlog === 'blog1'">
+        <h2>Nên sử dụng kính áp tròng hay kính có gọng?</h2>
+        <p>Chọn kính áp tròng hay kính gọng luôn là mối băn khoăn của nhiều người, đặc biệt là các bạn gái...</p>
+        <h3>Những điều cần biết về kính áp tròng</h3>
+        <p>Kính áp tròng hiện nay không còn là khái niệm xa lạ đối với những người gặp vấn đề về khúc xạ mắt...</p>
+        <p>Kính áp tròng bao gồm các loại: kính cứng, kính mềm và kính giãn tròng...</p>
+        <figure>
+            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/image.png?w=800" alt="Kính áp tròng"
+                class="img-fluid">
+        </figure>
+        <p>Kính áp tròng mềm được chia thành nhiều loại như dùng hàng ngày, hàng tuần...</p>
+        <figure>
+            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/image-1.png?w=800" alt="Kính giãn tròng"
+                class="img-fluid">
+        </figure>
+        <p>Kính áp tròng giúp khắc phục những nhược điểm của kính gọng:</p>
+        <ul>
+            <li>Mang đến một góc nhìn rộng và rõ ràng hơn.</li>
+            <li>Giữ được vẻ đẹp tự nhiên của đôi mắt.</li>
+            <li>Không tạo cảm giác nặng trên mũi, vướng víu, không dễ bị xô lệch khi vận động mạnh.</li>
+            <li>Có thể thay đổi màu mắt tùy theo ý muốn.</li>
+        </ul>
+        <p>Tuy nhiên, kính áp tròng không thích hợp để sử dụng lâu dài...</p>
+        <h3>Đặc điểm của kính gọng</h3>
+        <p>Kính gọng dễ dùng, không cần thay thường xuyên, tiết kiệm thời gian và chi phí...</p>
+        <figure>
+            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/b0ed6-d37a10_1b614c5c925a4c6caa0d2df8605635b4mv2.png"
+                alt="Kính gọng" class="img-fluid">
+        </figure>
+        <p>Tất nhiên, kính gọng cũng có nhược điểm...</p>
+        <h2>Nên sử dụng kính áp tròng hay kính có gọng?</h2>
+        <p>Kính áp tròng và kính gọng đều có ưu nhược điểm riêng...</p>
+        <p>Lưu ý khi đeo kính áp tròng:</p>
+        <ul>
+            <li>Đeo tối đa 6 – 8 tiếng mỗi ngày.</li>
+            <li>Bảo quản kính trong khay ngâm nước, thay nước rửa kính thường xuyên.</li>
+            <li>Sử dụng thuốc nhỏ mắt để tránh khô và đỏ mắt.</li>
+            <li>Dùng kính chắn bụi khi ra đường để bảo vệ kính áp tròng.</li>
+        </ul>
+        <figure>
+            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/b3893-d37a10_76e9eee7bc1b4654ab5bc9e7c6a65031mv2.jpg"
+                alt="Lưu ý khi dùng kính áp tròng" class="img-fluid">
+        </figure>
+        <p>Kính áp tròng và kính gọng đều có vai trò riêng...</p>
+        <a href="javascript:void(0)" class="back-link" (click)="showBlogDetails('blog1')">← Thu gọn</a>
+    </div>
+
+    <div id="blog2" class="blog-details" *ngIf="activeBlog === 'blog2'">
+        <h1>Cách chọn mắt kính phù hợp với từng loại khuôn mặt</h1>
+        <p>Kính mắt là một phụ kiện thời trang quan trọng...</p>
+        <h4>Hình dạng khuôn mặt của bạn là gì?</h4>
+        <p>Để xác định hình dạng khuôn mặt, hãy kéo tóc ra khỏi khuôn mặt và nhìn thẳng vào gương...</p>
+        <figure>
+            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/7f829-d37a10_271b77d16eb4469ead050196eabc8021mv2.webp"
+                alt="Hình dạng khuôn mặt" class="img-fluid">
+        </figure>
+        <h4>Gợi ý gọng kính phù hợp theo từng khuôn mặt:</h4>
+        <h5>Khuôn mặt tròn</h5>
+        <p>Đây là khuôn mặt điển hình của phụ nữ Việt Nam với phần trán rộng và cằm tròn trịa...</p>
+        <figure>
+            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/5c6ab-d37a10_fe72a638a9bf4ec896d7c70c3855c01emv2.png"
+                alt="Gọng kính cho khuôn mặt tròn" class="img-fluid">
+        </figure>
+        <h5>Khuôn mặt vuông</h5>
+        <p>Đặc điểm của khuôn mặt vuông là trán rộng, quai hàm bạnh và cằm vuông...</p>
+        <figure>
+            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/41002-d37a10_32bc2c2b949942f9958d7563ae36342emv2.png"
+                alt="Gọng kính cho khuôn mặt vuông" class="img-fluid">
+        </figure>
+        <h5>Khuôn mặt góc cạnh</h5>
+        <p>Đây là khuôn mặt với trán và cằm hẹp, gò má cao...</p>
+        <h5>Khuôn mặt trái tim</h5>
+        <p>Khuôn mặt trái tim có vầng trán rộng và cằm nhỏ...</p>
+        <figure>
+            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/46a4d-d37a10_6dba5ad8040f410ea54a04e105152c32mv2.png"
+                alt="Gọng kính cho khuôn mặt trái tim" class="img-fluid">
+        </figure>
+        <h5>Khuôn mặt trái xoan</h5>
+        <p>Khuôn mặt trái xoan có tỉ lệ cân đối với trán rộng hơn cằm...</p>
+        <figure>
+            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/7f829-d37a10_271b77d16eb4469ead050196eabc8021mv2.webp"
+                alt="Gọng kính cho khuôn mặt trái xoan" class="img-fluid">
+        </figure>
+        <a href="javascript:void(0)" class="back-link" (click)="showBlogDetails('blog2')">← Thu gọn</a>
+    </div>
+</div>

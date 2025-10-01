@@ -1,0 +1,162 @@
+.product-desc-container {
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 15px;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.tabs button.active {
+  color: #009cf8;
+  border-bottom: 2px solid #009cf8;
+}
+
+.tab-content {
+  padding: 10px 0;
+}
+
+.product-details {
+  list-style: none;
+  padding: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.product-details li {
+  margin-bottom: 8px;
+}
+
+.product-description {
+  margin-top: 15px;
+}
+
+.product-description h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #009cf8;
+  margin-bottom: 10px;
+}
+
+.product-description p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.review-card {
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.review-user {
+  font-weight: bold;
+  color: #009cf8;
+}
+
+.review-comment {
+  margin: 5px 0 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.review-time {
+  font-size: 12px;
+  color: #aaa;
+  margin-left: 10px;
+}
+
+.add-review {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.add-review textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  font-size: 14px;
+  resize: none;
+  height: 80px;
+}
+
+.submit-review-button {
+  align-self: flex-end;
+  background-color: #009cf8;
+  color: #fff;
+  font-size: 14px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-review-button:hover {
+  background-color: #007bb5;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 0.5px solid #009cf8;
+  background-color: transparent;
+  color: #009cf8;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.pagination button:hover:not(.active) {
+  background-color: #f0f0f0;
+}
+
+.pagination span {
+  display: inline-block;
+  line-height: 30px;
+}
+
+ng-template p {
+  color: #999;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 20px;
+}
