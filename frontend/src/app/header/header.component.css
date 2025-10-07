@@ -1,24 +1,33 @@
 .navbar {
   padding: 0.25rem 1rem;
-  background-color: #4e6c50 !important;
+  background-color: #1B1717 !important;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+/* Hiệu ứng trong suốt khi scroll */
+.navbar.scrolled {
+  background-color: rgba(27, 23, 23, 0.8) !important;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
 
 .navbar .fa-user-circle {
   font-size: 24px;
-  color: #820000;
+  color: #630000;
   transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .navbar-nav .nav-link {
   font-size: 0.85rem;
   padding: 0.25rem 0.5rem;
-  color: #f2deba !important;
+  color: #EEEBDD !important;
   position: relative;
   transition: color 0.3s;
 }
 
 .navbar-nav .nav-link:hover {
-  color: #820000;
+  color: #630000;
 }
 
 .navbar-nav .nav-link::after {
@@ -28,7 +37,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #820000;
+  background-color: #630000;
   transition: width 0.3s;
 }
 
@@ -50,18 +59,18 @@
   white-space: nowrap;
   padding: 0.25rem 1rem;
   color: #faecd6;
-  border-color: #f2deba;
+  border-color: #EEEBDD;
   transition: background-color 0.3s, color 0.3s;
 }
+
 .navbar .fa-user-circle {
   font-size: 24px;
-  color: #f2deba !important; 
+  color: #EEEBDD !important; 
   transition: transform 0.3s ease, color 0.3s ease;
 }
 
-
 .btn-outline-primary:hover {
-  background-color: #820000;
+  background-color: #630000;
   color: #ffffff;
 }
 

@@ -22,7 +22,7 @@ export class ChatComponent {
     'Xin chào! Bạn cần hỗ trợ gì?',
     'Chào mừng bạn! Tôi sẵn sàng hỗ trợ mọi câu hỏi của bạn.',
     'Hi! Bạn cần tìm hiểu gì? Tôi ở đây để giúp bạn.',
-    'Xin chào, tôi là Trợ lý của EYECONIC. Rất hân hạnh được phục vụ bạn.',
+    'Xin chào, tôi là Trợ lý của ĐẶC SẢN 3 MIỀN. Rất hân hạnh được phục vụ bạn.',
   ];
 
   constructor(private openAiService: OpenAiService) {

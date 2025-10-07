@@ -1,11 +1,31 @@
 body {
   font-family: 'Montserrat', sans-serif;
-  background-color: #f2deba !important;
-  color:#820000 !important;
+  background-color: #EEEBDD !important;
+  color:#630000 !important;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
 }
+
+
+/* Scroll Reveal base states */
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 600ms ease, transform 600ms ease;
+  will-change: opacity, transform;
+}
+
+.reveal-show {
+  opacity: 1;
+  transform: none;
+}
+
+/* Variants */
+.reveal-fade-up { }
+.reveal-fade-down { transform: translateY(-16px); }
+.reveal-fade-left { transform: translateX(24px); }
+.reveal-fade-right { transform: translateX(-24px); }
 
 
 .snowflake {
