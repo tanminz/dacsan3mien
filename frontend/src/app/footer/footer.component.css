@@ -8,19 +8,49 @@
     font-weight: bold;
     font-style: italic;
     margin-bottom: 5px;
-    color: #333;
+    color: #630000;
 }
 
 .contact-cell h4 {
     font-weight: bold;
     margin-bottom: 0.5rem;
-    color: #333;
+    color: #630000;
+}
+
+.contact-cell p a {
+    color: #630000;
+    text-decoration: none;
+}
+
+.contact-cell p a:hover {
+    color: #630000;
+    text-decoration: underline;
+}
+
+.feedback-cell h4 {
+    color: #630000;
+}
+
+.feedback-cell p {
+    color: #630000;
+}
+
+.btn-primary {
+    background-color: #630000;
+    border-color: #630000;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #6b0000;
+    border-color: #6b0000;
+    color: white;
 }
 
 .footer-section ul {
     list-style: none;
     padding-left: 0;
-    color: #666;
+    color: #630000;
     margin-bottom: 0;
 }
 
@@ -30,13 +60,13 @@
 }
 
 .footer-section ul li a {
-    color: #666;
+    color: #630000;
     text-decoration: none;
     transition: color 0.3s;
 }
 
 .footer-section ul li a:hover {
-    color: #820000;
+    color: #630000;
 }
 
 .icon {
@@ -54,24 +84,24 @@
 
 .signup-btn {
     background-color: white;
-    color: #007bff;
-    border: 1px solid #007bff;
+    color: #630000;
+    border: 1px solid #630000;
 }
 
 .signup-btn:hover {
-    background-color: #007bff;
+    background-color: #630000;
     color: white;
 }
 
 .login-btn {
-    background-color: #007bff;
+    background-color: #630000;
     color: white;
-    border: 1px solid #007bff;
+    border: 1px solid #630000;
 }
 
 .login-btn:hover {
-    background-color: #0056b3;
-    color: white;
+    background-color: white;
+    color: #630000;
 }
 
 .auth-buttons button {

@@ -4,24 +4,23 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    background-color: white;
+    background-color: #630000;
     padding: 10px;
     text-align: center;
 }
 
 .slogan-image {
-    max-width: 50%;
+    max-width: 66%;
     height: auto;
     border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .connect-button {
     position: absolute;
     bottom: 60px;
     background-color: white;
-    color: #009cf8;
-    border: 2px solid #009cf8;
+    color: #630000;
+    border: 2px solid #630000;
     padding: 10px 20px;
     font-size: 16px;
     font-weight: 500;
@@ -31,7 +30,7 @@
 }
 
 .connect-button:hover {
-    background-color: #009cf8;
+    background-color: #630000;
     color: white;
 }
 

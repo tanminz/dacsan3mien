@@ -19,7 +19,7 @@
 
 .faq-title {
   font-weight: bold;
-  color: #009cf8;
+  color: #630000;
   font-size: 1.8rem;
 }
 
@@ -34,7 +34,7 @@
 }
 
 .btn-toggle:hover {
-  color: #009cf8;
+  color: #630000;
 }
 
 .btn-toggle:focus {

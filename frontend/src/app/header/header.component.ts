@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CartService } from '../services/cart.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -13,6 +13,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   cartItemCount: number = 0;
   isLoggedIn: boolean = false;
   searchTerm: string = '';
+  isScrolled: boolean = false;
   private logoutSubscription: Subscription | null = null;
 
   constructor(
@@ -20,6 +21,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
   ) { }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    this.isScrolled = scrollTop > 50;
+  }
 
   ngOnInit(): void {
     this.cartService.cartItemsCount$.subscribe(count => {

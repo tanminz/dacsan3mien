@@ -17,6 +17,15 @@ export class BannerComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.videos = [this.video1.nativeElement, this.video2.nativeElement];
     this.videos.forEach(video => (video.muted = true));
+    // Warm up the non-active video shortly after first paint
+    setTimeout(() => {
+      const next = this.videos[1];
+      if (next && next.preload !== 'auto') {
+        next.preload = 'metadata';
+        next.load();
+      }
+    }, 300);
+
     this.playVideo(0);
   }
 
@@ -37,6 +46,18 @@ export class BannerComponent implements AfterViewInit {
     this.intervalId = setInterval(() => {
       this.updateProgress(index);
     }, 100);
+
+    // Preload the next video near the end of current playback
+    video.ontimeupdate = () => {
+      if (video.duration && video.currentTime > video.duration - 1.5) {
+        const nextIndex = (index + 1) % this.videos.length;
+        const next = this.videos[nextIndex];
+        if (next && next.preload !== 'auto') {
+          next.preload = 'auto';
+          next.load();
+        }
+      }
+    };
 
     video.onended = () => this.handleNextVideo();
   }
