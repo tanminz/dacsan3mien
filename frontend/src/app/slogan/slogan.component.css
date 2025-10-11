@@ -1,14 +1,16 @@
-.slogan-image {
-  max-width: 50%;
+ bổbổ.slogan-image {
+  max-width: 80%;
   height: auto;
-  border-radius: 15px;
 }
 
 .slogan-text-box {
   font-size: 1.5rem;
-  padding: 2rem;
   max-width: 800px;
   margin: 0 auto;
+}
+
+.slogan-highlight {
+  color: #630000;
 }
 
 @media (max-width: 768px) {
