@@ -16,3 +16,49 @@
 .scroll-to-top:hover {
     background-color: rgba(128, 128, 128, 0.9);
 }
+
+.certificate-title {
+    color: #630000;
+    font-weight: bold;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.certificate-image {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #dee2e6;
+    transition: transform 0.3s ease;
+}
+
+.certificate-image:hover {
+    transform: scale(1.02);
+}
+
+.certificate-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2c3e50;
+    line-height: 1.6;
+    border-left: 4px solid #ff685b;
+}
+
+@media (max-width: 768px) {
+    .certificate-title {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+    }
+    
+    .certificate-text {
+        font-size: 1rem;
+        padding: 20px !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .certificate-title {
+        font-size: 3rem;
+    }
+}
