@@ -1,56 +1,56 @@
 .container-fluid {
-    padding: 1rem 0;
+    padding: 2rem 0;
     max-width: 100%;
     overflow-x: hidden;
+    background: linear-gradient(to bottom, #810000 0%, #630000 70%, #1B1717 100%);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+    color: #EEEBDD;
+    border-top: none;
 }
 
 .footer-section h6 {
-    font-weight: bold;
-    font-style: italic;
-    margin-bottom: 5px;
-    color: #630000;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: #EEEBDD;
+    letter-spacing: 0.5px;
 }
 
-.contact-cell h4 {
+.best-choice {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #EEEBDD;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.contact-cell h4,
+.feedback-cell h4 {
+    color: #EEEBDD;
     font-weight: bold;
     margin-bottom: 0.5rem;
-    color: #630000;
+}
+
+.contact-cell p,
+.feedback-cell p,
+.footer-section ul li {
+    color: #EEEBDD;
+    font-size: 0.9rem;
 }
 
 .contact-cell p a {
-    color: #630000;
+    color: #EEEBDD;
     text-decoration: none;
 }
 
 .contact-cell p a:hover {
-    color: #630000;
     text-decoration: underline;
-}
-
-.feedback-cell h4 {
-    color: #630000;
-}
-
-.feedback-cell p {
-    color: #630000;
-}
-
-.btn-primary {
-    background-color: #630000;
-    border-color: #630000;
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: #6b0000;
-    border-color: #6b0000;
-    color: white;
 }
 
 .footer-section ul {
     list-style: none;
     padding-left: 0;
-    color: #630000;
     margin-bottom: 0;
 }
 
@@ -60,13 +60,27 @@
 }
 
 .footer-section ul li a {
-    color: #630000;
+    color: #EEEBDD;
     text-decoration: none;
     transition: color 0.3s;
 }
 
 .footer-section ul li a:hover {
+    color: #EEEBDD;
+    text-decoration: underline;
+}
+
+.feedback-row-3 button {
+    background-color: #EEEBDD;
+    border: 1px solid #EEEBDD;
     color: #630000;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.feedback-row-3 button:hover {
+    background-color: #630000;
+    color: #EEEBDD;
 }
 
 .icon {
@@ -165,7 +179,6 @@
 }
 
 @media (max-width: 576px) {
-
     .info-cell,
     .support-cell,
     .policy-cell {
