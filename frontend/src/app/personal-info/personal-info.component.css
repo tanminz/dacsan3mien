@@ -5,6 +5,11 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+body {
+    background-color: #EEEBDD;
+    color: #1B1717;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -13,32 +18,35 @@
 
 .title {
     margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .title span.gray {
-    color: #333;
+    color: #1B1717;
 }
 
 .title span.blue {
-    color: #009cf8;
+    color: #810000;
 }
 
 .description {
-    color: #666;
+    color: #630000;
     margin-bottom: 30px;
     text-align: justify;
 }
 
 .info-card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(27, 23, 23, 0.1);
+    padding: 30px;
 }
 
 .info-item {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #EEEBDD;
 }
 
 .info-item:last-child {
@@ -46,37 +54,43 @@
 }
 
 .info-label {
-    color: #666;
+    color: #630000;
     font-size: 14px;
     margin-bottom: 5px;
 }
 
 .info-value {
-    color: #333;
+    color: #1B1717;
     font-weight: 500;
 }
 
 .btn-primary {
-    background-color: #009cf8;
+    background-color: #810000;
+    color: #EEEBDD;
     border: none;
     padding: 12px 24px;
-    border-radius: 5px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #630000;
+}
+
+.btn-secondary {
+    background-color: #bcb7b7;
+    color: #1B1717;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
 }
 
-.btn-primary:hover {
-    background-color: #0088e0;
-}
-
-.btn-secondary {
-    background-color: #ccc;
-    color: #333;
-    border: none;
-}
-
 .btn-secondary:hover {
-    background-color: #b3b3b3;
+    background-color: #a29c9c;
 }
 
 @media (max-width: 992px) {
