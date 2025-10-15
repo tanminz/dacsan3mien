@@ -1,107 +1,724 @@
-<div class="container">
-    <div id="blogList" class="blog-list d-flex flex-column gap-3 mt-4">
-        <a href="javascript:void(0)" class="blog-item d-flex align-items-center text-decoration-none"
-            (click)="showBlogDetails('blog1')">
-            <img src="assets/anh1.jpg" alt="Contact Lens" class="img-fluid">
-            <div class="blog-content">
-                <h2>Nên sử dụng kính áp tròng hay kính có gọng?</h2>
-                <p>Chọn kính áp tròng hay kính gọng luôn là mối băn khoăn của nhiều người...</p>
-            </div>
-        </a>
+<div class="container my-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Tin tức</li>
+        </ol>
+    </nav>
 
-        <a href="javascript:void(0)" class="blog-item d-flex align-items-center text-decoration-none"
-            (click)="showBlogDetails('blog2')">
-            <img src="assets/matkinh.jpg" alt="Glasses" class="img-fluid">
-            <div class="blog-content">
-                <h2>Cách chọn mắt kính phù hợp với từng loại khuôn mặt</h2>
-                <p>Kính mắt là một phụ kiện thời trang quan trọng không chỉ để làm đẹp...</p>
+    <!-- Hiển thị danh sách blog -->
+    <div *ngIf="!activeBlog">
+        <h1 class="page-title text-center mb-5">TIN TỨC</h1>
+        
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col" *ngFor="let blog of blogs">
+                <div class="blog-card h-100">
+                    <div class="blog-card-image">
+                        <img [src]="blog.image" [alt]="blog.title" class="w-100">
+                    </div>
+                    <div class="blog-card-body">
+                        <h2 class="blog-card-title">{{ blog.title }}</h2>
+                        <p class="blog-card-description">{{ blog.description }}</p>
+                        <div class="blog-card-footer">
+                            <div class="blog-date">
+                                <i class="far fa-calendar-alt me-2"></i>
+                                <span>{{ blog.date }}</span>
+                            </div>
+                            <button class="btn-view-more" (click)="viewBlogDetail(blog.id)">
+                                Xem thêm →
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </a>
+        </div>
     </div>
 
-    <div id="blog1" class="blog-details" *ngIf="activeBlog === 'blog1'">
-        <h2>Nên sử dụng kính áp tròng hay kính có gọng?</h2>
-        <p>Chọn kính áp tròng hay kính gọng luôn là mối băn khoăn của nhiều người, đặc biệt là các bạn gái...</p>
-        <h3>Những điều cần biết về kính áp tròng</h3>
-        <p>Kính áp tròng hiện nay không còn là khái niệm xa lạ đối với những người gặp vấn đề về khúc xạ mắt...</p>
-        <p>Kính áp tròng bao gồm các loại: kính cứng, kính mềm và kính giãn tròng...</p>
-        <figure>
-            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/image.png?w=800" alt="Kính áp tròng"
-                class="img-fluid">
-        </figure>
-        <p>Kính áp tròng mềm được chia thành nhiều loại như dùng hàng ngày, hàng tuần...</p>
-        <figure>
-            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/image-1.png?w=800" alt="Kính giãn tròng"
-                class="img-fluid">
-        </figure>
-        <p>Kính áp tròng giúp khắc phục những nhược điểm của kính gọng:</p>
+    <!-- Blog 1: Chè Tân Cương -->
+    <div *ngIf="activeBlog === 'che-tan-cuong'" class="blog-detail">
+        <button class="btn-back mb-4" (click)="showBlogList()">
+            ← Quay lại danh sách
+        </button>
+        
+        <h1>🌟 CHÈ TÂN CƯƠNG – LINH HỒN CỦA ĐẤT TRÀ THÁI NGUYÊN</h1>
+        <p class="blog-meta">
+            <i class="far fa-calendar-alt me-2"></i>15/01/2025 | <strong>Vùng: Bắc Bộ (Thái Nguyên)</strong>
+        </p>
+        
+        <img src="/assets/provinces/Thái Nguyên.jpg" alt="Chè Tân Cương Thái Nguyên" class="img-fluid mb-4">
+        
+        <p>Chè Tân Cương Thái Nguyên không chỉ là một loại trà nổi tiếng của Việt Nam, mà còn là biểu tượng văn hóa, là niềm tự hào của vùng đất Thái Nguyên. Với hương thơm đặc trưng, vị chát nhẹ và hậu vị ngọt thanh kéo dài, chè Tân Cương đã chinh phục biết bao tâm hồn yêu trà.</p>
+        
+        <h3>Nguồn gốc vùng đất Tân Cương</h3>
+        <p>Tân Cương là một xã thuộc huyện Đại Từ, tỉnh Thái Nguyên, nằm ở độ cao từ 200-300m so với mặt nước biển. Vùng đất này có khí hậu ôn hòa, mưa nhiều, sương mù quanh năm – những điều kiện tự nhiên lý tưởng cho cây chè phát triển. Đất đỏ bazan giàu dinh dưỡng kết hợp với khí hậu đặc trưng đã tạo nên hương vị độc đáo không thể nhầm lẫn của chè Tân Cương.</p>
+        
+        <p>Người dân nơi đây đã gắn bó với nghề trồng chè từ hàng trăm năm trước. Từng búp chè non được hái tay cẩn thận vào sáng sớm, khi sương còn đọng trên lá, đảm bảo độ tươi và chất lượng tốt nhất.</p>
+        
+        <h3>Quy trình sao chè truyền thống</h3>
+        <p>Điều làm nên đẳng cấp của chè Tân Cương chính là quy trình sao chè thủ công tỉ mỉ, được truyền từ đời này sang đời khác:</p>
+        
         <ul>
-            <li>Mang đến một góc nhìn rộng và rõ ràng hơn.</li>
-            <li>Giữ được vẻ đẹp tự nhiên của đôi mắt.</li>
-            <li>Không tạo cảm giác nặng trên mũi, vướng víu, không dễ bị xô lệch khi vận động mạnh.</li>
-            <li>Có thể thay đổi màu mắt tùy theo ý muốn.</li>
+            <li><strong>Hái chè:</strong> Chỉ hái những búp non "một tôm hai lá" vào sáng sớm khi sương còn đọng.</li>
+            <li><strong>Ủ chè:</strong> Búp chè được ủ từ 2-4 giờ để giảm độ ẩm và tạo hương thơm.</li>
+            <li><strong>Sao chè:</strong> Đây là bước quan trọng nhất, chè được sao trên chảo gang nóng với nhiệt độ và thời gian chính xác, tay nghệ nhân phải liên tục xào đều để chè không bị cháy.</li>
+            <li><strong>Làm thơm:</strong> Sau khi sao, chè được ủ thêm lần nữa để tăng hương thơm và vị ngọt hậu.</li>
+            <li><strong>Sấy khô:</strong> Chè được sấy ở nhiệt độ thấp để giữ màu xanh tự nhiên và hương cốm non.</li>
         </ul>
-        <p>Tuy nhiên, kính áp tròng không thích hợp để sử dụng lâu dài...</p>
-        <h3>Đặc điểm của kính gọng</h3>
-        <p>Kính gọng dễ dùng, không cần thay thường xuyên, tiết kiệm thời gian và chi phí...</p>
-        <figure>
-            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/b0ed6-d37a10_1b614c5c925a4c6caa0d2df8605635b4mv2.png"
-                alt="Kính gọng" class="img-fluid">
-        </figure>
-        <p>Tất nhiên, kính gọng cũng có nhược điểm...</p>
-        <h2>Nên sử dụng kính áp tròng hay kính có gọng?</h2>
-        <p>Kính áp tròng và kính gọng đều có ưu nhược điểm riêng...</p>
-        <p>Lưu ý khi đeo kính áp tròng:</p>
+        
+        <p>Chính quy trình này đã giữ được hương cốm non đặc trưng và vị ngọt hậu thanh mát của chè Tân Cương, điều mà không một loại trà nào có thể sao chép.</p>
+        
+        <h3>Nghệ thuật thưởng trà tao nhã</h3>
+        <p>Thưởng trà không chỉ đơn thuần là uống, mà còn là một nghệ thuật văn hóa tinh tế của người Việt. Để thưởng thức trọn vẹn hương vị chè Tân Cương, người sành trà thường tuân theo các bước:</p>
+        
         <ul>
-            <li>Đeo tối đa 6 – 8 tiếng mỗi ngày.</li>
-            <li>Bảo quản kính trong khay ngâm nước, thay nước rửa kính thường xuyên.</li>
-            <li>Sử dụng thuốc nhỏ mắt để tránh khô và đỏ mắt.</li>
-            <li>Dùng kính chắn bụi khi ra đường để bảo vệ kính áp tròng.</li>
+            <li>Dùng ấm sứ hoặc ấm tử sa, ủ chè với nước sôi từ 90-95°C</li>
+            <li>Rót nước đầu tiên để "rửa trà", sau đó mới pha uống</li>
+            <li>Mỗi lần pha khoảng 30-45 giây, có thể pha đến 5-7 lần</li>
+            <li>Nhấp từng ngụm nhỏ, cảm nhận hương thơm bay lên, vị chát nhẹ và hậu vị ngọt thanh</li>
         </ul>
-        <figure>
-            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/b3893-d37a10_76e9eee7bc1b4654ab5bc9e7c6a65031mv2.jpg"
-                alt="Lưu ý khi dùng kính áp tròng" class="img-fluid">
-        </figure>
-        <p>Kính áp tròng và kính gọng đều có vai trò riêng...</p>
-        <a href="javascript:void(0)" class="back-link" (click)="showBlogDetails('blog1')">← Thu gọn</a>
+        
+        <p>Trong không gian yên tĩnh, một tách trà nóng, cùng bạn bè tri kỷ chia sẻ câu chuyện cuộc đời – đó chính là tinh hoa văn hóa trà đạo Việt Nam.</p>
+        
+        <h3>Hành trình đưa thương hiệu ra quốc tế</h3>
+        <p>Chè Tân Cương không chỉ nổi tiếng trong nước mà còn được xuất khẩu sang nhiều nước trên thế giới như Trung Quốc, Đài Loan, Nhật Bản, Nga, và các nước châu Âu. Năm 2012, "Chè Tân Cương Thái Nguyên" đã được công nhận là sản phẩm chỉ dẫn địa lý, khẳng định vị thế và chất lượng của sản phẩm.</p>
+        
+        <p>Nhiều thương hiệu chè Tân Cương nổi tiếng như Chè Thái Nguyên Ngọc Sơn, Chè Cổ Truyền Tân Cương, Chè Shan Tuyết Tân Cương... đã và đang từng bước chinh phục thị trường quốc tế, mang hương vị đặc sắc của Việt Nam đến với bạn bè khắp năm châu.</p>
+        
+        <p><em>Một tách chè Tân Cương không chỉ là thức uống, mà là câu chuyện về đất trời, về con người, và về tình yêu với truyền thống văn hóa Việt Nam.</em></p>
     </div>
 
-    <div id="blog2" class="blog-details" *ngIf="activeBlog === 'blog2'">
-        <h1>Cách chọn mắt kính phù hợp với từng loại khuôn mặt</h1>
-        <p>Kính mắt là một phụ kiện thời trang quan trọng...</p>
-        <h4>Hình dạng khuôn mặt của bạn là gì?</h4>
-        <p>Để xác định hình dạng khuôn mặt, hãy kéo tóc ra khỏi khuôn mặt và nhìn thẳng vào gương...</p>
-        <figure>
-            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/7f829-d37a10_271b77d16eb4469ead050196eabc8021mv2.webp"
-                alt="Hình dạng khuôn mặt" class="img-fluid">
-        </figure>
-        <h4>Gợi ý gọng kính phù hợp theo từng khuôn mặt:</h4>
-        <h5>Khuôn mặt tròn</h5>
-        <p>Đây là khuôn mặt điển hình của phụ nữ Việt Nam với phần trán rộng và cằm tròn trịa...</p>
-        <figure>
-            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/5c6ab-d37a10_fe72a638a9bf4ec896d7c70c3855c01emv2.png"
-                alt="Gọng kính cho khuôn mặt tròn" class="img-fluid">
-        </figure>
-        <h5>Khuôn mặt vuông</h5>
-        <p>Đặc điểm của khuôn mặt vuông là trán rộng, quai hàm bạnh và cằm vuông...</p>
-        <figure>
-            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/41002-d37a10_32bc2c2b949942f9958d7563ae36342emv2.png"
-                alt="Gọng kính cho khuôn mặt vuông" class="img-fluid">
-        </figure>
-        <h5>Khuôn mặt góc cạnh</h5>
-        <p>Đây là khuôn mặt với trán và cằm hẹp, gò má cao...</p>
-        <h5>Khuôn mặt trái tim</h5>
-        <p>Khuôn mặt trái tim có vầng trán rộng và cằm nhỏ...</p>
-        <figure>
-            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/46a4d-d37a10_6dba5ad8040f410ea54a04e105152c32mv2.png"
-                alt="Gọng kính cho khuôn mặt trái tim" class="img-fluid">
-        </figure>
-        <h5>Khuôn mặt trái xoan</h5>
-        <p>Khuôn mặt trái xoan có tỉ lệ cân đối với trán rộng hơn cằm...</p>
-        <figure>
-            <img src="https://commer72.wordpress.com/wp-content/uploads/2024/11/7f829-d37a10_271b77d16eb4469ead050196eabc8021mv2.webp"
-                alt="Gọng kính cho khuôn mặt trái xoan" class="img-fluid">
-        </figure>
-        <a href="javascript:void(0)" class="back-link" (click)="showBlogDetails('blog2')">← Thu gọn</a>
+    <!-- Blog 2: Mắm cá linh Cà Mau -->
+    <div *ngIf="activeBlog === 'mam-ca-linh-ca-mau'" class="blog-detail">
+        <button class="btn-back mb-4" (click)="showBlogList()">
+            ← Quay lại danh sách
+        </button>
+        
+        <h1>🐟 MẮM CÁ LINH CÀ MAU – HƯƠNG VỊ MÙA NƯỚC NỔI MIỀN TÂY</h1>
+        <p class="blog-meta">
+            <i class="far fa-calendar-alt me-2"></i>14/01/2025 | <strong>Vùng: Nam Bộ (Cà Mau)</strong>
+        </p>
+        
+        <img src="/assets/mắm cá linh.jpg" alt="Mắm cá linh Cà Mau" class="img-fluid mb-4">
+        
+        <p>Ở miền Tây Nam Bộ, khi mùa nước nổi tràn về, người dân lại háo hức đón mùa cá linh – loài cá nhỏ bé mà thơm ngon, được xem là "lộc trời ban" của vùng sông nước. Từ cá linh tươi, người dân Cà Mau sáng tạo nên món mắm cá linh – một trong những đặc sản trứ danh, mang trọn hương vị đồng quê và đậm đà bản sắc miền Tây.</p>
+        
+        <h3>🌾 Mùa cá linh – mùa của phù sa và no đủ</h3>
+        <p>Mỗi năm, vào khoảng tháng 8–11 âm lịch, khi nước từ thượng nguồn sông Mekong đổ về, những đàn cá linh non cũng theo dòng nước tràn vào đồng ruộng miền Tây. Cá linh (tên khoa học: Henicorhynchus siamensis) là loại cá nhỏ, có chiều dài khoảng 5-10cm, thân hình dẹp, màu bạc óng ánh dưới nước.</p>
+        
+        <p>Người dân Cà Mau gọi đây là "mùa cá linh", bởi trong khoảng 3 tháng ấy, cá linh xuất hiện dày đặc ở các con kênh, rạch, đồng ruộng. Thịt cá mềm, xương nhỏ, béo và ngọt – đặc biệt thơm ngon. Đây cũng là thời điểm mà phù sa từ thượng nguồn được mang về, làm màu mỡ đất đai, nuôi dưỡng mùa màng bội thu.</p>
+        
+        <p>Cũng chính từ mùa nước nổi ấy mà nghề làm mắm cá linh ra đời, trở thành nét văn hóa đặc trưng của vùng sông nước Cửu Long. Người dân đánh bắt cá linh rồi chế biến thành mắm để bảo quản lâu, vừa để dành cho gia đình, vừa làm thương phẩm mang ra chợ bán.</p>
+        
+        <h3>🐠 Công phu trong từng mẻ mắm</h3>
+        <p>Để làm ra một hũ mắm cá linh ngon, người thợ phải trải qua nhiều công đoạn tỉ mỉ:</p>
+        
+        <h4>1. Chọn cá:</h4>
+        <p>Cá linh tươi, đều con, không bị dập nát được lựa chọn kỹ càng. Cá được rửa sạch nhiều lần với nước muối loãng, bỏ mang để giảm tanh, sau đó để ráo nước hoàn toàn. Việc chọn cá tươi và xử lý sạch sẽ là yếu tố quan trọng nhất quyết định chất lượng mắm.</p>
+        
+        <h4>2. Ướp muối:</h4>
+        <p>Theo tỉ lệ vàng 3 cá – 1 muối, cá được trộn đều với muối biển hạt to, sau đó cho vào chum hoặc vại sành, đậy kín. Lớp muối sẽ giúp cá khử nước và bắt đầu quá trình lên men ban đầu. Thời gian ướp kéo dài từ 10–15 ngày, trong đó người thợ phải thường xuyên kiểm tra và đổ bỏ nước cá tiết ra để tránh mắm bị hỏng.</p>
+        
+        <h4>3. Pha thính:</h4>
+        <p>Sau khi cá thấm muối và săn lại, người thợ trộn thêm thính gạo rang giã nhuyễn. Thính gạo có vai trò quan trọng trong việc tạo mùi thơm đặc trưng, giúp mắm dậy hương và có độ sánh vừa phải. Một số người còn thêm đường, tỏi, ớt để tăng hương vị.</p>
+        
+        <h4>4. Ủ chượp:</h4>
+        <p>Mắm được ủ tiếp trong 2–3 tháng trong chum kín, đặt ở nơi râm mát. Trong thời gian này, quá trình lên men tự nhiên diễn ra, protein trong cá phân hủy thành amino acid, tạo nên hương vị đặc trưng. Mắm chín khi thịt cá săn, chuyển màu nâu đỏ và dậy hương thơm nồng đượm – đó là lúc mắm "chín tới".</p>
+        
+        <p>Công thức làm mắm được truyền qua nhiều thế hệ, và hầu như mỗi gia đình đều có bí quyết riêng để giữ được vị ngon đặc trưng. Có nhà thêm lá ổi non để mắm thơm hơn, có nhà lại thêm nước cốt dừa để mắm béo ngậy.</p>
+        
+        <h3>🌶️ Hương vị dân dã – linh hồn của bữa cơm miền Tây</h3>
+        <p>Mắm cá linh Cà Mau có mùi thơm nồng đặc trưng, vị mặn đậm đà hòa với vị ngọt hậu từ thịt cá lên men tự nhiên. Màu sắc của mắm chín là nâu đỏ, sánh mịn, thịt cá còn nguyên con nhưng đã mềm, tan ngay khi nhai.</p>
+        
+        <p>Mắm cá linh có nhiều cách thưởng thức:</p>
+        
+        <ul>
+            <li><strong>Ăn sống:</strong> Mắm được múc ra đĩa, thêm ít ớt, tỏi, chanh, ăn với cơm trắng nóng và rau sống như cải bẹ xanh, rau muống luộc, dưa leo...</li>
+            <li><strong>Lẩu mắm:</strong> Món ăn đặc trưng nhất của miền Tây, nồi lẩu mắm sôi sùng sục với cá lóc, ba khía, cà tím, bông súng, rau đắng, hẹ... Nước lẩu chua cay đậm đà, thơm nức mũi.</li>
+            <li><strong>Bún mắm:</strong> Bún trắng chan nước mắm loãng, cho thêm thịt heo, tôm, cá lóc chiên, chả giò, rau sống... Đây là món ăn sáng phổ biến ở miền Tây.</li>
+            <li><strong>Mắm kho:</strong> Mắm cá linh kho với thịt ba rọi, thêm ít đường để canh vị, ăn với cơm rất đưa cơm.</li>
+        </ul>
+        
+        <p>Mắm cá linh khi nấu cùng cà tím, thịt ba rọi, bông súng, rau đắng, hẹ, bạc hà... sẽ tạo nên hương vị khó quên – vừa dân dã, vừa tràn đầy sức sống của vùng đất phương Nam.</p>
+        
+        <h3>⚓ Từ món ăn dân quê đến đặc sản trứ danh</h3>
+        <p>Ngày nay, mắm cá linh Cà Mau không chỉ là món ăn quen thuộc trong các bữa cơm quê, mà còn trở thành đặc sản được đóng hũ, đóng chai để du khách mang về làm quà. Nhiều thương hiệu mắm cá linh uy tín đã được hình thành, đáp ứng nhu cầu của thị trường trong và ngoài nước.</p>
+        
+        <p>Các làng nghề mắm truyền thống như Phường 7, Phường 8 (TP. Cà Mau), xã Đất Mũi vẫn giữ nguyên cách làm thủ công, không chất bảo quản, giúp mắm giữ được hương vị tự nhiên nhất. Mỗi hũ mắm là tâm huyết của người làm nghề, là niềm tự hào về sản vật quê hương.</p>
+        
+        <p>Mắm cá linh Cà Mau cũng góp phần đưa hình ảnh ẩm thực miền Tây ra thế giới – nơi mỗi hũ mắm không chỉ chứa đựng hương vị, mà còn là ký ức, là tấm lòng mộc mạc của người dân sông nước. Nhiều du khách sau khi thưởng thức đã không quên mang theo vài hũ mắm về tặng người thân, chia sẻ hương vị đặc biệt này.</p>
+        
+        <h3>Giá trị dinh dưỡng và sức khỏe</h3>
+        <p>Mắm cá linh không chỉ ngon mà còn giàu dinh dưỡng:</p>
+        
+        <ul>
+            <li><strong>Protein cao:</strong> Cá linh giàu protein tốt cho cơ bắp và sức khỏe tổng thể</li>
+            <li><strong>Canxi:</strong> Do ăn cả xương cá nên bổ sung canxi tốt cho xương khớp</li>
+            <li><strong>Men vi sinh:</strong> Quá trình lên men tạo ra men vi sinh có lợi cho đường ruột</li>
+            <li><strong>Omega-3:</strong> Có trong cá linh, tốt cho tim mạch và não bộ</li>
+        </ul>
+        
+        <p>Tuy nhiên, do hàm lượng muối cao, người bị huyết áp cao nên hạn chế ăn mắm hoặc ăn với lượng vừa phải.</p>
+        
+        <div class="highlight-box" style="background-color: #e8f5e9; padding: 20px; border-left: 4px solid #4caf50; margin: 20px 0;">
+            <p><em><strong>"Chỉ cần một chén mắm cá linh, một rổ rau đồng quê và bát cơm nóng – là đủ gói trọn hồn quê miền Tây."</strong></em></p>
+        </div>
+        
+        <p><em>Mắm cá linh Cà Mau – hương vị mùa nước nổi, là món quà thiên nhiên ban tặng, là tâm hồn ẩm thực miền Tây sông nước, là di sản văn hóa quý giá cần được gìn giữ và lan tỏa.</em></p>
+    </div>
+
+    <!-- Blog 3: Cá cơm sấy giòn Nghệ An -->
+    <div *ngIf="activeBlog === 'ca-com-say-gion-nghe-an'" class="blog-detail">
+        <button class="btn-back mb-4" (click)="showBlogList()">
+            ← Quay lại danh sách
+        </button>
+        
+        <h1>🐟 CÁ CƠM SẤY GIÒN NGHỆ AN – VỊ BIỂN MẶN MÀ, GIÒN TAN TRÊN ĐẦU LƯỠI</h1>
+        <p class="blog-meta">
+            <i class="far fa-calendar-alt me-2"></i>13/01/2025 | <strong>Vùng: Bắc Trung Bộ (Nghệ An)</strong>
+        </p>
+        
+        <img src="/assets/cá cơm sấy giòn.jpg" alt="Cá cơm sấy giòn Nghệ An" class="img-fluid mb-4">
+        
+        <p>Miền Trung nắng gió khắc nghiệt lại chính là nơi cho ra đời nhiều đặc sản tuyệt vời từ biển, trong đó cá cơm sấy giòn Nghệ An là món quà đặc trưng mang trọn hương vị mặn mòi và tinh thần cần cù của người dân miền biển. Từng con cá cơm nhỏ, qua bàn tay khéo léo và công nghệ chế biến hiện đại, trở thành món ăn vừa dân dã, vừa tiện lợi – giòn tan, đậm vị, và đầy dinh dưỡng.</p>
+        
+        <h3>🌊 Cá cơm – món quà từ biển Cửa Lò</h3>
+        <p>Nghệ An là vùng có bờ biển dài hơn 80km, trong đó Cửa Lò, Nghi Thiết, Quỳnh Lưu là những nơi nổi tiếng với nghề đánh bắt cá cơm. Vùng biển Nghệ An thuộc vịnh Bắc Bộ, nơi dòng hải lưu giao thoa tạo ra nguồn cá cơm dồi dào và chất lượng cao.</p>
+        
+        <p>Mùa cá cơm rộ vào khoảng tháng 3 đến tháng 9 hàng năm, khi biển trong và cá nhiều thịt nhất. Đây cũng là thời điểm nắng gắt, gió mạnh – điều kiện lý tưởng để sấy khô cá cơm theo phương pháp truyền thống. Ngư dân thu hoạch cá cơm tươi rồi chuyển ngay về các cơ sở chế biến trong ngày để đảm bảo độ tươi ngon.</p>
+        
+        <p>Cá cơm Nghệ An có kích thước nhỏ (khoảng 3-5cm), thân hình thon dài, màu bạc óng ánh. Thịt cá chắc, ít xương, có vị ngọt tự nhiên – rất phù hợp để làm món cá cơm sấy giòn, vừa giữ nguyên hương vị tự nhiên, vừa tạo cảm giác giòn rụm hấp dẫn.</p>
+        
+        <h3>🍳 Công nghệ sấy giòn – giữ trọn vị biển</h3>
+        <p>Khác với cách rang hoặc chiên truyền thống, cá cơm sấy giòn Nghệ An được chế biến bằng công nghệ sấy khô nhiệt độ thấp hoặc sấy thăng hoa – phương pháp hiện đại giúp giữ nguyên dinh dưỡng và hương vị tự nhiên của cá.</p>
+        
+        <p>Quy trình chế biến cá cơm sấy giòn gồm các bước:</p>
+        
+        <h4>1. Làm sạch & tẩm ướp:</h4>
+        <p>Cá cơm tươi được rửa sạch nhiều lần với nước muối loãng, loại bỏ tạp chất và để ráo nước hoàn toàn. Sau đó, cá được ướp với gia vị vừa miệng: muối biển, tỏi băm, ớt bột, đường, tiêu... Thời gian ướp từ 30 phút đến 1 giờ để cá thấm đều gia vị.</p>
+        
+        <h4>2. Sấy khô nhẹ:</h4>
+        <p>Cá được xếp đều trên khay sấy, sử dụng nhiệt độ từ 50-60°C trong 4-6 giờ. Quá trình này loại bỏ độ ẩm trong cá nhưng vẫn giữ nguyên hình dáng và hương vị. Một số cơ sở truyền thống vẫn phơi cá dưới nắng tự nhiên, tạo hương vị đặc trưng của nắng gió Nghệ An.</p>
+        
+        <h4>3. Sấy giòn hoặc chiên không dầu:</h4>
+        <p>Sau khi khô nhẹ, cá tiếp tục được sấy ở nhiệt độ cao hơn (80-100°C) hoặc chiên không dầu bằng công nghệ Air Fryer để tạo độ giòn rụm tự nhiên, không ngấm dầu mỡ. Cá chín vàng đều, thơm nức, giòn tan khi cắn.</p>
+        
+        <p>Cách làm này giúp giữ nguyên 90% dinh dưỡng, đặc biệt là đạm (protein), canxi và omega-3 – những dưỡng chất quý từ biển rất tốt cho sức khỏe.</p>
+        
+        <h3>🌶️ Hương vị khó quên – giòn, mặn, cay hòa quyện</h3>
+        <p>Mỗi miếng cá cơm sấy giòn Nghệ An mang đủ vị: mặn mòi của muối biển, cay nồng của ớt, ngọt hậu từ thịt cá tươi và thơm béo từ tỏi rang. Khi ăn, cá giòn tan trong miệng, để lại hương vị đậm đà khó quên.</p>
+        
+        <p>Món này có thể thưởng thức theo nhiều cách:</p>
+        
+        <ul>
+            <li><strong>Ăn ngay như snack:</strong> Cá cơm sấy giòn là món ăn vặt tuyệt vời, thay thế cho các loại snack không lành mạnh. Vừa ngon vừa bổ dưỡng.</li>
+            <li><strong>Món nhắm bia:</strong> Cá cơm sấy giòn là món nhắm bia, rượu được ưa chuộng, đặc biệt trong các buổi họp mặt, tiệc tùng.</li>
+            <li><strong>Rắc lên cơm, xôi, cháo:</strong> Thêm ít cá cơm sấy giòn vào bát cơm trắng nóng, xôi hoặc cháo, món ăn sẽ thêm phần hấp dẫn và giàu dinh dưỡng.</li>
+            <li><strong>Trộn gỏi:</strong> Cá cơm sấy giòn có thể bóp vụn, trộn cùng rau sống, dưa leo, cà chua, mè rang... tạo thành món gỏi cá cơm giòn ngon miệng.</li>
+            <li><strong>Nấu canh, kho:</strong> Cá cơm sấy cũng có thể dùng để nấu canh chua hoặc kho với tương, ăn với cơm rất đưa cơm.</li>
+        </ul>
+        
+        <p>Người Nghệ thường nói vui: <em>"Một hũ cá cơm sấy giòn có thể 'cứu đói' cả tuần lễ bận rộn!"</em> – vừa tiện, vừa ngon, lại đậm vị quê.</p>
+        
+        <h3>⚓ Đặc sản vươn tầm – món quà miền biển Nghệ An</h3>
+        <p>Ngày nay, cá cơm sấy giòn Nghệ An được đóng gói hiện đại trong hũ thủy tinh hoặc túi zip hút chân không, thuận tiện cho bảo quản và mang đi xa. Sản phẩm có thể để được 3-6 tháng mà vẫn giữ nguyên độ giòn và hương vị.</p>
+        
+        <p>Sản phẩm không chỉ được tiêu thụ mạnh trong nước mà còn xuất khẩu sang Hàn Quốc và Nhật Bản, nhờ đảm bảo vệ sinh an toàn thực phẩm và giữ trọn hương vị truyền thống. Người Việt xa quê cũng thường đặt mua cá cơm sấy giòn Nghệ An làm quà biếu hoặc để thưởng thức, nhớ về hương vị quê nhà.</p>
+        
+        <p>Các thương hiệu nổi bật đang góp phần đưa đặc sản Nghệ An đến gần hơn với thực khách khắp cả nước:</p>
+        
+        <ul>
+            <li><strong>Biển Cửa Lò Foods:</strong> Thương hiệu uy tín với hơn 20 năm kinh nghiệm, chuyên sản xuất các sản phẩm hải sản sấy khô cao cấp</li>
+            <li><strong>Hải Nam SeaGift:</strong> Nổi tiếng với quy trình sản xuất hiện đại, đạt chứng nhận HACCP và ISO</li>
+            <li><strong>Thanh Chương SeaDry:</strong> Giữ nguyên phương pháp làm truyền thống, cá được phơi nắng tự nhiên tạo hương vị đặc trưng</li>
+        </ul>
+        
+        <h3>Giá trị dinh dưỡng</h3>
+        <p>Cá cơm sấy giòn không chỉ ngon mà còn rất giàu dinh dưỡng:</p>
+        
+        <ul>
+            <li><strong>Protein cao:</strong> Cung cấp 50-60% protein, tốt cho cơ bắp và phục hồi sức khỏe</li>
+            <li><strong>Canxi dồi dào:</strong> Do ăn cả xương cá, bổ sung canxi tự nhiên tốt cho xương răng</li>
+            <li><strong>Omega-3:</strong> Acid béo tốt cho tim mạch, não bộ và thị lực</li>
+            <li><strong>Vitamin D:</strong> Giúp hấp thu canxi hiệu quả hơn</li>
+            <li><strong>Ít chất béo:</strong> Phù hợp cho người ăn kiêng hoặc cần kiểm soát cân nặng</li>
+        </ul>
+        
+        <div class="highlight-box" style="background-color: #e3f2fd; padding: 20px; border-left: 4px solid #2196f3; margin: 20px 0;">
+            <p><em><strong>"Cá cơm sấy giòn Nghệ An – nhỏ bé mà mạnh mẽ, như chính con người miền Trung – chịu thương, chịu khó và luôn giữ trọn vị mặn mòi của biển."</strong></em></p>
+        </div>
+        
+        <p><em>Cá cơm sấy giòn Nghệ An – vị biển mặn mà, giòn tan trên đầu lưỡi, là niềm tự hào của người dân Nghệ An, là món quà đặc biệt từ biển khơi mang đậm tinh thần cần cù, kiên cường của quê hương Bác.</em></p>
+            </div>
+
+    <!-- Blog 4: Nước mắm Phan Thiết -->
+    <div *ngIf="activeBlog === 'nuoc-mam-phan-thiet'" class="blog-detail">
+        <button class="btn-back mb-4" (click)="showBlogList()">
+            ← Quay lại danh sách
+        </button>
+        
+        <h1>🏝️ NƯỚC MẮM PHAN THIẾT – HƯƠNG VỊ ĐẬM ĐÀ TỪ BIỂN CÁT VÀ NẮNG GIÓ</h1>
+        <p class="blog-meta">
+            <i class="far fa-calendar-alt me-2"></i>12/01/2025 | <strong>Vùng: Trung Bộ (Bình Thuận - Phan Thiết)</strong>
+        </p>
+        
+        <img src="/assets/nước mắm.jpg" alt="Nước mắm Phan Thiết" class="img-fluid mb-4">
+        
+        <p>Nhắc đến đặc sản miền Trung, không thể không nhắc đến nước mắm Phan Thiết – biểu tượng của nghề biển lâu đời hơn 300 năm. Hương thơm nồng đậm, vị mặn mòi hòa quyện cùng vị ngọt hậu đặc trưng, nước mắm Phan Thiết đã trở thành linh hồn của ẩm thực miền Trung và là niềm tự hào của người dân Bình Thuận.</p>
+        
+        <h3>🌊 Làng nghề trăm năm tuổi giữa nắng gió</h3>
+        <p>Phan Thiết được thiên nhiên ưu đãi với bờ biển dài, nguồn cá cơm dồi dào quanh năm và khí hậu nắng gắt – điều kiện lý tưởng để làm nước mắm. Vùng biển Phan Thiết thuộc vịnh Phan Rang, nơi dòng hải lưu mang theo nguồn cá cơm phong phú, là nguyên liệu quý giá để tạo nên những giọt nước mắm đặc sản.</p>
+        
+        <p>Từ thế kỷ XIX, các làng nghề như Thanh Hải, Phú Hài, Đức Thắng đã hình thành những "nhà thùng" đầu tiên. Ngày ấy, những người dân làng chài đã khám phá ra cách ủ cá cơm với muối để tạo ra nước chấm có hương vị đặc biệt. Qua nhiều thế hệ, nghề làm nước mắm đã trở thành một phần không thể thiếu trong đời sống văn hóa của người dân Phan Thiết.</p>
+        
+        <p>Hiện nay, hơn 300 cơ sở sản xuất vẫn giữ cách ủ chượp truyền thống, biến Phan Thiết trở thành "thủ đô nước mắm" của Việt Nam. Những hàng thùng mắm khổng lồ xếp thành hàng dài, mỗi thùng chứa hàng tấn cá cơm đang lên men, tạo nên một phong cảnh đặc trưng của vùng đất này.</p>
+        
+        <h3>🐟 Bí quyết tạo nên vị mắm Phan Thiết đậm đà</h3>
+        <p>Điều làm nên sự khác biệt của nước mắm Phan Thiết chính là nguyên liệu và quy trình chế biến độc đáo:</p>
+        
+        <h4>Nguyên liệu đặc biệt:</h4>
+        <p>Nước mắm Phan Thiết được làm từ cá cơm than và cá cơm sọc tiêu – những loại cá nhỏ, nhiều đạm, cho hương vị ngọt hậu và thơm đặc trưng. Cá cơm Phan Thiết có kích thước nhỏ hơn cá cơm Phú Quốc, nhưng lại chứa hàm lượng protein cao hơn, tạo nên độ đạm đặc trưng cho nước mắm.</p>
+        
+        <h4>Quy trình ủ chượp truyền thống:</h4>
+        <p>Sau khi đánh bắt, cá được ướp muối ngay trên thuyền theo tỷ lệ vàng 3 cá : 1 muối. Tỷ lệ này được các nghệ nhân truyền lại qua nhiều đời, đảm bảo cá không bị hỏng và lên men đúng cách. Cá sau đó được đưa về nhà thùng, ủ trong vại sành hoặc thùng gỗ bời lời suốt 12–15 tháng.</p>
+        
+        <p>Trong quá trình lên men tự nhiên, người thợ phải thường xuyên kiểm tra, "đảo chượp" (xáo trộn đều để cá lên men đồng đều) và lấy mẫu thử để canh độ đạm chuẩn. Công việc này đòi hỏi kinh nghiệm lâu năm và sự tỉ mỉ cao độ.</p>
+        
+        <p>Chính sự tỉ mỉ này đã tạo nên nước mắm có độ đạm cao (35°–40°N), vị mặn đầu lưỡi nhưng ngọt dịu nơi hậu vị – đặc trưng không thể lẫn với bất kỳ vùng nào khác. Sau khi lên men đủ thời gian, nước mắm được chiết xuất từ đáy thùng, lọc qua nhiều lần để loại bỏ cặn và đóng chai.</p>
+        
+        <h3>☀️ Tinh túy của nắng, gió và biển</h3>
+        <p>Nếu nước mắm Phú Quốc mang vị ngọt dịu, thanh nhẹ do khí hậu ôn hòa, thì nước mắm Phan Thiết lại đậm đà, dậy mùi hơn, do đặc trưng khí hậu khô nóng khiến quá trình lên men diễn ra nhanh và mạnh hơn.</p>
+        
+        <p>Phan Thiết nổi tiếng với khí hậu nắng gắt quanh năm, gió Lào thổi mạnh vào mùa khô. Nhiệt độ cao và độ ẩm thấp tạo điều kiện lý tưởng cho quá trình lên men tự nhiên. Cá cơm lên men nhanh hơn, tạo ra hương vị đặc trưng đậm đà, mặn mà.</p>
+        
+        <p>Mùi thơm mặn mòi của biển hòa quyện cùng màu nâu đỏ sậm, sóng sánh dưới nắng vàng – đó chính là "dấu ấn" của vùng đất nắng gió miền Trung. Khi múc một muỗng nước mắm Phan Thiết lên ánh sáng, bạn sẽ thấy màu nâu đỏ đặc trưng, trong veo như hổ phách, phản chiếu ánh nắng rực rỡ của Phan Thiết.</p>
+        
+        <h3>🏅 Thương hiệu quốc gia – niềm tự hào của người dân Bình Thuận</h3>
+        <p>Năm 2007, nước mắm Phan Thiết được công nhận là sản phẩm đạt chỉ dẫn địa lý quốc gia, đánh dấu bước ngoặt lớn trong việc khẳng định thương hiệu Việt trên thị trường. Đây là sự ghi nhận xứng đáng cho một sản phẩm đã gắn bó với người dân Bình Thuận qua nhiều thế hệ.</p>
+        
+        <p>Các doanh nghiệp tiêu biểu như:</p>
+        <ul>
+            <li><strong>Nước mắm Liên Thành:</strong> Thương hiệu lâu đời nhất, hơn 100 năm tuổi, vẫn giữ nguyên quy trình sản xuất truyền thống</li>
+            <li><strong>Nước mắm Thanh Hà:</strong> Nổi tiếng với nước mắm 40 độ đạm cao cấp, xuất khẩu ra nhiều nước</li>
+            <li><strong>Nước mắm Hải Ninh:</strong> Được ưa chuộng với độ đạm ổn định và giá cả hợp lý</li>
+            <li><strong>Nước mắm Hồng Hương:</strong> Thương hiệu trẻ nhưng nhanh chóng chiếm được lòng tin của người tiêu dùng</li>
+        </ul>
+        
+        <p>Các doanh nghiệp này đã không ngừng cải tiến quy trình sản xuất, đầu tư vào công nghệ lọc và đóng chai hiện đại, đồng thời tích cực quảng bá sản phẩm ra thế giới. Nước mắm Phan Thiết hiện đã có mặt tại nhiều nước châu Á, châu Âu và Mỹ.</p>
+        
+        <p>Năm 2025, nước mắm Phan Thiết tiếp tục được vinh danh trong chương trình "Thương hiệu Quốc gia Việt Nam", khẳng định vị thế đặc sản truyền thống đạt chuẩn quốc tế. Đây là niềm tự hào không chỉ của người dân Bình Thuận mà còn của cả nước.</p>
+        
+        <h3>⚓ Giọt mắm – hồn quê và bản sắc Việt</h3>
+        <p>Không chỉ là một loại gia vị, nước mắm Phan Thiết là ký ức của người dân miền biển, là kết tinh của công sức, mồ hôi và tình yêu với nghề. Mỗi gia đình làm mắm đều có câu chuyện riêng, có công thức bí truyền được truyền từ đời này sang đời khác.</p>
+        
+        <p>Từng giọt mắm sóng sánh không chỉ mặn của muối, ngọt của cá mà còn nồng đượm hương vị quê hương. Đó là mùi biển khơi, là nắng gió Phan Thiết, là bàn tay sần sùi của những người thợ làm mắm, là tình yêu và niềm tự hào của một nghề truyền thống.</p>
+        
+        <p>Nước mắm Phan Thiết không chỉ dùng để chấm, để nấu ăn, mà còn là linh hồn của rất nhiều món ăn đặc sản miền Trung: bánh xèo chấm mắm, gỏi cá mai chấm mắm, lẩu mắm... Mỗi món ăn lại mang một hương vị riêng biệt nhờ có nước mắm Phan Thiết đậm đà.</p>
+        
+        <h3>Cách phân biệt nước mắm Phan Thiết nguyên chất</h3>
+        <p>Để chọn được nước mắm Phan Thiết nguyên chất, bạn có thể lưu ý các dấu hiệu sau:</p>
+        
+        <ul>
+            <li><strong>Màu sắc:</strong> Nâu đỏ sậm, trong veo, không đục, không có cặn lơ lửng</li>
+            <li><strong>Mùi hương:</strong> Thơm mùi đặc trưng của cá lên men, hơi nồng, không tanh, không hôi</li>
+            <li><strong>Vị:</strong> Mặn đầu lưỡi, ngọt hậu, không đắng, không chát</li>
+            <li><strong>Độ sánh:</strong> Khi lắc chai, bọt mịn bám đều vào thành chai, không tan nhanh</li>
+            <li><strong>Độ đạm:</strong> Nước mắm cao cấp có độ đạm từ 35-40°N, ghi rõ trên nhãn</li>
+        </ul>
+        
+        <div class="highlight-box" style="background-color: #fff3cd; padding: 20px; border-left: 4px solid #ffc107; margin: 20px 0;">
+            <p><em><strong>"Giữa nắng gió miền Trung, từng giọt nước mắm Phan Thiết vẫn mặn mà như tấm lòng người làm nghề – giản dị, kiên cường và đậm đà tình biển."</strong></em></p>
+        </div>
+        
+        <p><em>Nước mắm Phan Thiết – hương vị đậm đà từ biển cát và nắng gió, là niềm tự hào của người dân Bình Thuận, là di sản văn hóa ẩm thực quý giá cần được gìn giữ và phát huy.</em></p>
+    </div>
+
+    <!-- Blog 5: Mật ong Mẫu Sơn -->
+    <div *ngIf="activeBlog === 'mat-ong-mau-son'" class="blog-detail">
+        <button class="btn-back mb-4" (click)="showBlogList()">
+            ← Quay lại danh sách
+        </button>
+        
+        <h1>🍯 MẬT ONG MẪU SƠN – GIỌT NGỌT TINH KHIẾT TỪ ĐỈNH NÚI LẠNG SƠN</h1>
+        <p class="blog-meta">
+            <i class="far fa-calendar-alt me-2"></i>11/01/2025 | <strong>Vùng: Bắc Bộ (Lạng Sơn)</strong>
+        </p>
+        
+        <img src="/assets/mật ong mẫu sơn.jpg" alt="Mật ong Mẫu Sơn" class="img-fluid mb-4">
+        
+        <p>Trên độ cao hơn 1.000 mét của dãy Mẫu Sơn (Lạng Sơn), nơi sương mù bao phủ quanh năm, những đàn ong rừng miệt mài hút mật từ hàng trăm loài hoa dại để tạo nên mật ong Mẫu Sơn – một trong những đặc sản quý hiếm của miền núi phía Bắc. Đây không chỉ là món ăn bổ dưỡng mà còn là linh dược quý giá được người dân bản địa tin dùng từ bao đời nay.</p>
+        
+        <h3>🏔️ Mẫu Sơn – thiên đường của ong rừng</h3>
+        <p>Mẫu Sơn là một dãy núi thuộc huyện Lộc Bình, tỉnh Lạng Sơn, với độ cao trung bình từ 800-1.541m so với mặt nước biển. Khí hậu nơi đây mát mẻ quanh năm, nhiệt độ trung bình 18-20°C, vào mùa đông có thể xuống dưới 0°C. Sương mù dày đặc và không khí trong lành tạo nên một môi trường sống lý tưởng cho ong rừng.</p>
+        
+        <p>Thảm thực vật Mẫu Sơn vô cùng phong phú với hơn 1.000 loài thực vật, trong đó có nhiều loài hoa dại quý hiếm như hoa đỗ quyên, hoa ban, hoa mơ rừng, hoa dã quỳ, hoa sơn trà... Chính sự đa dạng này đã tạo nên hương vị đặc biệt cho mật ong Mẫu Sơn – không giống bất kỳ vùng nào khác.</p>
+        
+        <p>Người dân bản địa, chủ yếu là đồng bào Dao, Nùng, Tày, đã có nghề nuôi ong lấy mật từ hàng trăm năm trước. Họ thường đặt tổ ong trong rừng sâu, để ong tự do kiếm mật, chỉ thu hoạch vào mùa hoa nở rộ.</p>
+        
+        <h3>🐝 Đặc điểm của mật ong Mẫu Sơn</h3>
+        <p>Mật ong Mẫu Sơn có những đặc điểm riêng biệt, dễ nhận biết:</p>
+        
+        <ul>
+            <li><strong>Màu sắc:</strong> Vàng hổ phách đậm, trong veo, có thể hơi đục do chứa phấn hoa tự nhiên</li>
+            <li><strong>Hương thơm:</strong> Thơm nhẹ, dịu, mang hương hoa rừng đặc trưng, không gắt như mật ong công nghiệp</li>
+            <li><strong>Vị ngọt:</strong> Ngọt thanh, không ngấy, có vị hậu ngọt kéo dài</li>
+            <li><strong>Độ sánh:</strong> Đặc, sánh tự nhiên do hàm lượng nước thấp (dưới 18%)</li>
+            <li><strong>Kết tinh:</strong> Mật ong Mẫu Sơn thường kết tinh tự nhiên sau 2-3 tháng, đây là dấu hiệu của mật ong nguyên chất</li>
+        </ul>
+        
+        <p>Do khí hậu trong lành và thảm thực vật phong phú, mật ong nơi đây chứa nhiều enzyme, vitamin (đặc biệt là vitamin B và C), khoáng chất (kali, magie, canxi) và chất chống oxy hóa hơn mật ong vùng đồng bằng. Hàm lượng đường tự nhiên cao nhưng chỉ số đường huyết (GI) thấp, phù hợp cho người cần kiểm soát đường huyết.</p>
+        
+        <h3>🌸 Mùa thu hoạch mật ong</h3>
+        <p>Mật ong Mẫu Sơn được thu hoạch chủ yếu vào hai mùa trong năm:</p>
+        
+        <h4>Mùa xuân (tháng 2-4):</h4>
+        <p>Đây là mùa hoa rừng nở rộ nhất, đặc biệt là hoa ban, hoa đào, hoa mơ. Mật ong thu được trong mùa này có màu vàng nhạt, vị ngọt dịu, thơm hoa ban rất đặc trưng.</p>
+        
+        <h4>Mùa thu (tháng 9-11):</h4>
+        <p>Mùa này có nhiều hoa dã quỳ, hoa cúc rừng, hoa sơn trà. Mật ong thu được có màu vàng đậm hơn, vị ngọt đậm đà và có hương thơm nồng hơn.</p>
+        
+        <p>Vào mùa hoa rừng, từng giọt mật được thu bằng tay, lọc thủ công qua vải lanh sạch, không qua nhiệt – giữ trọn vị ngọt nguyên sơ của núi rừng. Một tổ ong rừng chỉ cho khoảng 5-10kg mật mỗi năm, nên mật ong Mẫu Sơn rất quý hiếm và giá trị.</p>
+        
+        <h3>🏥 Công dụng tuyệt vời của mật ong Mẫu Sơn</h3>
+        <p>Người dân bản địa thường dùng mật ong Mẫu Sơn như một vị thuốc quý:</p>
+        
+        <ul>
+            <li><strong>Tăng cường sức đề kháng:</strong> Chứa nhiều chất chống oxy hóa, vitamin và khoáng chất giúp tăng cường hệ miễn dịch</li>
+            <li><strong>Chữa ho, viêm họng:</strong> Mật ong có tính kháng khuẩn tự nhiên, giảm ho, làm dịu cổ họng rất hiệu quả</li>
+            <li><strong>Hỗ trợ tiêu hóa:</strong> Enzyme tự nhiên trong mật ong giúp tiêu hóa tốt hơn, giảm táo bón</li>
+            <li><strong>Làm đẹp da:</strong> Mật ong Mẫu Sơn được dùng để đắp mặt, dưỡng da, giúp da mịn màng, sáng khỏe</li>
+            <li><strong>Ngâm rượu:</strong> Mật ong ngâm với rượu thuốc Bắc giúp bổ khí, tăng sức khỏe</li>
+            <li><strong>Pha trà:</strong> Thêm mật ong vào trà gừng, trà thảo mộc giúp thêm vị ngọt và dinh dưỡng</li>
+        </ul>
+        
+        <h3>🎯 Cách nhận biết mật ong Mẫu Sơn nguyên chất</h3>
+        <p>Để tránh mua phải hàng giả, hàng pha trộn, bạn có thể nhận biết mật ong Mẫu Sơn nguyên chất qua các dấu hiệu:</p>
+        
+        <ul>
+            <li><strong>Thử giọt:</strong> Nhỏ một giọt mật lên giấy, mật nguyên chất sẽ không thấm nhanh, giữ nguyên hình giọt</li>
+            <li><strong>Thử nước:</strong> Cho mật vào ly nước, mật nguyên chất sẽ chìm xuống đáy và tan chậm</li>
+            <li><strong>Thử lửa:</strong> Nhúng que diêm vào mật rồi châm lửa, mật nguyên chất sẽ bắt lửa được</li>
+            <li><strong>Kiểm tra kết tinh:</strong> Mật ong nguyên chất thường kết tinh tự nhiên sau vài tháng, kết tinh mịn như kem</li>
+            <li><strong>Mùi hương:</strong> Mật ong Mẫu Sơn có mùi hoa rừng nhẹ nhàng, không quá gắt</li>
+        </ul>
+        
+        <h3>🏪 Nơi mua mật ong Mẫu Sơn uy tín</h3>
+        <p>Mật ong Mẫu Sơn hiện được bán tại:</p>
+        
+        <ul>
+            <li><strong>Các hợp tác xã tại Lạng Sơn:</strong> Trực tiếp từ người nuôi ong, đảm bảo nguồn gốc</li>
+            <li><strong>Các cửa hàng đặc sản Lạng Sơn:</strong> Có giấy chứng nhận vệ sinh an toàn thực phẩm</li>
+            <li><strong>Các sàn thương mại điện tử:</strong> Chọn nhà bán hàng có đánh giá tốt và chứng nhận rõ ràng</li>
+            <li><strong>Chợ Lạng Sơn, chợ Đồng Đăng:</strong> Có thể thử trực tiếp trước khi mua</li>
+        </ul>
+        
+        <p>Giá mật ong Mẫu Sơn thường cao hơn mật ong thường (từ 300.000-600.000 đồng/kg tùy mùa và chất lượng) do sản lượng ít và chất lượng cao.</p>
+        
+        <h3>💡 Cách sử dụng và bảo quản</h3>
+        <p><strong>Cách dùng:</strong></p>
+        <ul>
+            <li>Uống trực tiếp: 1-2 muỗng canh/ngày vào buổi sáng đói hoặc trước khi ngủ</li>
+            <li>Pha với nước ấm (không quá 40°C để giữ nguyên enzyme)</li>
+            <li>Pha với sữa, trà, nước chanh</li>
+            <li>Phết lên bánh mì, trộn sữa chua</li>
+        </ul>
+        
+        <p><strong>Bảo quản:</strong></p>
+        <ul>
+            <li>Để nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp</li>
+            <li>Đậy kín nắp sau khi sử dụng</li>
+            <li>Không cần bảo quản trong tủ lạnh</li>
+            <li>Mật ong có thể để được vài năm mà không hỏng</li>
+        </ul>
+        
+        <div class="highlight-box" style="background-color: #fff8e1; padding: 20px; border-left: 4px solid #ffc107; margin: 20px 0;">
+            <p><em><strong>"Một giọt mật Mẫu Sơn – ngọt của hoa, tinh khiết của sương và chân thật như lòng người xứ Lạng."</strong></em></p>
+        </div>
+        
+        <p><em>Mật ong Mẫu Sơn – giọt ngọt tinh khiết từ đỉnh núi Lạng Sơn, là món quà thiên nhiên ban tặng, là công sức tích lũy của muôn vàn chú ong nhỏ bé, là tình yêu và tâm huyết của người dân miền núi. Mỗi giọt mật không chỉ mang vị ngọt thanh mà còn chứa đựng cả linh hồn của núi rừng Mẫu Sơn hùng vĩ.</em></p>
+    </div>
+
+    <!-- Blog 6: Giải thưởng Thương hiệu Quốc gia 2025 -->
+    <div *ngIf="activeBlog === 'giai-thuong-thuong-hieu-quoc-gia'" class="blog-detail">
+        <button class="btn-back mb-4" (click)="showBlogList()">
+            ← Quay lại danh sách
+        </button>
+        
+        <h1>🏆 ĐẶC SẢN VIỆT NAM VINH DANH TẠI GIẢI THƯỞNG "THƯƠNG HIỆU QUỐC GIA 2025"</h1>
+        <p class="blog-meta">
+            <i class="far fa-calendar-alt me-2"></i>10/01/2025 | <strong>Vùng: Toàn quốc</strong>
+        </p>
+        
+        <img src="/assets/price.jpg" alt="Giải thưởng Thương hiệu Quốc gia 2025" class="img-fluid mb-4">
+        
+        <p>Năm 2025 đánh dấu một cột mốc quan trọng trong hành trình xây dựng và phát triển thương hiệu đặc sản Việt Nam khi nhiều sản phẩm đã được vinh danh tại Giải thưởng Thương hiệu Quốc gia – chương trình uy tín do Bộ Công Thương tổ chức 2 năm một lần. Đây không chỉ là sự ghi nhận về chất lượng sản phẩm mà còn là minh chứng cho nỗ lực không ngừng của các doanh nghiệp Việt trong việc nâng tầm đặc sản nội địa ra thị trường quốc tế.</p>
+        
+        <h3>Giải thưởng Thương hiệu Quốc gia - Tầm nhìn và Sứ mệnh</h3>
+        <p>Giải thưởng Thương hiệu Quốc gia được Bộ Công Thương khởi xướng từ năm 2003, nhằm tôn vinh các doanh nghiệp Việt Nam có thành tích xuất sắc trong việc xây dựng và phát triển thương hiệu, góp phần nâng cao vị thế hàng Việt Nam trên thị trường trong nước và quốc tế.</p>
+        
+        <p>Với tiêu chí đánh giá nghiêm ngặt, giải thưởng không chỉ xem xét về doanh thu, thị phần mà còn đặc biệt chú trọng đến:</p>
+        
+        <ul>
+            <li><strong>Chất lượng sản phẩm:</strong> Đạt chuẩn quốc tế về an toàn thực phẩm và dinh dưỡng</li>
+            <li><strong>Quy trình sản xuất:</strong> Minh bạch, truy xuất nguồn gốc, đảm bảo vệ sinh an toàn thực phẩm</li>
+            <li><strong>Bền vững môi trường:</strong> Không gây hại đến môi trường, hỗ trợ phát triển cộng đồng địa phương</li>
+            <li><strong>Giá trị văn hóa:</strong> Gìn giữ và phát huy bản sắc văn hóa truyền thống của Việt Nam</li>
+            <li><strong>Khả năng cạnh tranh:</strong> Có vị thế vững chắc trên thị trường trong nước và xuất khẩu</li>
+        </ul>
+        
+        <h3>Các thương hiệu đặc sản được vinh danh 2025</h3>
+        <p>Trong lễ trao giải năm 2025, nhiều sản phẩm đặc sản Việt Nam đã vinh dự nhận danh hiệu "Vietnam Value" (Giá trị Việt Nam), khẳng định vị thế của mình trên thị trường quốc tế:</p>
+        
+        <h4>🥇 Nước mắm Phú Quốc</h4>
+        <p>Sản phẩm chỉ dẫn địa lý nổi tiếng thế giới, nước mắm Phú Quốc tiếp tục khẳng định vị thế là đại diện xuất sắc của ẩm thực Việt Nam. Với quy trình sản xuất truyền thống được bảo tồn và phát triển, nước mắm Phú Quốc hiện đã có mặt tại hơn 50 quốc gia trên thế giới.</p>
+        
+        <h4>🍵 Trà Tân Cương Thái Nguyên</h4>
+        <p>Thương hiệu trà đặc sản của vùng đất Thái Nguyên với lịch sử hàng trăm năm. Trà Tân Cương không chỉ được người Việt yêu thích mà còn được xuất khẩu sang Trung Quốc, Nhật Bản, châu Âu với giá trị hàng triệu đô la mỗi năm.</p>
+        
+        <h4>☕ Cà phê Buôn Ma Thuột</h4>
+        <p>Đại diện cho vùng đất Tây Nguyên, cà phê Buôn Ma Thuột đã chinh phục thị trường quốc tế với hương vị đậm đà, đặc trưng. Việt Nam hiện là nước xuất khẩu cà phê lớn thứ 2 thế giới, và Buôn Ma Thuột là "thủ phủ" của ngành cà phê Việt Nam.</p>
+        
+        <h4>🍬 Mè xửng Huế</h4>
+        <p>Món bánh truyền thống của cố đô Huế đã vượt qua ranh giới địa lý để trở thành món quà lưu niệm được yêu thích khắp cả nước. Các thương hiệu mè xửng Huế như Thiên Hương, Song Hỷ đã có mặt tại nhiều nước châu Á và châu Âu.</p>
+        
+        <h4>🥜 Hạt điều Bình Phước</h4>
+        <p>Việt Nam là nước xuất khẩu hạt điều lớn nhất thế giới, và Bình Phước là trung tâm trồng và chế biến điều chất lượng cao. Hạt điều Bình Phước được đánh giá cao về chất lượng với hạt to, đều, màu trắng ngà, vị bùi thơm.</p>
+        
+        <h4>🦐 Tôm Cà Mau</h4>
+        <p>Đặc sản từ mũi Cà Mau, tôm sú và tôm càng xanh Cà Mau đã chinh phục thị trường khó tính như Nhật Bản, Hàn Quốc, châu Âu nhờ chất lượng tươi ngon và quy trình nuôi trồng an toàn, bền vững.</p>
+        
+        <h3>Nỗ lực xây dựng thương hiệu hướng tới xuất khẩu</h3>
+        <p>Để đạt được danh hiệu "Vietnam Value", các doanh nghiệp đã phải trải qua một hành trình dài với nhiều nỗ lực không ngừng:</p>
+        
+        <ul>
+            <li><strong>Đầu tư công nghệ:</strong> Ứng dụng công nghệ hiện đại trong sản xuất, chế biến và bảo quản để đảm bảo chất lượng sản phẩm đồng đều</li>
+            <li><strong>Xây dựng vùng nguyên liệu:</strong> Liên kết với nông dân, hợp tác xã để tạo ra vùng nguyên liệu ổn định, an toàn</li>
+            <li><strong>Chứng nhận tiêu chuẩn quốc tế:</strong> Đạt các chứng nhận như HACCP, ISO, GlobalGAP, FDA...</li>
+            <li><strong>Đầu tư marketing:</strong> Xây dựng hình ảnh thương hiệu chuyên nghiệp, tham gia các hội chợ triển lãm quốc tế</li>
+            <li><strong>Phát triển bền vững:</strong> Cam kết bảo vệ môi trường, phát triển cộng đồng, đảm bảo phúc lợi người lao động</li>
+        </ul>
+        
+        <h3>Bảo tồn giá trị văn hóa địa phương</h3>
+        <p>Một điểm đặc biệt của các thương hiệu đặc sản Việt Nam là luôn gắn liền với văn hóa và truyền thống địa phương. Trong quá trình hiện đại hóa, các doanh nghiệp vẫn giữ gìn các giá trị cốt lõi:</p>
+        
+        <ul>
+            <li>Giữ nguyên công thức và quy trình chế biến truyền thống</li>
+            <li>Hợp tác với các nghệ nhân lâu năm để truyền nghề cho thế hệ trẻ</li>
+            <li>Tôn vinh câu chuyện và lịch sử của sản phẩm trong chiến lược thương hiệu</li>
+            <li>Đóng góp vào việc bảo tồn di sản văn hóa phi vật thể</li>
+        </ul>
+        
+        <h3>Chia sẻ từ đại diện doanh nghiệp đạt giải</h3>
+        
+        <div class="interview-box" style="background-color: #f9f9f9; padding: 20px; border-left: 4px solid #810000; margin: 20px 0;">
+            <p><strong>Ông Nguyễn Văn A - Giám đốc Công ty Nước mắm Phú Quốc Hùng Thành:</strong></p>
+            <p><em>"Giải thưởng này là sự ghi nhận to lớn đối với chúng tôi sau hơn 100 năm gìn giữ nghề truyền thống. Chúng tôi tự hào vì đã đưa nước mắm Phú Quốc – linh hồn ẩm thực Việt Nam – đến với bạn bè quốc tế. Tuy nhiên, vinh dự này cũng đặt lên vai chúng tôi trách nhiệm lớn lao trong việc duy trì chất lượng và bảo tồn phương pháp sản xuất truyền thống cho thế hệ sau."</em></p>
+        </div>
+        
+        <div class="interview-box" style="background-color: #f9f9f9; padding: 20px; border-left: 4px solid #810000; margin: 20px 0;">
+            <p><strong>Bà Trần Thị B - Đại diện Hợp tác xã Trà Tân Cương:</strong></p>
+            <p><em>"Từ một làng nghề nhỏ, giờ đây chè Tân Cương đã vươn ra thế giới. Thành công này là nhờ sự đoàn kết của cả cộng đồng – từ bà con nông dân trồng chè, các nghệ nhân sao chè đến các doanh nghiệp xuất khẩu. Chúng tôi cam kết sẽ không ngừng nâng cao chất lượng và giữ gìn bản sắc văn hóa trà Việt Nam."</em></p>
+        </div>
+        
+        <div class="interview-box" style="background-color: #f9f9f9; padding: 20px; border-left: 4px solid #810000; margin: 20px 0;">
+            <p><strong>Ông Lê Văn C - Giám đốc Công ty Cà phê Buôn Ma Thuột:</strong></p>
+            <p><em>"Cà phê Việt Nam đã nổi tiếng về số lượng, nhưng chúng tôi muốn chứng minh rằng chúng ta cũng có thể cạnh tranh về chất lượng. Giải thưởng 'Vietnam Value' là minh chứng cho nỗ lực của chúng tôi trong việc xây dựng thương hiệu cà phê đặc sản cao cấp, không chỉ bán nguyên liệu mà còn xuất khẩu sản phẩm có giá trị gia tăng cao."</em></p>
+        </div>
+        
+        <h3>Tầm nhìn tương lai</h3>
+        <p>Với những thành tựu đạt được, Bộ Công Thương và các hiệp hội ngành hàng đặt mục tiêu đến năm 2030:</p>
+        
+        <ul>
+            <li>Có ít nhất 100 thương hiệu đặc sản Việt Nam được công nhận "Vietnam Value"</li>
+            <li>Tăng giá trị xuất khẩu đặc sản lên 20 tỷ USD/năm</li>
+            <li>50% sản phẩm đặc sản có chỉ dẫn địa lý được bảo hộ quốc tế</li>
+            <li>Xây dựng hệ thống truy xuất nguồn gốc điện tử cho tất cả đặc sản</li>
+            <li>Phát triển du lịch gắn với đặc sản địa phương, tạo sinh kế bền vững cho cộng đồng</li>
+        </ul>
+        
+        <p><strong>Giải thưởng Thương hiệu Quốc gia 2025</strong> không chỉ là sự vinh danh các doanh nghiệp xuất sắc mà còn là động lực to lớn để toàn ngành tiếp tục nỗ lực xây dựng và phát triển thương hiệu đặc sản Việt Nam. Đây là cơ hội để thế giới biết đến Việt Nam không chỉ qua những cảnh đẹp thiên nhiên mà còn qua hương vị ẩm thực đặc sắc, qua những sản phẩm chất lượng cao mang đậm bản sắc văn hóa dân tộc.</p>
+        
+        <p><em>Hãy tự hào khi chọn và sử dụng đặc sản Việt Nam – không chỉ vì chất lượng tuyệt hảo mà còn vì bạn đang góp phần gìn giữ và phát huy những giá trị văn hóa quý báu của dân tộc!</em></p>
+    </div>
+
+    <!-- Blog 7: Lạp xưởng hun khói Sa Pa -->
+    <div *ngIf="activeBlog === 'lap-xuong-hun-khoi-sapa'" class="blog-detail">
+        <button class="btn-back mb-4" (click)="showBlogList()">
+            ← Quay lại danh sách
+        </button>
+        
+        <h1>🐂 LẠP XƯỞNG HUN KHÓI SA PA – ẨM THỰC TÂY BẮC TRONG TỪNG THỚ THỊT</h1>
+        <p class="blog-meta">
+            <i class="far fa-calendar-alt me-2"></i>09/01/2025 | <strong>Vùng: Bắc Bộ (Lào Cai - Sa Pa)</strong>
+        </p>
+        
+        <img src="/assets/lạp xưởng hun khói.jpg" alt="Lạp xưởng hun khói Sa Pa" class="img-fluid mb-4">
+        
+        <p>Giữa cái lạnh quanh năm của vùng cao Sa Pa (Lào Cai), món lạp xưởng hun khói ra đời như một cách người dân nơi đây giữ thịt qua mùa đông – và dần trở thành món đặc sản trứ danh. Đây là sự kết hợp hoàn hảo giữa trí tuệ của người Tây Bắc và món quà thiên nhiên từ núi rừng hùng vĩ.</p>
+        
+        <h3>🏔️ Sa Pa – Vùng cao đặc sản</h3>
+        <p>Sa Pa nằm ở độ cao trên 1.500m so với mặt nước biển, khí hậu ôn đới với nhiệt độ trung bình 15-18°C. Vào mùa đông, nhiệt độ có thể xuống âm độ, thậm chí có tuyết rơi. Chính khí hậu khắc nghiệt này đã tạo điều kiện cho nghề hun khói thịt phát triển.</p>
+        
+        <p>Người dân các dân tộc H'Mông, Dao, Tày ở Sa Pa nuôi heo rừng, heo bản – loại heo ăn cỏ rừng, sắn, ngô, có thịt chắc và thơm ngon hơn heo nuôi công nghiệp. Từ thịt heo bản địa này, họ tạo ra món lạp xưởng hun khói đặc biệt.</p>
+        
+        <h3>🥓 Quy trình làm lạp xưởng truyền thống</h3>
+        
+        <h4>1. Chọn thịt:</h4>
+        <p>Lạp xưởng Sa Pa được làm từ thịt nạc vai và mỡ heo bản theo tỷ lệ 7 nạc : 3 mỡ. Thịt được cắt thành từng thớ dài, rửa sạch và để ráo nước.</p>
+        
+        <h4>2. Ướp gia vị:</h4>
+        <p>Thịt được ướp với hỗn hợp gia vị đặc trưng của Tây Bắc:</p>
+        <ul>
+            <li><strong>Rượu ngô:</strong> Rượu tự nấu từ ngô bản địa, giúp khử mùi hôi và tạo hương thơm</li>
+            <li><strong>Tỏi:</strong> Tỏi rừng băm nhỏ, có vị cay đặc trưng</li>
+            <li><strong>Hạt dổi:</strong> Gia vị đặc sản của người Tày, có vị cay nhẹ, thơm nồng</li>
+            <li><strong>Mắc khén:</strong> Gia vị quý của Tây Bắc, có mùi thơm độc đáo</li>
+            <li><strong>Tiêu rừng:</strong> Tiêu được hái từ rừng, cay và thơm hơn tiêu thường</li>
+            <li><strong>Muối:</strong> Muối hạt to để bảo quản thịt lâu</li>
+            <li><strong>Đường:</strong> Một chút đường để cân bằng vị</li>
+        </ul>
+        
+        <p>Thịt được trộn đều với gia vị, ủ kín trong 24 giờ để thấm đều.</p>
+        
+        <h4>3. Nhồi vào ruột heo:</h4>
+        <p>Thịt đã ướp được nhồi vào ruột heo đã được rửa sạch và làm khô. Mỗi cây lạp xưởng dài khoảng 15-20cm, được buộc hai đầu bằng chỉ.</p>
+        
+        <h4>4. Hun khói trên gác bếp:</h4>
+        <p>Đây là bước quan trọng nhất, tạo nên đặc trưng cho lạp xưởng Sa Pa. Từng cây lạp xưởng được treo lên gác bếp (phía trên bếp lửa), hun bằng khói của củi nghiến hoặc vỏ ngô trong 7-15 ngày.</p>
+        
+        <p>Khói từ củi nghiến mang hương thơm đặc biệt, thấm vào từng thớ thịt, tạo màu nâu đỏ óng ánh và hương vị khói đặc trưng. Nhiệt độ thấp và khói liên tục giúp thịt khô dần, không bị hỏng mà vẫn giữ được độ mềm và hương vị.</p>
+        
+        <h3>🍴 Hương vị khó quên</h3>
+        <p>Kết quả là miếng lạp xưởng có:</p>
+        <ul>
+            <li><strong>Màu sắc:</strong> Nâu đỏ óng ánh, bắt mắt</li>
+            <li><strong>Mùi hương:</strong> Khói quyện với mùi thơm của hương rừng (mắc khén, hạt dổi, tiêu rừng)</li>
+            <li><strong>Vị:</strong> Béo, ngọt và cay nhẹ – một hương vị "ăn một lần nhớ mãi"</li>
+            <li><strong>Kết cấu:</strong> Thịt chắc, dai vừa phải, mỡ trong không ngấy</li>
+        </ul>
+        
+        <h3>👨‍🍳 Cách chế biến và thưởng thức</h3>
+        <p>Lạp xưởng Sa Pa có thể chế biến theo nhiều cách:</p>
+        
+        <ul>
+            <li><strong>Hấp chín:</strong> Cách đơn giản nhất, hấp khoảng 15-20 phút rồi thái lát mỏng ăn với cơm nóng</li>
+            <li><strong>Nướng than:</strong> Nướng trên than hồng, lạp xưởng sẽ thơm hơn, béo ngậy chảy ra</li>
+            <li><strong>Chiên giòn:</strong> Thái lát mỏng rồi chiên giòn, ăn như snack rất ngon</li>
+            <li><strong>Xào rau:</strong> Thái lát xào với rau cải, măng khô, cải thìa... món ăn đưa cơm</li>
+            <li><strong>Nấu lẩu:</strong> Cho vào lẩu nấm, lẩu chua để tăng hương vị</li>
+        </ul>
+        
+        <p>Ở Sa Pa, lạp xưởng thường được ăn với cơm nếp nướng hoặc rượu ngô – tạo nên bữa ăn đậm đà bản sắc Tây Bắc.</p>
+        
+        <h3>📦 Lạp xưởng Sa Pa hiện đại</h3>
+        <p>Ngày nay, lạp xưởng Sa Pa được đóng gói chân không, bảo quản lâu mà vẫn giữ nguyên hương vị truyền thống, trở thành món quà đặc sản phổ biến khắp Việt Nam. Sản phẩm có thể để được 3-6 tháng trong tủ lạnh, hoặc 1 năm trong tủ đông.</p>
+        
+        <p>Các thương hiệu uy tín:</p>
+        <ul>
+            <li><strong>Lạp xưởng bản Cát Cát:</strong> Giữ nguyên công thức truyền thống, hun khói tự nhiên</li>
+            <li><strong>Lạp xưởng H'Mông Sapa:</strong> Sản xuất quy mô lớn, đảm bảo vệ sinh an toàn thực phẩm</li>
+            <li><strong>Lạp xưởng chợ Sa Pa:</strong> Bán tại chợ Sa Pa, có thể thử trực tiếp</li>
+        </ul>
+        
+        <p>Nhiều du khách khi đến Sa Pa đều mua lạp xưởng làm quà, mang về cho gia đình và bạn bè thưởng thức hương vị núi rừng Tây Bắc.</p>
+        
+        <div class="highlight-box" style="background-color: #fbe9e7; padding: 20px; border-left: 4px solid #ff5722; margin: 20px 0;">
+            <p><em><strong>"Từng sợi khói vờn quanh bếp Sa Pa, hun đượm cả hương vị núi rừng trong mỗi miếng lạp xưởng."</strong></em></p>
+        </div>
+        
+        <p><em>Lạp xưởng hun khói Sa Pa – ẩm thực Tây Bắc trong từng thớ thịt, là món quà của núi rừng, là tinh hoa ẩm thực vùng cao, là niềm tự hào của người dân Sa Pa.</em></p>
+    </div>
+
+    <!-- Blog 8: Rượu ngô Na Hang -->
+    <div *ngIf="activeBlog === 'ruou-ngo-na-hang'" class="blog-detail">
+        <button class="btn-back mb-4" (click)="showBlogList()">
+            ← Quay lại danh sách
+        </button>
+        
+        <h1>🍯 RƯỢU NGÔ NA HANG – HƯƠNG MEN LÁ CỦA NÚI RỪNG TUYÊN QUANG</h1>
+        <p class="blog-meta">
+            <i class="far fa-calendar-alt me-2"></i>08/01/2025 | <strong>Vùng: Bắc Bộ (Tuyên Quang - Na Hang)</strong>
+        </p>
+        
+        <img src="/assets/rượu ngô.png" alt="Rượu ngô Na Hang" class="img-fluid mb-4">
+        
+        <p>Ở vùng núi Na Hang (Tuyên Quang), rượu không chỉ là thức uống mà còn là một phần linh hồn văn hóa người Tày và Dao. Trong những ngôi nhà sàn, hương rượu ngô thơm men lá lan tỏa – chính là rượu ngô Na Hang, loại rượu được nấu hoàn toàn thủ công từ ngô bản địa và men rừng. Mỗi hũ rượu không chỉ là thức uống mà còn là tình cảm, là sự hiếu khách của người dân vùng cao.</p>
+        
+        <h3>🌾 Ngô Na Hang – nguyên liệu quý từ núi rừng</h3>
+        <p>Na Hang là vùng đất có địa hình núi cao, khí hậu mát mẻ, đất đai màu mỡ – điều kiện lý tưởng để trồng ngô. Ngô Na Hang có hạt to, chắc, ngọt và thơm hơn ngô vùng đồng bằng. Người dân thường trồng ngô theo mùa, thu hoạch vào tháng 8-9 hàng năm.</p>
+        
+        <p>Ngô sau khi thu hoạch được phơi khô tự nhiên dưới nắng, bảo quản trong nhà sàn cho đến khi nấu rượu. Chỉ những hạt ngô chắc, đều màu mới được chọn để nấu rượu, đảm bảo chất lượng tốt nhất.</p>
+        
+        <h3>🍃 Bí quyết của men lá</h3>
+        <p>Điều làm nên sự khác biệt của rượu ngô Na Hang chính là men lá đặc biệt – được làm từ hơn 20 loại thảo mộc quý mọc hoang trên núi rừng:</p>
+        
+        <ul>
+            <li><strong>Gừng rừng:</strong> Cay nồng, giúp rượu ấm và tốt cho sức khỏe</li>
+            <li><strong>Vỏ quế:</strong> Thơm nồng, tạo hương vị đặc trưng</li>
+            <li><strong>Khúc khắc:</strong> Thảo dược quý, giúp rượu dễ lên men</li>
+            <li><strong>Lá ổi non:</strong> Tạo vị chát nhẹ, cân bằng vị ngọt</li>
+            <li><strong>Hương nhu:</strong> Thơm mát, dễ chịu</li>
+            <li><strong>Lá sả:</strong> Thơm, khử mùi tanh</li>
+            <li><strong>Nghệ rừng:</strong> Tạo màu vàng và tốt cho tiêu hóa</li>
+        </ul>
+        
+        <p>Các loại lá và rễ cây này được người dân hái từ rừng vào những ngày trăng tròn (theo quan niệm sẽ cho men tốt hơn), phơi khô, giã nhuyễn hoặc để nguyên lá, sau đó trộn đều để tạo thành men. Công thức men lá của mỗi gia đình đều là bí quyết riêng, được truyền từ đời này sang đời khác.</p>
+        
+        <h3>🍶 Quy trình nấu rượu ngô</h3>
+        
+        <h4>1. Đồ ngô:</h4>
+        <p>Ngô được ngâm nước khoảng 4-6 giờ, sau đó hấp chín hoặc đồ chín trong nồi. Ngô chín phải mềm nhưng không nát, vẫn giữ nguyên hạt.</p>
+        
+        <h4>2. Trộn men:</h4>
+        <p>Khi ngô nguội bớt (khoảng 30-35°C), người nấu rượu trộn đều men lá vào ngô, đảm bảo từng hạt ngô đều được phủ men.</p>
+        
+        <h4>3. Ủ men:</h4>
+        <p>Hỗn hợp ngô và men được cho vào hũ sành hoặc thùng gỗ, đậy kín bằng lá chuối hoặc vải sạch, ủ ở nơi ấm từ 3-5 ngày. Trong thời gian này, men sẽ lên men biến đường trong ngô thành cồn.</p>
+        
+        <h4>4. Chưng cất:</h4>
+        <p>Sau khi lên men đủ thời gian, ngô được cho vào nồi đồng, chưng cất qua ống tre hoặc ống inox. Hơi rượu bay lên, ngưng tụ lại và nhỏ giọt xuống bình đựng – cho ra rượu ngô trong veo, thơm mùi men lá.</p>
+        
+        <p>Rượu chưng cất lần đầu có độ cồn khoảng 30-40°, thơm dịu, vị ngọt thanh, không gắt cổ. Một số người còn chưng cất lần 2 để có rượu mạnh hơn (50-60°) dùng để ngâm thuốc.</p>
+        
+        <h3>🎎 Rượu ngô trong văn hóa vùng cao</h3>
+        <p>Rượu ngô Na Hang không chỉ là thức uống mà còn gắn liền với đời sống văn hóa của người dân:</p>
+        
+        <ul>
+            <li><strong>Lễ cưới:</strong> Rượu ngô không thể thiếu trong đám cưới, được dùng để cúng gia tiên và mời khách</li>
+            <li><strong>Lễ hội:</strong> Trong các lễ hội như Lồng Tồng, Xuống Đồng, rượu ngô được dùng để cúng thần linh và cùng nhau uống</li>
+            <li><strong>Đón khách:</strong> Khi có khách quý đến nhà, chủ nhà luôn mời một chén rượu ngô để thể hiện lòng hiếu khách</li>
+            <li><strong>Giao lưu cộng đồng:</strong> Người dân thường tụ họp uống rượu, hát then, hát lượn – gắn kết cộng đồng</li>
+        </ul>
+        
+        <p>Có câu tục ngữ của người Tày: "Không rượu không thành lễ, không men lá không có tình người". Rượu ngô là cầu nối văn hóa, là thể hiện tình cảm chân thành giữa người với người.</p>
+        
+        <h3>💊 Công dụng của rượu ngô</h3>
+        <p>Rượu ngô Na Hang không chỉ ngon mà còn có nhiều công dụng:</p>
+        
+        <ul>
+            <li><strong>Sưởi ấm cơ thể:</strong> Uống rượu ngô giúp ấm người trong những ngày đông lạnh giá</li>
+            <li><strong>Ngâm thuốc:</strong> Rượu ngô được dùng để ngâm các loại thảo dược như củ nâu, củ mài, hà thủ ô... làm thuốc bổ</li>
+            <li><strong>Giảm mỏi cơ:</strong> Massage với rượu ngô giúp giảm đau mỏi cơ bắp</li>
+            <li><strong>Kích thích tiêu hóa:</strong> Uống một chút rượu ngô trước bữa ăn giúp tiêu hóa tốt hơn</li>
+        </ul>
+        
+        <p>Tuy nhiên, cần uống vừa phải (1-2 chén nhỏ/ngày) để tốt cho sức khỏe. Tuyệt đối không lái xe sau khi uống rượu.</p>
+        
+        <h3>🏪 Nơi mua rượu ngô Na Hang</h3>
+        <p>Bạn có thể mua rượu ngô Na Hang tại:</p>
+        
+        <ul>
+            <li><strong>Chợ Na Hang, chợ Tân Trào:</strong> Mua trực tiếp từ người dân bản địa</li>
+            <li><strong>Các cửa hàng đặc sản Tuyên Quang:</strong> Có đóng gói đẹp, phù hợp làm quà</li>
+            <li><strong>Homestay Sa Pa, Na Hang:</strong> Nhiều homestay tự nấu rượu để phục vụ khách</li>
+        </ul>
+        
+        <p>Giá rượu ngô Na Hang dao động từ 80.000-200.000 đồng/lít tùy vào độ cồn và chất lượng.</p>
+        
+        <div class="highlight-box" style="background-color: #f3e5f5; padding: 20px; border-left: 4px solid #9c27b0; margin: 20px 0;">
+            <p><em><strong>"Rượu ngô Na Hang – say men lá, say cả tình người miền sơn cước."</strong></em></p>
+        </div>
+        
+        <p><em>Rượu ngô Na Hang – hương men lá của núi rừng Tuyên Quang, là tinh hoa văn hóa của người Tày, Dao, là cầu nối tình cảm cộng đồng, là món quà đặc biệt mang đậm bản sắc vùng cao. Mỗi chén rượu không chỉ ấm lòng mà còn chứa đựng tình người mộc mạc, chân thành của dân tộc thiểu số Tây Bắc.</em></p>
     </div>
 </div>

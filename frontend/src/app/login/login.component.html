@@ -1,9 +1,9 @@
 <div class="background"
-    style="background-image: url('/assets/bg.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    style="background-image: url('/assets/bg.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="login-container col-11 col-md-8 col-lg-5 col-xl-4">
-            <h2 class="text-primary fw-bold mb-3">ĐĂNG NHẬP</h2>
-            <p class="text-muted">Đăng nhập nâng cao trải nghiệm mua sắm cùng với <b>Eyeconic!</b></p>
+            <h2 class="fw-bold mb-3">ĐĂNG NHẬP</h2>
+            <p class="description-text">Đăng nhập nâng cao trải nghiệm mua sắm cùng với <b>ĐẶC SẢN 3 MIỀN!</b></p>
 
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                 <div *ngIf="loginError" class="alert alert-danger">{{ loginError }}</div>
@@ -21,14 +21,14 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <label><input type="checkbox" formControlName="rememberMe"> Ghi nhớ đăng nhập</label>
-                    <a href="#" class="text-primary no-underline">Quên mật khẩu?</a>
+                    <a href="#" class="no-underline">Quên mật khẩu?</a>
                 </div>
 
                 <button type="submit" class="btn btn-dark btn-sm w-50 rounded-pill mb-3">Đăng nhập</button>
             </form>
 
             <p class="mb-3">Chưa có tài khoản? <a routerLink="/signup" fragment="forms"
-                    class="text-primary no-underline">Đăng ký ngay</a></p>
+                    class="no-underline">Đăng ký ngay</a></p>
 
             <div class="separator">Hoặc</div>
 
