@@ -24,10 +24,10 @@ textarea {
 }
 
 button.btn-primary {
-    background-color: #007bff;
+    background-color: #810000;
     border: none;
 }
 
 button.btn-primary:hover {
-    background-color: #0056b3;
+    background-color: #610000;
 }

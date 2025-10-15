@@ -1,18 +1,42 @@
 .outer-background {
-  background-color: #e0f0ff;
+  background-image: url('/assets/aboutdecor.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  font-family: 'Montserrat', sans-serif;
+  color: #1B1717;
 }
 
 .signup-container {
   background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(27, 23, 23, 0.1);
   width: 100%;
   max-width: 700px;
+  padding: 40px;
+  transition: all 0.3s ease;
 }
 
 .social-button {
   width: 80%;
   max-width: 350px;
+  border: 1px solid #810000;
+  background-color: #EEEBDD;
+  color: #1B1717;
+  border-radius: 25px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 10px 0;
+}
+
+.social-button:hover {
+  background-color: #810000;
+  color: #EEEBDD;
 }
 
 .separator {
@@ -20,7 +44,7 @@
   align-items: center;
   text-align: center;
   margin: 20px 0;
-  color: #666;
+  color: #1B1717;
   font-size: 14px;
 }
 
@@ -29,7 +53,7 @@
   content: "";
   flex: 1;
   height: 1px;
-  background-color: #ccc;
+  background-color: #D6CFC3;
 }
 
 .separator::before {
@@ -40,33 +64,39 @@
   margin-left: 10px;
 }
 
+
 .form-content {
   width: 80%;
   max-width: 450px;
 }
 
+
 small.text-muted {
   font-size: 0.875rem;
-  color: #6c757d;
+  color: #630000;
   margin-top: 0.25rem;
   display: block;
 }
 
+
 .recaptcha-box {
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid #D6CFC3;
+  border-radius: 8px;
   padding: 10px;
-  background-color: #f9f9f9;
+  background-color: #F7F3EC;
   max-width: 350px;
 }
 
+
 .btn-primary {
-  background-color: #007bff;
+  background-color: #810000;
   border: none;
   border-radius: 25px;
   padding: 10px 0;
   font-weight: bold;
   max-width: 200px;
+  color: #EEEBDD;
+  transition: all 0.3s ease;
 }
 
 .container-button {
@@ -75,16 +105,25 @@ small.text-muted {
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #630000;
 }
+
 
 .no-underline {
   text-decoration: none;
+  color: #630000;
+  transition: color 0.3s ease;
 }
+
+.no-underline:hover {
+  color: #810000;
+  text-decoration: underline;
+}
+
 
 @media (max-width: 768px) {
   .signup-container {
-    padding: 20px !important;
+    padding: 25px !important;
   }
 }
 
