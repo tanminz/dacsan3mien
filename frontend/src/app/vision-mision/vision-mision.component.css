@@ -1,33 +1,61 @@
+.vision-mission {
+    background-color: #630000;
+    max-width: 1200px;
+}
+
 .vision-mission h2 {
     font-size: 2rem;
     font-weight: bold;
     margin-bottom: 1rem;
+    color: #EEEBDD;
 }
 
 .custom-size {
     max-width: 100%;
+    width: 100%;
     height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 400px;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .justified-text {
     text-align: justify;
     margin-top: 10px;
     font-size: 1rem;
+    line-height: 1.7;
+    color: #EEEBDD;
 }
 
 .container {
     padding-left: 15px;
     padding-right: 15px;
+    max-width: 1200px;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 768px) {
     .vision-mission h2 {
-        font-size: 1.5rem !important;
+        font-size: 2.2rem;
+    }
+    
+    .justified-text {
+        font-size: 1.05rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .vision-mission h2 {
+        font-size: 1.8rem;
     }
 
     .custom-size {
-        max-height: 300px !important;
+        min-height: 300px;
+        max-height: 400px;
+    }
+    
+    .justified-text {
+        font-size: 0.95rem;
     }
 }
