@@ -52,6 +52,7 @@ import { Banner2Component } from './banner-2/banner-2.component';
 import { Banner3Component } from './banner-3/banner-3.component';
 import { ProductSection2Component } from './product-section-2/product-section-2.component';
 import { ProductSection3Component } from './product-section-3/product-section-3.component';
+import { VietnamMapComponent } from './vietnam-map/vietnam-map.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { ProductSection3Component } from './product-section-3/product-section-3.
     Banner3Component,
     ProductSection2Component,
     ProductSection3Component,
+    VietnamMapComponent,
     ScrollRevealDirective
   ],
   imports: [
