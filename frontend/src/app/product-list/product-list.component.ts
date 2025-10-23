@@ -12,8 +12,8 @@ export class ProductListComponent implements OnInit {
   displayedProducts: Product[] = [];
   errMessage: string = '';
   isLoading: boolean = true;
-  initialDisplayCount: number = 6;
-  loadMoreCount: number = 6;
+  initialDisplayCount: number = 8;
+  loadMoreCount: number = 8;
 
   constructor(private _service: ProductAPIService) { }
 

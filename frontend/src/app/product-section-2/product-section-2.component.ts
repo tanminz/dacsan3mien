@@ -15,8 +15,8 @@ export class ProductSection2Component implements OnInit {
   displayedProducts: Product[] = [];
   errMessage: string = '';
   isLoading: boolean = true;
-  initialDisplayCount: number = 3;
-  loadMoreCount: number = 3;
+  initialDisplayCount: number = 4;
+  loadMoreCount: number = 4;
   isLoggedIn: boolean = false;
 
   constructor(

@@ -15,8 +15,8 @@ export class ProductSection3Component implements OnInit {
   displayedProducts: Product[] = [];
   errMessage: string = '';
   isLoading: boolean = true;
-  initialDisplayCount: number = 3;
-  loadMoreCount: number = 3;
+  initialDisplayCount: number = 4;
+  loadMoreCount: number = 4;
   isLoggedIn: boolean = false;
 
   constructor(
@@ -54,10 +54,15 @@ export class ProductSection3Component implements OnInit {
           return newProduct;
         });
         
-        // Filter products for Miền Nam (you can adjust this filter as needed)
-        // For now, we'll take products starting from index 3 as Miền Nam products
-        const startIndex = 3;
-        this.displayedProducts = this.products.slice(startIndex, startIndex + this.initialDisplayCount);
+        // Filter products with names >= 5 words
+        const filteredProducts = this.products.filter(product => {
+          const wordCount = product.product_name ? product.product_name.trim().split(/\s+/).length : 0;
+          console.log(`Product: ${product.product_name}, Word count: ${wordCount}`);
+          return wordCount >= 5;
+        });
+        
+        console.log(`Total products: ${this.products.length}, Filtered products: ${filteredProducts.length}`);
+        this.displayedProducts = filteredProducts.slice(0, this.initialDisplayCount);
         this.isLoading = false;
       },
       error: (err) => {
@@ -107,8 +112,10 @@ export class ProductSection3Component implements OnInit {
 
   showMore(): void {
     const currentLength = this.displayedProducts.length;
-    const startIndex = 3 + currentLength;
-    const additionalProducts = this.products.slice(startIndex, startIndex + this.loadMoreCount);
+    const filteredProducts = this.products.filter(product => 
+      product.product_name && product.product_name.trim().split(/\s+/).length >= 5
+    );
+    const additionalProducts = filteredProducts.slice(currentLength, currentLength + this.loadMoreCount);
     this.displayedProducts = [...this.displayedProducts, ...additionalProducts];
   }
 

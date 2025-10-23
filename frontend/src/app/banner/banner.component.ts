@@ -16,7 +16,11 @@ export class BannerComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.videos = [this.video1.nativeElement, this.video2.nativeElement];
-    this.videos.forEach(video => (video.muted = true));
+    this.videos.forEach(video => {
+      video.muted = true;
+      video.playsInline = true; // For mobile devices
+    });
+    
     // Warm up the non-active video shortly after first paint
     setTimeout(() => {
       const next = this.videos[1];
@@ -26,7 +30,10 @@ export class BannerComponent implements AfterViewInit {
       }
     }, 300);
 
-    this.playVideo(0);
+    // Start playing first video after a short delay
+    setTimeout(() => {
+      this.playVideo(0);
+    }, 100);
   }
 
   playVideo(index: number): void {
@@ -39,7 +46,19 @@ export class BannerComponent implements AfterViewInit {
 
     const video = this.videos[index];
     video.classList.add('active');
-    video.play();
+    
+    // Play with error handling
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          console.log('Video playing successfully');
+        })
+        .catch(error => {
+          console.error('Error playing video:', error);
+        });
+    }
+    
     this.currentVideoIndex = index;
 
     clearInterval(this.intervalId);

@@ -1,31 +1,82 @@
 .product-desc-container {
   padding: 20px;
-  background-color: #fff;
+  background-image: url('/assets/bg_productdetail.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: local;
   border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  position: relative;
+  min-height: 400px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-desc-container:hover {
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15), 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.product-desc-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.50);
   border-radius: 8px;
+  z-index: 1;
+}
+
+.product-desc-container > * {
+  position: relative;
+  z-index: 2;
 }
 
 .tabs {
   display: flex;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.tabs::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ddd, transparent);
 }
 
 .tabs button {
   flex: 1;
-  padding: 10px 0;
+  padding: 15px 0;
   background: none;
   border: none;
   cursor: pointer;
   font-size: 16px;
-  font-weight: 500;
-  color: #555;
-  transition: color 0.3s;
+  font-weight: 600;
+  color: #2a2a2a;
+  transition: all 0.2s ease;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
+  border-bottom: 3px solid transparent;
+}
+
+.tabs button:hover {
+  color: #810000;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+  border-bottom-color: #810000;
 }
 
 .tabs button.active {
-  color: #009cf8;
-  border-bottom: 2px solid #009cf8;
+  color: #810000;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
+  font-weight: 700;
+  border-bottom-color: #810000;
 }
 
 .tab-content {
@@ -36,11 +87,14 @@
   list-style: none;
   padding: 0;
   font-size: 14px;
-  color: #333;
+  color: #1a1a1a;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .product-details li {
   margin-bottom: 8px;
+  padding: 2px 0;
 }
 
 .product-description {
@@ -48,16 +102,21 @@
 }
 
 .product-description h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #009cf8;
-  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #810000;
+  margin-bottom: 12px;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.5px;
 }
 
 .product-description p {
-  font-size: 14px;
-  color: #555;
-  line-height: 1.6;
+  font-size: 15px;
+  color: #1a1a1a;
+  line-height: 1.7;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
 }
 
 .review-card {
@@ -70,7 +129,7 @@
 
 .review-user {
   font-weight: bold;
-  color: #009cf8;
+  color: #810000;
 }
 
 .review-comment {
@@ -104,7 +163,7 @@
 
 .submit-review-button {
   align-self: flex-end;
-  background-color: #009cf8;
+  background-color: #810000;
   color: #fff;
   font-size: 14px;
   padding: 8px 20px;
@@ -115,7 +174,7 @@
 }
 
 .submit-review-button:hover {
-  background-color: #007bb5;
+  background-color: #810000;
 }
 
 .pagination {
@@ -129,9 +188,9 @@
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  border: 0.5px solid #009cf8;
+  border: 0.5px solid #810000;
   background-color: transparent;
-  color: #009cf8;
+  color: #810000;
   font-size: 10px;
   display: flex;
   align-items: center;
@@ -141,7 +200,7 @@
 }
 
 .pagination button.active {
-  background-color: #007bff;
+  background-color: #810000;
   color: white;
 }
 

@@ -1,20 +1,39 @@
 <div class="container-fluid banner position-relative p-0">
-  <div class="video-container d-flex">
-    <video #video1 class="video-item active" autoplay muted playsinline preload="metadata" poster="assets/banner1.png">
-      <source src="assets/banner-video.mp4" type="video/mp4" />
+  <div class="video-container">
+    <video 
+      #video1 
+      class="video active" 
+      muted 
+      preload="auto" 
+      autoplay 
+      playsinline
+      webkit-playsinline>
+      <source src="assets/banner-video.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <video #video2 class="video-item" muted playsinline preload="none" poster="assets/banner2.jpg">
-      <source src="assets/video-banner.mp4" type="video/mp4" />
+    <video 
+      #video2 
+      class="video" 
+      muted 
+      preload="none"
+      playsinline
+      webkit-playsinline>
+      <source src="assets/video-banner.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </div>
-  <div class="horizontal-controls d-flex justify-content-center mt-3">
-    <div class="control-bar" (click)="handleClick(0)">
-      <div class="progress" [style.width.%]="progress[0]"></div>
+
+  <div class="progress-container">
+    <div class="progress-bar" 
+         [class.active]="currentVideoIndex === 0"
+         [style.--progress-width.%]="progress[0]"
+         (click)="handleClick(0)">
     </div>
-    <div class="control-bar" (click)="handleClick(1)">
-      <div class="progress" [style.width.%]="progress[1]"></div>
+    <div class="progress-bar" 
+         [class.active]="currentVideoIndex === 1"
+         [style.--progress-width.%]="progress[1]"
+         (click)="handleClick(1)">
     </div>
   </div>
 </div>
+

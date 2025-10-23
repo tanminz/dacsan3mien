@@ -37,13 +37,56 @@
     {{ errMessage }}
   </div>
 
-  <div *ngIf="!isLoading && filteredProducts.length > 0" class="row">
-    <div *ngFor="let product of filteredProducts" class="col-lg-3 col-md-4 col-sm-6 d-flex align-items-stretch mb-4">
+  <div *ngIf="!isLoading && paginatedProducts.length > 0" class="row">
+    <div *ngFor="let product of paginatedProducts" class="col-lg-3 col-md-4 col-sm-6 d-flex align-items-stretch mb-4">
       <app-product-item [product]="product"></app-product-item>
     </div>
   </div>
 
-  <div *ngIf="!isLoading && !filteredProducts.length" class="text-center">
+  <div *ngIf="!isLoading && !paginatedProducts.length" class="text-center">
     <p class="text-muted">There are no products in this category.</p>
+  </div>
+
+
+  <!-- Pagination -->
+  <div *ngIf="!isLoading && totalPages > 1" class="pagination-container mt-5">
+    <nav aria-label="Product pagination">
+      <ul class="pagination justify-content-center">
+        <!-- Previous button -->
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" href="#" (click)="goToPreviousPage(); $event.preventDefault()" 
+             [attr.aria-disabled]="currentPage === 1">
+            <span aria-hidden="true">&laquo;</span>
+            Trước
+          </a>
+        </li>
+        
+        <!-- Page numbers -->
+        <li *ngFor="let page of getPageNumbers()" class="page-item" 
+            [class.active]="currentPage === page">
+          <a class="page-link" href="#" 
+             (click)="goToPage(page); $event.preventDefault()">
+            {{ page }}
+          </a>
+        </li>
+        
+        <!-- Next button -->
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" href="#" (click)="goToNextPage(); $event.preventDefault()" 
+             [attr.aria-disabled]="currentPage === totalPages">
+            Sau
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    
+    <!-- Pagination info -->
+    <div class="pagination-info text-center mt-3">
+      <small class="text-muted">
+        Hiển thị {{ (currentPage - 1) * itemsPerPage + 1 }} - {{ getEndRange() }} 
+        trong tổng số {{ totalItems }} sản phẩm
+      </small>
+    </div>
   </div>
 </div>

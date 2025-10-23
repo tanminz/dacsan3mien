@@ -3,7 +3,7 @@ export const environment = {
     apiUrl: 'http://localhost:3002',
     support: {
         zalo: {
-            id: 'YOUR_PHONE_NUMBER'
+            id: '0792098518'
         }
     },
     openAiApiKey: 'YOUR_APIKEY'

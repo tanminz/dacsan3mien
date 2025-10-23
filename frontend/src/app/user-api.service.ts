@@ -105,6 +105,18 @@ export class UserAPIService {
     );
   }
 
+  // Update current authenticated user's own profile
+  updateMyProfile(userData: Partial<User>): Observable<any> {
+    const payload = { ...userData } as any;
+    delete payload._id;
+    delete payload.email;
+    delete payload.password;
+    return this.http.patch<any>(`${this.apiUrl}/profile`, payload, {
+      headers: this.getHeaders(),
+      withCredentials: true
+    }).pipe(catchError(this.handleError));
+  }
+
   deleteUserAccount(userId: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/delete/${userId}`, {
       headers: this.getHeaders(),

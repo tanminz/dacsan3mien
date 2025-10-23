@@ -151,9 +151,11 @@ export class PaymentComponent implements OnInit {
     this.locationService.getProvinces().subscribe({
       next: data => {
         this.provinces = data;
+        console.log('Đã tải thành công danh sách tỉnh/thành phố:', data.length, 'tỉnh');
       },
       error: err => {
-        alert('Không thể tải danh sách tỉnh/thành phố. Vui lòng thử lại.');
+        console.error('Lỗi khi tải danh sách tỉnh/thành phố:', err);
+        // Fallback data sẽ được sử dụng từ service
       }
     });
   }
@@ -166,10 +168,12 @@ export class PaymentComponent implements OnInit {
           this.districts = data.districts || [];
           this.wards = [];
           this.paymentForm.patchValue({ selectedDistrict: '', selectedWard: '' });
+          console.log('Đã tải danh sách quận/huyện:', this.districts.length, 'quận/huyện');
         },
         error: err => {
-          alert('Không thể tải danh sách quận/huyện. Vui lòng thử lại.');
+          console.error('Lỗi khi tải danh sách quận/huyện:', err);
           this.districts = [];
+          this.wards = [];
         }
       });
     } else {
@@ -185,9 +189,10 @@ export class PaymentComponent implements OnInit {
         next: data => {
           this.wards = data.wards || [];
           this.paymentForm.patchValue({ selectedWard: '' });
+          console.log('Đã tải danh sách phường/xã:', this.wards.length, 'phường/xã');
         },
         error: err => {
-          alert('Không thể tải danh sách phường/xã. Vui lòng thử lại.');
+          console.error('Lỗi khi tải danh sách phường/xã:', err);
           this.wards = [];
         }
       });

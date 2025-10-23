@@ -292,7 +292,10 @@ app.post("/user/signup", async (req, res) => {
       gender,
       birthDate: { month: birthMonth, day: birthDay, year: birthYear },
       marketing: !!marketing,
-      role
+      role,
+      avatar: "",
+      memberPoints: 0,
+      memberTier: "Member"
     };
     const result = await userCollection.insertOne(newUser);
     res.status(201).json({ message: "User registered successfully", userId: result.insertedId });
@@ -359,7 +362,10 @@ app.get("/user/profile", requireAuth, async (req, res) => {
     phone: user.phone,
     address: user.address,
     marketing: user.marketing,
-    role: user.role
+    role: user.role,
+    avatar: user.avatar || "",
+    memberPoints: user.memberPoints || 0,
+    memberTier: user.memberTier || "Member"
   });
 });
 
@@ -388,6 +394,54 @@ app.patch(
     }
   }
 );
+
+// Allow authenticated users to update their own profile (e.g., avatar, profileName, phone, address, birthDate)
+app.patch("/user/profile", requireAuth, async (req, res) => {
+  try {
+    const allowed = ["profileName", "phone", "address", "birthDate", "gender", "marketing", "avatar"];
+    const updateData = {};
+    for (const key of allowed) {
+      if (req.body[key] !== undefined) updateData[key] = req.body[key];
+    }
+
+    if (updateData.avatar) {
+      if (typeof updateData.avatar !== "string" || !updateData.avatar.startsWith("data:image/")) {
+        return res.status(400).json({ message: "Invalid avatar format. Must be Base64 data URL." });
+      }
+      if (updateData.avatar.length > 2_000_000) { // ~2MB limit for safety
+        return res.status(413).json({ message: "Avatar image too large." });
+      }
+    }
+
+    const result = await userCollection.updateOne(
+      { _id: new ObjectId(req.session.userId) },
+      { $set: updateData }
+    );
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: "User not found or no changes made" });
+    }
+    const updatedUser = await userCollection.findOne({ _id: new ObjectId(req.session.userId) });
+    res.status(200).json({
+      message: "Profile updated",
+      user: {
+        _id: updatedUser?._id,
+        email: updatedUser?.email,
+        profileName: updatedUser?.profileName,
+        gender: updatedUser?.gender,
+        birthDate: updatedUser?.birthDate,
+        phone: updatedUser?.phone,
+        address: updatedUser?.address,
+        marketing: updatedUser?.marketing,
+        role: updatedUser?.role,
+        avatar: updatedUser?.avatar || '',
+        memberPoints: updatedUser?.memberPoints || 0,
+        memberTier: updatedUser?.memberTier || 'Member'
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update profile" });
+  }
+});
 
 app.delete(
   "/user/delete/:userId",
@@ -782,6 +836,9 @@ app.get('/orders/:orderId/invoice', requireAuth, async (req, res) => {
     if (!fs.existsSync('./invoices')) {
       fs.mkdirSync('./invoices');
     }
+    
+    // Clear any cached logo
+    console.log('Generating PDF for order:', orderId);
 
     const stream = fs.createWriteStream(filePath);
     doc.pipe(stream);
@@ -791,9 +848,34 @@ app.get('/orders/:orderId/invoice', requireAuth, async (req, res) => {
       doc.font(fontPath);
     }
 
-    const logoPath = './logo.png';
-    if (fs.existsSync(logoPath)) {
-      doc.image(logoPath, 50, 30, { width: 100 });
+    // Try multiple logo paths with absolute path
+    const logoPaths = [
+      './Logo.png', 
+      './logo.png', 
+      './Logo.PNG', 
+      './logo.PNG',
+      __dirname + '/Logo.png',
+      __dirname + '/logo.png'
+    ];
+    let logoFound = false;
+    
+    for (const logoPath of logoPaths) {
+      if (fs.existsSync(logoPath)) {
+        console.log('Using logo:', logoPath);
+        try {
+          doc.image(logoPath, 50, 30, { width: 100 });
+          logoFound = true;
+          break;
+        } catch (error) {
+          console.log('Error loading logo:', error.message);
+        }
+      }
+    }
+    
+    if (!logoFound) {
+      console.log('No logo file found. Tried paths:', logoPaths);
+      // Add a placeholder text if no logo found
+      doc.fontSize(16).text('LOGO', 50, 30);
     }
 
     doc.fontSize(20).text('Hóa đơn bán hàng', 150, 50, { align: 'center' });
@@ -877,7 +959,7 @@ app.get('/orders/:orderId/invoice', requireAuth, async (req, res) => {
     doc.fontSize(12)
       .text('Cảm ơn bạn đã mua hàng!', 50, doc.y, { align: 'center' })
       .moveDown(0.5)
-      .text('Liên hệ với chúng tôi: 037 500 1528', 50, doc.y, { align: 'center' });
+      .text('Liên hệ với chúng tôi: 079 2098 518', 50, doc.y, { align: 'center' });
 
     doc.end();
 

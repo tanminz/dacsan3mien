@@ -52,8 +52,7 @@
                             <input type="file" id="image_{{ i }}" class="form-control" accept="image/*"
                                 (change)="onImageChange($event, i)" />
                             <div class="mt-2" *ngIf="images[i]">
-                                <img [src]="images[i]" alt="Hình ảnh {{ i + 1 }}" class="img-thumbnail"
-                                    style="max-width: 100%;" />
+                                <img [src]="images[i]" alt="Hình ảnh {{ i + 1 }}" class="img-thumbnail" />
                                 <button type="button" class="btn btn-danger btn-sm mt-2" (click)="clearImage(i)">
                                     Xóa
                                 </button>
@@ -62,8 +61,37 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Progress Bar -->
+            <div *ngIf="isUploading" class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-primary fw-medium">
+                        <i class="fas fa-spinner fa-spin me-2"></i>
+                        Đang tải lên sản phẩm...
+                    </span>
+                    <span class="text-muted">{{ uploadProgress | number:'1.0-0' }}%</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                         role="progressbar" 
+                         [style.width.%]="uploadProgress"
+                         [attr.aria-valuenow]="uploadProgress" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100">
+                    </div>
+                </div>
+            </div>
+            
             <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary me-2">{{ isEditing ? 'Cập nhật' : 'Thêm mới' }}</button>
+                <button type="submit" 
+                        class="btn btn-primary me-2" 
+                        [disabled]="isUploading || loading">
+                    <span *ngIf="!isUploading && !loading">{{ isEditing ? 'Cập nhật' : 'Thêm mới' }}</span>
+                    <span *ngIf="isUploading || loading">
+                        <i class="fas fa-spinner fa-spin me-2"></i>
+                        {{ isEditing ? 'Đang cập nhật...' : 'Đang thêm...' }}
+                    </span>
+                </button>
                 <button type="button" class="btn btn-secondary" *ngIf="isEditing" (click)="cancelEdit()">Hủy</button>
             </div>
         </form>

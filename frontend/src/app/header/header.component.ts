@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 export class HeaderComponent implements OnInit, OnDestroy {
   cartItemCount: number = 0;
   isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
   searchTerm: string = '';
   isScrolled: boolean = false;
   private logoutSubscription: Subscription | null = null;
@@ -35,9 +36,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
+      this.isAdmin = this.authService.isAdmin();
     });
 
     this.logoutSubscription = this.authService.logoutEvent$.subscribe(() => {
+      this.isAdmin = false;
       this.router.navigate(['/']);
     });
   }

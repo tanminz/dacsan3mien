@@ -19,6 +19,8 @@ export class ProductManagementComponent implements OnInit {
   productForm: FormGroup;
   selectedProducts: string[] = [];
   loading: boolean = false;
+  uploadProgress: number = 0;
+  isUploading: boolean = false;
   filterDept: string = '';
   canEdit: boolean = false;
   canView: boolean = false;
@@ -104,6 +106,18 @@ export class ProductManagementComponent implements OnInit {
       return;
     }
 
+    this.isUploading = true;
+    this.uploadProgress = 0;
+    this.loading = true;
+
+    // Simulate progress steps
+    const progressInterval = setInterval(() => {
+      if (this.uploadProgress < 90) {
+        this.uploadProgress += Math.random() * 20;
+        if (this.uploadProgress > 90) this.uploadProgress = 90;
+      }
+    }, 200);
+
     const sanitizedProduct: Record<string, any> = { ...this.productForm.value };
 
     const imageFields = ['image_1', 'image_2', 'image_3', 'image_4', 'image_5'];
@@ -115,15 +129,27 @@ export class ProductManagementComponent implements OnInit {
 
     this.productService.createProduct(sanitizedProduct).subscribe({
       next: () => {
-        this.loadProducts();
-        this.productForm.reset();
-        this.images = ['', '', '', '', ''];
-        const fileInputs = document.querySelectorAll('input[type="file"]');
-        fileInputs.forEach(input => {
-          (input as HTMLInputElement).value = '';
-        });
+        clearInterval(progressInterval);
+        this.uploadProgress = 100;
+        
+        setTimeout(() => {
+          this.loadProducts();
+          this.productForm.reset();
+          this.images = ['', '', '', '', ''];
+          const fileInputs = document.querySelectorAll('input[type="file"]');
+          fileInputs.forEach(input => {
+            (input as HTMLInputElement).value = '';
+          });
+          this.isUploading = false;
+          this.loading = false;
+          this.uploadProgress = 0;
+        }, 500);
       },
       error: (err) => {
+        clearInterval(progressInterval);
+        this.isUploading = false;
+        this.loading = false;
+        this.uploadProgress = 0;
         alert(err.message);
       },
     });

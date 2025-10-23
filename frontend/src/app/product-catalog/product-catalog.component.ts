@@ -13,12 +13,19 @@ export class ProductCatalogComponent implements OnInit {
   selectedCategory: string = 'Tất cả';
   products: Product[] = [];
   filteredProducts: Product[] = [];
+  paginatedProducts: Product[] = [];
   productCount: number = 0;
   isLoading: boolean = true;
   errMessage: string = '';
   priceFilter: string = '';
   tagFilter: string = '';
   searchQuery: string = '';
+  
+  // Pagination properties
+  currentPage: number = 1;
+  itemsPerPage: number = 36;
+  totalPages: number = 0;
+  totalItems: number = 0;
 
   constructor(
     private productService: ProductAPIService,
@@ -38,12 +45,12 @@ export class ProductCatalogComponent implements OnInit {
 
   initializeCategories(): void {
     this.categories = [
-      { name: 'Tất cả', image: '/assets/Mẫu.png', filterKey: 'Tất cả' },
-      { name: 'Kính mắt', image: '/assets/Mẫu.png', filterKey: 'Kính mắt' },
-      { name: 'Áp tròng', image: '/assets/Mẫu.png', filterKey: 'Áp tròng' },
-      { name: 'Tròng', image: '/assets/Mẫu.png', filterKey: 'Tròng' },
-      { name: 'Phụ kiện', image: '/assets/Mẫu.png', filterKey: 'Phụ kiện' },
-      { name: 'Kính mát', image: '/assets/Mẫu.png', filterKey: 'Kính mát' },
+      { name: 'Tất cả', image: '/assets/Mẫu.jpg', filterKey: 'Tất cả' },
+      { name: 'Thực phẩm khô', image: '/assets/thực phẩm khô.jpg', filterKey: 'Thực phẩm khô' },
+      { name: 'Thức uống', image: '/assets/thucuong.jpg', filterKey: 'Thức uống' },
+      { name: 'Bánh kẹo', image: '/assets/aboutanh7.jpg', filterKey: 'Bánh kẹo' },
+      { name: 'Thực phẩm đông lạnh', image: '/assets/donglanh.jpg', filterKey: 'Thực phẩm đông lạnh' },
+      { name: 'Gia vị', image: '/assets/giavi.jpg', filterKey: 'Gia vị' },
     ];
   }
 
@@ -85,6 +92,7 @@ export class ProductCatalogComponent implements OnInit {
 
   applyFilter(category: string): void {
     this.selectedCategory = category;
+    this.currentPage = 1; // Reset to first page when changing category
     this.filteredProducts = category === 'Tất cả'
       ? [...this.products]
       : this.products.filter(product => product.product_dept === category);
@@ -99,17 +107,20 @@ export class ProductCatalogComponent implements OnInit {
       product.product_name.toLowerCase().includes(lowerCaseSearchTerm) ||
       product.product_detail.toLowerCase().includes(lowerCaseSearchTerm)
     );
+    this.currentPage = 1; // Reset to first page when searching
     this.updateProductCount();
   }
 
   filterByPrice(event: Event): void {
     this.priceFilter = (event.target as HTMLSelectElement).value;
+    this.currentPage = 1; // Reset to first page when filtering
     this.applyAdditionalFilters();
     this.updateProductCount();
   }
 
   filterByTag(event: Event): void {
     this.tagFilter = (event.target as HTMLSelectElement).value;
+    this.currentPage = 1; // Reset to first page when filtering
     const baseFilteredProducts = this.selectedCategory === 'Tất cả'
       ? this.products
       : this.products.filter(product => product.product_dept === this.selectedCategory);
@@ -146,8 +157,86 @@ export class ProductCatalogComponent implements OnInit {
 
   private updateProductCount(): void {
     this.productCount = this.filteredProducts.length;
+    this.totalItems = this.filteredProducts.length;
+    this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+    
+    // Only reset to first page if current page is beyond total pages
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = 1;
+    }
+    
+    this.updatePaginatedProducts();
     this.errMessage = this.filteredProducts.length === 0
       ? 'No products found in this category.'
       : '';
+  }
+
+  private updatePaginatedProducts(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedProducts = this.filteredProducts.slice(startIndex, endIndex);
+    
+    // Debug info
+    console.log('Pagination Debug:', {
+      currentPage: this.currentPage,
+      totalPages: this.totalPages,
+      totalItems: this.totalItems,
+      itemsPerPage: this.itemsPerPage,
+      filteredProductsLength: this.filteredProducts.length,
+      paginatedProductsLength: this.paginatedProducts.length,
+      startIndex,
+      endIndex
+    });
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePaginatedProducts();
+      this.scrollToTop();
+    }
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePaginatedProducts();
+      this.scrollToTop();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePaginatedProducts();
+      this.scrollToTop();
+    }
+  }
+
+  private scrollToTop(): void {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  getPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  getEndRange(): number {
+    return Math.min(this.currentPage * this.itemsPerPage, this.totalItems);
   }
 }

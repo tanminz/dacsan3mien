@@ -3,6 +3,7 @@
   background-color: #1B1717 !important;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  top: 30px !important;
 }
 
 /* Hiệu ứng trong suốt khi scroll */
@@ -16,6 +17,42 @@
   font-size: 24px;
   color: #630000;
   transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Custom Admin Panel button */
+.btn-admin-panel {
+  background-color: #810000 !important;
+  border-color: #810000 !important;
+  color: white !important;
+}
+
+.btn-admin-panel:hover {
+  background-color: #a71e2a !important;
+  border-color: #a71e2a !important;
+  color: white !important;
+}
+
+/* Enhanced logout button styling */
+.btn-outline-primary {
+  background-color: #f8f9fa !important;
+  border: 1px solid #810000 !important;
+  color: #810000 !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(129, 0, 0, 0.1);
+}
+
+.btn-outline-primary:hover {
+  background-color: #810000 !important;
+  border-color: #810000 !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(129, 0, 0, 0.2);
+}
+
+.btn-outline-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(129, 0, 0, 0.1);
 }
 
 .navbar-nav .nav-link {
