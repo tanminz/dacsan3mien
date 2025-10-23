@@ -2,18 +2,20 @@
     padding: 2rem 0;
     max-width: 100%;
     overflow-x: hidden;
-    background: linear-gradient(to bottom, #810000 0%, #630000 70%, #1B1717 100%);
+    background: #1B1717;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
     color: #EEEBDD;
     border-top: none;
 }
 
-.footer-section h6 {
+.footer-section h6,
+.fw-bold {
     font-weight: 700;
     text-transform: uppercase;
     margin-bottom: 10px;
-    color: #EEEBDD;
+    color: #810000;
     letter-spacing: 0.5px;
+    text-shadow: 0.5px 0.5px 0 #EEEBDD, -0.5px -0.5px 0 #EEEBDD, 0.5px -0.5px 0 #EEEBDD, -0.5px 0.5px 0 #EEEBDD;
 }
 
 .best-choice {
@@ -27,9 +29,10 @@
 
 .contact-cell h4,
 .feedback-cell h4 {
-    color: #EEEBDD;
+    color: #810000;
     font-weight: bold;
     margin-bottom: 0.5rem;
+    text-shadow: 0.5px 0.5px 0 #EEEBDD, -0.5px -0.5px 0 #EEEBDD, 0.5px -0.5px 0 #EEEBDD, -0.5px 0.5px 0 #EEEBDD;
 }
 
 .contact-cell p,
@@ -73,7 +76,7 @@
 .feedback-row-3 button {
     background-color: #EEEBDD;
     border: 1px solid #EEEBDD;
-    color: #630000;
+    color: #EEEBDD;
     border-radius: 6px;
     transition: all 0.3s ease;
 }
