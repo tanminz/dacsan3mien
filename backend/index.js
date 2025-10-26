@@ -44,7 +44,7 @@ app.use((req, res, next) => {
 
 const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017";
 const client = new MongoClient(mongoUri);
-let productCollection, userCollection, orderCollection, feedbackCollection, cartCollection;
+let productCollection, userCollection, orderCollection, feedbackCollection, cartCollection, blogCollection;
 
 (async () => {
   try {
@@ -55,6 +55,7 @@ let productCollection, userCollection, orderCollection, feedbackCollection, cart
     orderCollection = database.collection("Order");
     feedbackCollection = database.collection("Feedback");
     cartCollection = database.collection("Cart");
+    blogCollection = database.collection("Blog");
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
     process.exit(1);
@@ -998,12 +999,390 @@ app.post("/feedback", async (req, res) => {
       email: email || null,
       phone: phone || null,
       message,
+      status: 'new',
       submittedAt: new Date(),
     };
     const result = await feedbackCollection.insertOne(feedbackData);
     res.status(201).json({ message: "Feedback submitted successfully", feedbackId: result.insertedId });
   } catch {
     res.status(500).json({ message: "Failed to submit feedback" });
+  }
+});
+
+// Get all feedback/contacts for admin
+app.get("/feedback", requireRoleAction("admin", ["edit all", "sales ctrl", "view"]), async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+  const search = req.query.search || "";
+  const status = req.query.status || "";
+
+  try {
+    const filter = {};
+    
+    if (search) {
+      filter.$or = [
+        { fullName: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { message: { $regex: search, $options: "i" } }
+      ];
+    }
+    
+    if (status) {
+      filter.status = status;
+    }
+
+    const feedback = await feedbackCollection
+      .find(filter)
+      .sort({ submittedAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+    
+    const total = await feedbackCollection.countDocuments(filter);
+    
+    res.status(200).json({
+      feedback,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Update feedback status
+app.patch("/feedback/:id/status", requireRoleAction("admin", ["edit all", "sales ctrl"]), async (req, res) => {
+  const feedbackId = new ObjectId(req.params.id);
+  const { status } = req.body;
+
+  if (!status || !['new', 'read', 'replied'].includes(status)) {
+    return res.status(400).json({ message: "Invalid status" });
+  }
+
+  try {
+    const result = await feedbackCollection.updateOne(
+      { _id: feedbackId },
+      { $set: { status, updatedAt: new Date() } }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: "Feedback not found" });
+    }
+
+    res.status(200).json({ message: "Status updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update status" });
+  }
+});
+
+// Delete feedback
+app.delete("/feedback/:id", requireRoleAction("admin", ["edit all", "sales ctrl"]), async (req, res) => {
+  const feedbackId = new ObjectId(req.params.id);
+  
+  try {
+    const result = await feedbackCollection.deleteOne({ _id: feedbackId });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Feedback not found" });
+    }
+    res.status(200).json({ message: "Feedback deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete feedback" });
+  }
+});
+
+// ========== DASHBOARD ENDPOINTS ==========
+
+// Get dashboard statistics
+app.get("/dashboard/stats", requireRoleAction("admin", ["edit all", "sales ctrl", "view"]), async (req, res) => {
+  try {
+    const totalProducts = await productCollection.countDocuments();
+    const totalOrders = await orderCollection.countDocuments();
+    const totalUsers = await userCollection.countDocuments();
+    const totalBlogs = await blogCollection.countDocuments();
+    const totalContacts = await feedbackCollection.countDocuments();
+    const newContacts = await feedbackCollection.countDocuments({ status: 'new' });
+    
+    // Order statistics
+    const pendingOrders = await orderCollection.countDocuments({ status: 'in_progress' });
+    const completedOrders = await orderCollection.countDocuments({ status: 'completed' });
+    const cancelledOrders = await orderCollection.countDocuments({ status: 'cancelled' });
+    
+    // Calculate total revenue
+    const revenueResult = await orderCollection.aggregate([
+      { $match: { status: 'completed' } },
+      { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+    ]).toArray();
+    const totalRevenue = revenueResult.length > 0 ? revenueResult[0].total : 0;
+    
+    // Calculate average order value
+    const avgOrderValue = completedOrders > 0 ? totalRevenue / completedOrders : 0;
+    
+    // Recent orders
+    const recentOrders = await orderCollection.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .toArray();
+    
+    // Low stock products
+    const lowStockProducts = await productCollection.find({ stocked_quantity: { $lte: 10 } })
+      .sort({ stocked_quantity: 1 })
+      .limit(5)
+      .toArray();
+    
+    // Top selling products (from orders)
+    const topProducts = await orderCollection.aggregate([
+      { $unwind: '$selectedItems' },
+      { $group: {
+        _id: '$selectedItems._id',
+        productName: { $first: '$selectedItems.product_name' },
+        totalQuantity: { $sum: '$selectedItems.quantity' },
+        totalRevenue: { $sum: { $multiply: ['$selectedItems.quantity', '$selectedItems.unit_price'] } }
+      }},
+      { $sort: { totalQuantity: -1 } },
+      { $limit: 5 }
+    ]).toArray();
+    
+    // Generate fake sales data for charts (not connected to real database)
+    const generateFakeSalesData = () => {
+      const salesData = [];
+      const weeklySalesData = [];
+      const monthlySalesData = [];
+      
+      // Generate 30 days of fake sales data
+      for (let i = 29; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dailyRevenue = Math.floor(Math.random() * 5000000) + 1000000; // 1M - 6M VND
+        const dailyOrders = Math.floor(Math.random() * 20) + 5; // 5-25 orders
+        
+        salesData.push({
+          _id: date.toISOString().split('T')[0],
+          dailyRevenue: dailyRevenue,
+          dailyOrders: dailyOrders
+        });
+      }
+      
+      // Generate 7 days of fake weekly data
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dailyRevenue = Math.floor(Math.random() * 3000000) + 500000; // 500K - 3.5M VND
+        
+        weeklySalesData.push({
+          _id: date.toISOString().split('T')[0],
+          dailyRevenue: dailyRevenue,
+          dailyOrders: Math.floor(Math.random() * 15) + 3
+        });
+      }
+      
+      // Generate 12 months of fake monthly data
+      for (let i = 11; i >= 0; i--) {
+        const date = new Date();
+        date.setMonth(date.getMonth() - i);
+        const monthlyRevenue = Math.floor(Math.random() * 50000000) + 10000000; // 10M - 60M VND
+        const monthlyOrders = Math.floor(Math.random() * 200) + 50; // 50-250 orders
+        
+        monthlySalesData.push({
+          _id: date.toISOString().substring(0, 7), // YYYY-MM format
+          monthlyRevenue: monthlyRevenue,
+          monthlyOrders: monthlyOrders
+        });
+      }
+      
+      return { salesData, weeklySalesData, monthlySalesData };
+    };
+    
+    const { salesData, weeklySalesData, monthlySalesData } = generateFakeSalesData();
+    
+    // Calculate growth rates (fake data)
+    const revenueGrowth = Math.floor(Math.random() * 40) - 10; // -10% to +30%
+    const ordersGrowth = Math.floor(Math.random() * 30) - 5; // -5% to +25%
+    
+    res.status(200).json({
+      overview: {
+        totalProducts,
+        totalOrders,
+        totalUsers,
+        totalBlogs,
+        totalContacts,
+        newContacts,
+        pendingOrders,
+        completedOrders,
+        cancelledOrders,
+        totalRevenue,
+        avgOrderValue,
+        revenueGrowth,
+        ordersGrowth
+      },
+      recentOrders,
+      lowStockProducts,
+      topProducts,
+      salesData,
+      weeklySalesData,
+      monthlySalesData
+    });
+  } catch (err) {
+    console.error("Error fetching dashboard stats:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// ========== BLOG ENDPOINTS ==========
+
+// Get all blogs (public) with pagination
+app.get("/blogs", async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  try {
+    const filter = { published: true };
+    const blogs = await blogCollection
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+    const total = await blogCollection.countDocuments(filter);
+    
+    res.status(200).json({
+      blogs,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Get all blogs for admin (with search)
+app.get("/blogs/admin/list", requireRoleAction("admin", ["edit all", "sales ctrl", "view"]), async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+  const search = req.query.search || "";
+
+  try {
+    if (!blogCollection) {
+      console.error("Blog collection not initialized");
+      return res.status(500).json({ message: "Database not initialized" });
+    }
+
+    const filter = search
+      ? { title: { $regex: search, $options: "i" } }
+      : {};
+
+    const blogs = await blogCollection
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+    const total = await blogCollection.countDocuments(filter);
+    
+    res.status(200).json({
+      blogs,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+    });
+  } catch (err) {
+    console.error("Error fetching blogs for admin:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Get single blog by ID (public)
+app.get("/blogs/:id", async (req, res) => {
+  try {
+    const blogId = new ObjectId(req.params.id);
+    const blog = await blogCollection.findOne({ _id: blogId });
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+    res.status(200).json(blog);
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Create new blog (admin only)
+app.post("/blogs", requireRoleAction("admin", ["edit all", "sales ctrl"]), async (req, res) => {
+  const { title, description, content, image, author, published } = req.body;
+
+  if (!title || !content) {
+    return res.status(400).json({ message: "Title and content are required." });
+  }
+
+  if (image && (typeof image !== "string" || !image.startsWith("data:image/"))) {
+    return res.status(400).json({ message: "Invalid image format. Must be Base64." });
+  }
+
+  const newBlog = {
+    title,
+    description: description || "",
+    content,
+    image: image || "",
+    author: author || "Admin",
+    published: published !== undefined ? published : true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
+  try {
+    const result = await blogCollection.insertOne(newBlog);
+    res.status(201).json({ message: "Blog created successfully", blogId: result.insertedId });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to create blog" });
+  }
+});
+
+// Update blog (admin only)
+app.patch("/blogs/:id", requireRoleAction("admin", ["edit all", "sales ctrl"]), async (req, res) => {
+  const blogId = new ObjectId(req.params.id);
+  const { image, ...updateData } = req.body;
+
+  if (image && (typeof image !== "string" || !image.startsWith("data:image/"))) {
+    return res.status(400).json({ message: "Invalid image format. Must be Base64." });
+  }
+
+  try {
+    const updatePayload = {
+      ...updateData,
+      ...(image && { image }),
+      updatedAt: new Date(),
+    };
+
+    const result = await blogCollection.updateOne(
+      { _id: blogId },
+      { $set: updatePayload }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: "Blog not found or no changes made" });
+    }
+
+    res.status(200).json({ message: "Blog updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update blog" });
+  }
+});
+
+// Delete blog (admin only)
+app.delete("/blogs/:id", requireRoleAction("admin", ["edit all", "sales ctrl"]), async (req, res) => {
+  const blogId = new ObjectId(req.params.id);
+  
+  try {
+    const result = await blogCollection.deleteOne({ _id: blogId });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+    res.status(200).json({ message: "Blog deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete blog" });
   }
 });
 

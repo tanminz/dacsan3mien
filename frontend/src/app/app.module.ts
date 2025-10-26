@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AuthInterceptor } from './services/auth.interceptor';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 
 import { AppComponent } from './app.component';
@@ -53,6 +54,7 @@ import { Banner3Component } from './banner-3/banner-3.component';
 import { ProductSection2Component } from './product-section-2/product-section-2.component';
 import { ProductSection3Component } from './product-section-3/product-section-3.component';
 import { VietnamMapComponent } from './vietnam-map/vietnam-map.component';
+import { LoadingComponent } from './shared/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -100,7 +102,8 @@ import { VietnamMapComponent } from './vietnam-map/vietnam-map.component';
     ProductSection2Component,
     ProductSection3Component,
     VietnamMapComponent,
-    ScrollRevealDirective
+    ScrollRevealDirective,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -116,6 +119,12 @@ import { VietnamMapComponent } from './vietnam-map/vietnam-map.component';
       useClass: AuthInterceptor,
       multi: true
     },
+    // LoadingInterceptor disabled - loading only for login/signup
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: LoadingInterceptor,
+    //   multi: true
+    // },
     AuthGuard
   ],
   bootstrap: [AppComponent],

@@ -11,12 +11,16 @@ import { Subscription } from 'rxjs';
 export class MainpageComponent implements OnInit, OnDestroy {
   profileName: string = 'Admin';
   recentActivities = [
-    { category: 'Chức năng', item: 'Sản phẩm', name: 'The Quinteen', action: 'edit' },
-    { category: 'Chức năng', item: 'Giảm giá', name: 'ChristmasEVE', action: 'view' },
-    { category: 'Chức năng', item: 'Sản phẩm', name: 'Kính mắt Ann...', action: 'edit' },
-    { category: 'Chức năng', item: 'Sản phẩm', name: 'ChristmasEVE', action: 'view' },
-    { category: 'Chức năng', item: 'Sản phẩm', name: 'ChristmasEVE', action: 'edit' },
-    { category: 'Chức năng', item: 'Sản phẩm', name: 'ChristmasEVE', action: 'view' },
+    { category: 'Chức năng', item: 'Blog', name: 'Chè Tân Cương Thái Nguyên', action: 'edit' },
+    { category: 'Chức năng', item: 'Sản phẩm', name: 'Mắm cá linh Cà Mau', action: 'edit' },
+    { category: 'Chức năng', item: 'Đơn hàng', name: 'Đơn #12345 - Nước mắm Phan Thiết', action: 'view' },
+    { category: 'Chức năng', item: 'Blog', name: 'Cá cơm sấy giòn Nghệ An', action: 'edit' },
+    { category: 'Chức năng', item: 'Sản phẩm', name: 'Mật ong Mẫu Sơn Lạng Sơn', action: 'edit' },
+    { category: 'Chức năng', item: 'Sản phẩm', name: 'Lạp xưởng hun khói Sa Pa', action: 'view' },
+    { category: 'Chức năng', item: 'Blog', name: 'Rượu ngô Na Hang Tuyên Quang', action: 'edit' },
+    { category: 'Chức năng', item: 'Sản phẩm', name: 'Cà phê Buôn Ma Thuột', action: 'view' },
+    { category: 'Chức năng', item: 'Đơn hàng', name: 'Đơn #12346 - Set quà Tết 3 miền', action: 'view' },
+    { category: 'Chức năng', item: 'Sản phẩm', name: 'Bánh đậu xanh Hải Dương', action: 'edit' },
   ];
   private subscription: Subscription | null = null;
   private filterRecentActivities(): void {
