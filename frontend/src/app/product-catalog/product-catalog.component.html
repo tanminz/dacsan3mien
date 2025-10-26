@@ -1,17 +1,81 @@
 <div class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="section-title">Sản phẩm / {{ selectedCategory }} ({{ productCount }})</h5>
-    <div class="filter-controls d-flex">
-      <select (change)="filterByPrice($event)" class="form-select form-select-sm me-2">
-        <option value="">Lọc theo giá</option>
-        <option value="lowToHigh">Giá: Thấp đến Cao</option>
-        <option value="highToLow">Giá: Cao đến Thấp</option>
-      </select>
-      <select (change)="filterByTag($event)" class="form-select form-select-sm">
-        <option value="">Lọc theo tag</option>
-        <option value="new">Mới</option>
-        <option value="discount">Giảm giá</option>
-      </select>
+    <div class="filter-controls">
+      <div class="filter-row">
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fas fa-dollar-sign"></i>
+            Lọc theo giá
+          </label>
+          <select (change)="filterByPrice($event)" class="filter-select">
+            <option value="">Tất cả giá</option>
+            <option value="lowToHigh">Giá: Thấp đến Cao</option>
+            <option value="highToLow">Giá: Cao đến Thấp</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fas fa-tags"></i>
+            Lọc theo tag
+          </label>
+          <select (change)="filterByTag($event)" class="filter-select">
+            <option value="">Tất cả tag</option>
+            <option value="new">Mới</option>
+            <option value="discount">Giảm giá</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fas fa-map-marker-alt"></i>
+            Lọc theo tỉnh thành
+          </label>
+          <div class="province-search-container">
+            <div class="province-input-wrapper">
+              <input 
+                type="text" 
+                class="province-search-input" 
+                placeholder="Tìm kiếm tỉnh thành..."
+                [(ngModel)]="provinceSearchQuery"
+                (input)="onProvinceSearch($event)"
+                (focus)="showProvinceSuggestions = true"
+                (blur)="onProvinceInputBlur()"
+                [value]="provinceFilter">
+              <button 
+                *ngIf="provinceFilter" 
+                class="clear-province-btn"
+                (click)="clearProvinceFilter()"
+                type="button"
+                title="Xóa filter tỉnh thành">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            
+            <div class="province-suggestions" *ngIf="showProvinceSuggestions && filteredProvinces.length > 0">
+              <div 
+                *ngFor="let province of filteredProvinces" 
+                class="province-suggestion-item"
+                (click)="selectProvince(province)"
+                [class.highlighted]="province.toLowerCase().includes(provinceSearchQuery.toLowerCase())">
+                <i class="fas fa-map-marker-alt suggestion-icon"></i>
+                <span class="province-name">{{ province }}</span>
+                <span class="province-count" *ngIf="getProvinceProductCount(province) > 0">
+                  ({{ getProvinceProductCount(province) }} sản phẩm)
+                </span>
+              </div>
+            </div>
+            
+            <div class="province-suggestions" *ngIf="showProvinceSuggestions && filteredProvinces.length === 0 && provinceSearchQuery">
+              <div class="no-results">
+                <i class="fas fa-search"></i>
+                Không tìm thấy tỉnh thành nào
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

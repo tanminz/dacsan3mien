@@ -48,15 +48,17 @@ export class ProductSection2Component implements OnInit {
             product.image_4 || '',
             product.image_5 || '',
             product.product_dept || '',
-            product.rating || 0
+            product.rating || 0,
+            product.isNew || false,
+            product.type || 'food'
           );
           newProduct.checkIfNew();
           return newProduct;
         });
         
-        // Filter products for Miền Bắc (you can adjust this filter as needed)
-        // For now, we'll take the first few products as Miền Bắc products
-        this.displayedProducts = this.products.slice(0, this.initialDisplayCount);
+        // Filter products for dried food (thực phẩm khô)
+        const driedFoodProducts = this.products.filter(product => product.type === 'dried_food');
+        this.displayedProducts = driedFoodProducts.slice(0, this.initialDisplayCount);
         this.isLoading = false;
       },
       error: (err) => {
@@ -106,8 +108,13 @@ export class ProductSection2Component implements OnInit {
 
   showMore(): void {
     const currentLength = this.displayedProducts.length;
-    const additionalProducts = this.products.slice(currentLength, currentLength + this.loadMoreCount);
+    const driedFoodProducts = this.products.filter(product => product.type === 'dried_food');
+    const additionalProducts = driedFoodProducts.slice(currentLength, currentLength + this.loadMoreCount);
     this.displayedProducts = [...this.displayedProducts, ...additionalProducts];
+  }
+
+  goToDriedFoodProducts(): void {
+    this.router.navigate(['/catalog'], { queryParams: { category: 'dried_food' } });
   }
 
   getOriginalPrice(product: Product): number | null {

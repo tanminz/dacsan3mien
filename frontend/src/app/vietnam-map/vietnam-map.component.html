@@ -56,7 +56,7 @@
           <p>{{ selectedProvince.description }}</p>
         </div>
 
-        <a routerLink="/products" [queryParams]="{dept: selectedProvince.name}" class="explore-btn">
+        <a routerLink="/catalog" [queryParams]="{province: selectedProvince.name}" class="explore-btn">
           <span class="explore-icon">🔍</span>
           Khám Phá Đặc Sản {{ selectedProvince.name }}
         </a>

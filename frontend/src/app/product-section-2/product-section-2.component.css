@@ -23,6 +23,18 @@
 .product-grid .col-lg-3 {
   margin-bottom: 30px;
   padding: 0 15px;
+  display: flex;
+}
+
+/* Ensure all product cards have equal height */
+.product-grid .col-lg-3 app-product-item {
+  width: 100%;
+  display: flex;
+}
+
+.product-grid .col-lg-3 app-product-item .product-card {
+  width: 100%;
+  height: 100%;
 }
 
 .product-grid .col-md-6 {
@@ -40,6 +52,9 @@
   overflow: hidden;
   position: relative;
   cursor: pointer;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-card:hover {
@@ -56,6 +71,7 @@
   align-items: center;
   justify-content: center;
   aspect-ratio: 1/1;
+  flex-shrink: 0;
 }
 
 /* Fallback for browsers that don't support aspect-ratio */
@@ -152,6 +168,10 @@
 .product-info {
   padding: 10px;
   text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .product-title {

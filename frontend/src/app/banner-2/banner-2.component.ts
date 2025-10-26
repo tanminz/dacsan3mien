@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-banner-2',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class Banner2Component {
 
+  constructor(private router: Router) { }
+
+  goToDriedFoodProducts(): void {
+    this.router.navigate(['/catalog'], { queryParams: { category: 'dried_food' } });
+  }
 }

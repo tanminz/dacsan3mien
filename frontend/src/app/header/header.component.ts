@@ -15,6 +15,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAdmin: boolean = false;
   searchTerm: string = '';
   isScrolled: boolean = false;
+  showProductsDropdown: boolean = false;
+  private dropdownTimeout: any = null;
   private logoutSubscription: Subscription | null = null;
 
   constructor(
@@ -63,9 +65,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
+  hideProductsDropdown(): void {
+    this.dropdownTimeout = setTimeout(() => {
+      this.showProductsDropdown = false;
+    }, 300); // 300ms delay before hiding
+  }
+
+  clearDropdownTimeout(): void {
+    if (this.dropdownTimeout) {
+      clearTimeout(this.dropdownTimeout);
+      this.dropdownTimeout = null;
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.logoutSubscription) {
       this.logoutSubscription.unsubscribe();
+    }
+    if (this.dropdownTimeout) {
+      clearTimeout(this.dropdownTimeout);
     }
   }
 }

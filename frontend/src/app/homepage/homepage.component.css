@@ -23,6 +23,12 @@
     margin: 40px 0;
     padding: 0;
     overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.banner-event-container:hover {
+    transform: scale(1.02);
 }
 
 .banner-event-image {

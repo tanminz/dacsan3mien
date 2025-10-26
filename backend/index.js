@@ -101,7 +101,17 @@ app.get(
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
     const productDept = req.query.dept || "";
-    const filter = productDept ? { product_dept: productDept } : {};
+    const productType = req.query.type || "";
+    
+    // Build filter object
+    let filter = {};
+    if (productDept) {
+      filter.product_dept = productDept;
+    }
+    if (productType) {
+      filter.type = productType;
+    }
+    
     try {
       const products = await productCollection
         .find(filter)
@@ -138,7 +148,7 @@ app.post(
   "/products",
   requireRoleAction("admin", ["edit all", "sales ctrl"]),
   async (req, res) => {
-    const { product_name, product_detail, stocked_quantity, unit_price, discount, product_dept, rating, image_1, image_2, image_3, image_4, image_5 } = req.body;
+    const { product_name, product_detail, stocked_quantity, unit_price, discount, product_dept, type, rating, image_1, image_2, image_3, image_4, image_5 } = req.body;
 
     if (!product_name || !unit_price) {
       return res.status(400).json({ message: "Please provide all required fields." });
@@ -167,6 +177,7 @@ app.post(
       unit_price,
       discount: discount || 0,
       product_dept: product_dept || "",
+      type: type || "food",
       rating: rating || 4,
       createdAt: new Date(),
       image_1: image_1 || "",

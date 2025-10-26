@@ -66,11 +66,15 @@ export class ProductAPIService {
   getProducts(
     page: number = 1,
     limit: number = 10,
-    dept: string = ''
+    dept: string = '',
+    type: string = ''
   ): Observable<{ products: Product[]; total: number; page: number; pages: number }> {
     const params: any = { page, limit };
     if (dept) {
       params.dept = dept;
+    }
+    if (type) {
+      params.type = type;
     }
     return this._http
       .get<{ products: Product[]; total: number; page: number; pages: number }>(this.apiUrl, {

@@ -3,6 +3,9 @@
   overflow: hidden;
   position: relative;
   cursor: pointer;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-card:hover {
@@ -21,6 +24,7 @@
   aspect-ratio: 1/1;
   min-height: 280px;
   max-height: 280px;
+  flex-shrink: 0;
 }
 
 /* Fallback for browsers that don't support aspect-ratio */
@@ -138,6 +142,10 @@
 .product-info {
   padding: 10px;
   text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .product-title {

@@ -48,21 +48,17 @@ export class ProductSection3Component implements OnInit {
             product.image_4 || '',
             product.image_5 || '',
             product.product_dept || '',
-            product.rating || 0
+            product.rating || 0,
+            product.isNew || false,
+            product.type || 'food'
           );
           newProduct.checkIfNew();
           return newProduct;
         });
         
-        // Filter products with names >= 5 words
-        const filteredProducts = this.products.filter(product => {
-          const wordCount = product.product_name ? product.product_name.trim().split(/\s+/).length : 0;
-          console.log(`Product: ${product.product_name}, Word count: ${wordCount}`);
-          return wordCount >= 5;
-        });
-        
-        console.log(`Total products: ${this.products.length}, Filtered products: ${filteredProducts.length}`);
-        this.displayedProducts = filteredProducts.slice(0, this.initialDisplayCount);
+        // Filter products for beverages (thức uống)
+        const beverageProducts = this.products.filter(product => product.type === 'beverages');
+        this.displayedProducts = beverageProducts.slice(0, this.initialDisplayCount);
         this.isLoading = false;
       },
       error: (err) => {
@@ -112,11 +108,13 @@ export class ProductSection3Component implements OnInit {
 
   showMore(): void {
     const currentLength = this.displayedProducts.length;
-    const filteredProducts = this.products.filter(product => 
-      product.product_name && product.product_name.trim().split(/\s+/).length >= 5
-    );
-    const additionalProducts = filteredProducts.slice(currentLength, currentLength + this.loadMoreCount);
+    const beverageProducts = this.products.filter(product => product.type === 'beverages');
+    const additionalProducts = beverageProducts.slice(currentLength, currentLength + this.loadMoreCount);
     this.displayedProducts = [...this.displayedProducts, ...additionalProducts];
+  }
+
+  goToBeverageProducts(): void {
+    this.router.navigate(['/catalog'], { queryParams: { category: 'beverages' } });
   }
 
   getOriginalPrice(product: Product): number | null {

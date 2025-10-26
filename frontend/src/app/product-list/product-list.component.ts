@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductAPIService } from '../product-api.service';
 import { Product } from '../../interface/Product';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
@@ -15,7 +16,10 @@ export class ProductListComponent implements OnInit {
   initialDisplayCount: number = 8;
   loadMoreCount: number = 8;
 
-  constructor(private _service: ProductAPIService) { }
+  constructor(
+    private _service: ProductAPIService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this._service.getProducts(1, 100).subscribe({
@@ -35,7 +39,9 @@ export class ProductListComponent implements OnInit {
             product.image_4 || '',
             product.image_5 || '',
             product.product_dept || '',
-            product.rating || 0
+            product.rating || 0,
+            product.isNew || false,
+            product.type || 'food'
           );
           newProduct.checkIfNew();
           return newProduct;
@@ -54,5 +60,9 @@ export class ProductListComponent implements OnInit {
     const currentLength = this.displayedProducts.length;
     const additionalProducts = this.products.slice(currentLength, currentLength + this.loadMoreCount);
     this.displayedProducts = [...this.displayedProducts, ...additionalProducts];
+  }
+
+  goToAllProducts(): void {
+    this.router.navigate(['/catalog']);
   }
 }
