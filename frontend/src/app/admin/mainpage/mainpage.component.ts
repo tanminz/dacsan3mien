@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-mainpage',
   templateUrl: './mainpage.component.html',
-  styleUrls: ['./mainpage.component.css']
+  styleUrls: ['./mainpage.component.scss']
 })
 export class MainpageComponent implements OnInit, OnDestroy {
   profileName: string = 'Admin';
@@ -21,6 +21,12 @@ export class MainpageComponent implements OnInit, OnDestroy {
     { category: 'Chức năng', item: 'Sản phẩm', name: 'Cà phê Buôn Ma Thuột', action: 'view' },
     { category: 'Chức năng', item: 'Đơn hàng', name: 'Đơn #12346 - Set quà Tết 3 miền', action: 'view' },
     { category: 'Chức năng', item: 'Sản phẩm', name: 'Bánh đậu xanh Hải Dương', action: 'edit' },
+  ];
+  dashboardStats = [
+    { label: 'Đơn hàng hôm nay', value: '128', trend: '+12% so với hôm qua' },
+    { label: 'Doanh thu tuần này', value: '₫1.2 tỷ', trend: '+8% so với tuần trước' },
+    { label: 'Khách hàng mới', value: '56', trend: '+14% trong 7 ngày' },
+    { label: 'Sản phẩm đang bán', value: '412', trend: 'Ổn định' }
   ];
   private subscription: Subscription | null = null;
   private filterRecentActivities(): void {

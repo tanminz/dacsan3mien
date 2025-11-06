@@ -1,4 +1,20 @@
 <div class="admin-dashboard container-fluid">
+    <section class="hero-banner mb-4">
+        <div class="hero-content">
+            <h1 class="hero-title">Bảng điều khiển quản trị</h1>
+            <p class="hero-subtitle">Quản lý hoạt động, cập nhật dữ liệu và theo dõi hiệu suất hệ thống ĐẶC SẢN 3 MIỀN.</p>
+        </div>
+        <div class="hero-metrics">
+            <div class="metric-card" *ngFor="let stat of dashboardStats">
+                <span class="metric-label">{{ stat.label }}</span>
+                <span class="metric-value">{{ stat.value }}</span>
+                <span class="metric-trend" [ngClass]="{
+                    'positive': stat.trend?.startsWith('+'),
+                    'negative': stat.trend?.startsWith('-')
+                }">{{ stat.trend }}</span>
+            </div>
+        </div>
+    </section>
     <div class="row welcome-section align-items-center">
         <div class="col-12 col-md mb-3 mb-md-0">
             <h2 class="welcome-message">Xin chào, {{ profileName }}</h2>
@@ -10,38 +26,55 @@
         </div>
     </div>
 
-    <div class="row mt-4">
-        <div class="col-12 col-lg-7 mb-4 mb-lg-0 recent-activity-section">
-            <h5 class="section-title mb-3 d-flex align-items-center" data-bs-toggle="collapse"
-                data-bs-target="#recentActivities" aria-expanded="true">
-                <i class="fa fa-angle-down me-2"></i> Hoạt động gần đây
-            </h5>
-            <div id="recentActivities" class="collapse show">
-                <div class="card mb-3 recent-activity-card" *ngFor="let activity of recentActivities">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <span><i class="fa fa-edit me-2"></i>{{ activity.category }}/{{ activity.item }}</span>
-                        <span class="activity-name">{{ activity.name }}</span>
-                        <i class="fa fa-clock"></i>
+    <div class="main-content row g-4 mt-2">
+        <div class="col-12 col-lg-7">
+            <div class="section-card recent-activity-section h-100">
+                <div class="section-heading" data-bs-toggle="collapse" data-bs-target="#recentActivities"
+                    aria-expanded="true">
+                    <div>
+                        <h5><i class="fa fa-history me-2"></i>Hoạt động gần đây</h5>
+                        <p class="section-description">Theo dõi những thay đổi mới nhất được thực hiện trong hệ thống.</p>
                     </div>
+                    <i class="fa fa-angle-down"></i>
                 </div>
-                <div class="pagination-controls d-flex justify-content-between">
-                    <button class="btn btn-pagination">Trước</button>
-                    <span>1/10</span>
-                    <button class="btn btn-pagination">Sau</button>
+                <div id="recentActivities" class="collapse show section-body">
+                    <div class="recent-activity-card" *ngFor="let activity of recentActivities">
+                        <div class="activity-icon">
+                            <i class="fa fa-edit" *ngIf="activity.action === 'edit'"></i>
+                            <i class="fa fa-eye" *ngIf="activity.action !== 'edit'"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-meta">{{ activity.category }} · {{ activity.item }}</div>
+                            <div class="activity-name">{{ activity.name }}</div>
+                        </div>
+                        <div class="activity-time">
+                            <i class="fa fa-clock me-1"></i>Vừa cập nhật
+                        </div>
+                    </div>
+                    <div class="pagination-controls d-flex justify-content-between align-items-center">
+                        <button class="btn btn-pagination"><i class="fa fa-angle-left me-1"></i>Trước</button>
+                        <span>1/10</span>
+                        <button class="btn btn-pagination">Sau<i class="fa fa-angle-right ms-1"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="col-12 col-lg-5 admin-menu-section">
+            <div class="menu-intro">
+                <h5>Trung tâm quản trị</h5>
+                <p>Truy cập nhanh các khu vực quan trọng để vận hành và phát triển hệ thống.</p>
+            </div>
             <div class="card mb-3 menu-card">
-                <div class="card-header menu-header d-flex align-items-center" data-bs-toggle="collapse"
+                <div class="card-header menu-header" data-bs-toggle="collapse"
                     data-bs-target="#authMenu" aria-expanded="true">
-                    <i class="fa fa-angle-down me-2"></i> Xác thực
+                    <div class="menu-header-text">
+                        <div class="menu-title"><i class="fa fa-shield me-2"></i> Xác thực</div>
+                        <span class="menu-subtitle">Quản lý tài khoản & phân quyền</span>
+                    </div>
+                    <i class="fa fa-angle-down toggle-icon"></i>
                 </div>
                 <ul id="authMenu" class="collapse show list-group list-group-flush menu-list">
-                    <li class="list-group-item menu-item">
-                        <a [routerLink]="'/admin'" class="menu-link">Nhóm <i class="fa fa-edit float-end"></i></a>
-                    </li>
                     <li class="list-group-item menu-item">
                         <a [routerLink]="'/admin/user-adm'" class="menu-link">Tài khoản <i
                                 class="fa fa-edit float-end"></i></a>
@@ -49,9 +82,13 @@
                 </ul>
             </div>
             <div class="card menu-card">
-                <div class="card-header menu-header d-flex align-items-center" data-bs-toggle="collapse"
+                <div class="card-header menu-header" data-bs-toggle="collapse"
                     data-bs-target="#mainMenu" aria-expanded="true">
-                    <i class="fa fa-angle-down me-2"></i> Chức năng
+                    <div class="menu-header-text">
+                        <div class="menu-title"><i class="fa fa-cogs me-2"></i> Chức năng</div>
+                        <span class="menu-subtitle">Điều hành sản phẩm, nội dung và đơn hàng</span>
+                    </div>
+                    <i class="fa fa-angle-down toggle-icon"></i>
                 </div>
                 <ul id="mainMenu" class="collapse show list-group list-group-flush menu-list">
                     <li class="list-group-item menu-item">
@@ -69,7 +106,7 @@
                         <a [routerLink]="'/admin/blog-adm'" class="menu-link">Blogs <i class="fa fa-edit float-end"></i></a>
                     </li>
                     <li class="list-group-item menu-item">
-                        <a [routerLink]="'/admin/dashboard'" class="menu-link">Biểu đồ <i class="fa fa-chart-bar float-end"></i></a>
+                        <a [routerLink]="'/admin/dashboard'" class="menu-link">Biểu đồ <i class="fa fa-bar-chart float-end"></i></a>
                     </li>
                 </ul>
             </div>

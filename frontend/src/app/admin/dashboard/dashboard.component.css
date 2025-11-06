@@ -4,6 +4,21 @@
     min-height: 100vh;
 }
 
+.dashboard-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #8b0000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.dashboard-title .icon {
+    font-size: 2.2rem;
+}
+
 /* Stat Cards */
 .stat-card {
     border: none;

@@ -31,9 +31,9 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="address">Địa chỉ nhận hàng</label>
+                        <label for="address">Địa chỉ nhận hàng <span class="label-hint">(Vui lòng dùng thông tin sau sáp nhập)</span></label>
                         <input type="text" id="address" class="form-control" formControlName="address"
-                            placeholder="Nhập địa chỉ" required>
+                            placeholder="Nhập địa chỉ - Vui lòng điền cụ thể Số nhà, Tòa nhà, Tên đường" required>
                         <div *ngIf="paymentForm.get('address')?.invalid && paymentForm.get('address')?.touched"
                             class="text-danger">
                             Địa chỉ là bắt buộc.

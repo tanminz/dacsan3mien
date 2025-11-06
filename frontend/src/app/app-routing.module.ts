@@ -14,12 +14,20 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { BlogComponent } from './blog/blog.component';
 import { ProductCatalogComponent } from './product-catalog/product-catalog.component';
 import { PersonalInfoComponent } from './personal-info/personal-info.component';
+import { HistoryComponent } from './history/history.component';
+import { DeliveryComponent } from './delivery/delivery.component';
+import { DeliveryMethodsComponent } from './delivery-methods/delivery-methods.component';
+import { HowToBuyComponent } from './how-to-buy/how-to-buy.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: '', component: HomepageComponent },
   { path: 'contact', component: ContactFaqComponent },
   { path: 'about', component: IntroComponent },
+  { path: 'history', component: HistoryComponent },
+  { path: 'delivery', component: DeliveryComponent },
+  { path: 'delivery-methods', component: DeliveryMethodsComponent },
+  { path: 'how-to-buy', component: HowToBuyComponent },
   { path: 'policy', component: PolicyComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },

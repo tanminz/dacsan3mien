@@ -41,6 +41,14 @@ button.btn-primary:hover {
     background-color: #f8f9fa;
 }
 
+.label-hint {
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #b03a2e;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
 @media (max-width: 576px) {
     .order-summary img {
         width: 50px;

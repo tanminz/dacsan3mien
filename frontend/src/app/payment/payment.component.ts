@@ -132,7 +132,7 @@ export class PaymentComponent implements OnInit {
 
     this.orderAPIService.placeOrder(orderData).subscribe({
       next: () => {
-        alert('Đơn hàng của bạn đã được đặt thành công!');
+        alert('Đơn hàng của bạn đã được đặt thành công!\n\nĐể tránh mất tiền vào tay kẻ lừa đảo mạo danh Shipper, bạn tuyệt đối\nKHÔNG chuyển khoản cho Shipper khi chưa nhận hàng\nKHÔNG nhấn vào đường dẫn (Link) lạ của Shipper gửi');
         this.cartService.removeOrderedItems(orderedItems.map(item => item._id));
         this.cartService.clearSelectedItems();
         this.router.navigate(['/']);

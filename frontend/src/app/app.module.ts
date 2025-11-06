@@ -55,6 +55,10 @@ import { ProductSection2Component } from './product-section-2/product-section-2.
 import { ProductSection3Component } from './product-section-3/product-section-3.component';
 import { VietnamMapComponent } from './vietnam-map/vietnam-map.component';
 import { LoadingComponent } from './shared/loading/loading.component';
+import { HistoryComponent } from './history/history.component';
+import { DeliveryComponent } from './delivery/delivery.component';
+import { DeliveryMethodsComponent } from './delivery-methods/delivery-methods.component';
+import { HowToBuyComponent } from './how-to-buy/how-to-buy.component';
 
 @NgModule({
   declarations: [
@@ -103,7 +107,11 @@ import { LoadingComponent } from './shared/loading/loading.component';
     ProductSection3Component,
     VietnamMapComponent,
     ScrollRevealDirective,
-    LoadingComponent
+    LoadingComponent,
+    HistoryComponent,
+    DeliveryComponent,
+    DeliveryMethodsComponent,
+    HowToBuyComponent
   ],
   imports: [
     BrowserModule,
