@@ -27,7 +27,7 @@ app.use(session({
   saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI || "mongodb://root:password@localhost:27017",
-    dbName: process.env.DB_NAME || 'EYECONIC',
+    dbName: process.env.DB_NAME || 'dacsan3mien',
     collectionName: 'sessions',
   }),
   cookie: {
@@ -49,7 +49,7 @@ let productCollection, userCollection, orderCollection, feedbackCollection, cart
 (async () => {
   try {
     await client.connect();
-    const database = client.db(process.env.DB_NAME || "EYECONIC");
+    const database = client.db(process.env.DB_NAME || "dacsan3mien");
     productCollection = database.collection("Product");
     userCollection = database.collection("User");
     orderCollection = database.collection("Order");
@@ -181,6 +181,7 @@ app.post(
       type: type || "food",
       rating: rating || 4,
       createdAt: new Date(),
+      updatedAt: new Date(),
       image_1: image_1 || "",
       image_2: image_2 || "",
       image_3: image_3 || "",
@@ -220,7 +221,7 @@ app.patch(
     };
 
     try {
-      const updatePayload = { ...updateData, ...updatedImages };
+      const updatePayload = { ...updateData, ...updatedImages, updatedAt: new Date() };
 
       const result = await productCollection.updateOne(
         { _id: productId },
@@ -735,6 +736,7 @@ app.post("/orders", requireAuth, async (req, res) => {
       paymentMethod,
       shippingAddress,
       createdAt: new Date(),
+      updatedAt: new Date(),
       status: "in_progress",
     };
 
@@ -782,7 +784,7 @@ app.patch(
     try {
       const result = await orderCollection.updateOne(
         { _id: new ObjectId(orderId) },
-        { $set: { status } }
+        { $set: { status, updatedAt: new Date() } }
       );
 
       if (result.matchedCount === 0) {
@@ -1225,6 +1227,149 @@ app.get("/dashboard/stats", requireRoleAction("admin", ["edit all", "sales ctrl"
     });
   } catch (err) {
     console.error("Error fetching dashboard stats:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+app.get("/dashboard/activities", requireRoleAction("admin", ["edit all", "sales ctrl", "account ctrl", "view"]), async (req, res) => {
+  try {
+    const [
+      latestProducts,
+      latestBlogs,
+      latestOrders,
+      latestFeedback
+    ] = await Promise.all([
+      productCollection
+        ? productCollection
+            .find({}, { projection: { product_name: 1, updatedAt: 1, createdAt: 1 } })
+            .sort({ updatedAt: -1, createdAt: -1, _id: -1 })
+            .limit(5)
+            .toArray()
+        : [],
+      blogCollection
+        ? blogCollection
+            .find({}, { projection: { title: 1, updatedAt: 1, createdAt: 1, published: 1 } })
+            .sort({ updatedAt: -1, createdAt: -1, _id: -1 })
+            .limit(5)
+            .toArray()
+        : [],
+      orderCollection
+        ? orderCollection
+            .find({}, { projection: { status: 1, totalPrice: 1, updatedAt: 1, createdAt: 1 } })
+            .sort({ updatedAt: -1, createdAt: -1, _id: -1 })
+            .limit(5)
+            .toArray()
+        : [],
+      feedbackCollection
+        ? feedbackCollection
+            .find({}, { projection: { fullName: 1, status: 1, message: 1, updatedAt: 1, submittedAt: 1 } })
+            .sort({ updatedAt: -1, submittedAt: -1, _id: -1 })
+            .limit(5)
+            .toArray()
+        : []
+    ]);
+
+    const resolveTimestamp = (doc, extraFields = []) => {
+      const candidates = [
+        ...extraFields,
+        'updatedAt',
+        'createdAt',
+        'submittedAt'
+      ];
+      for (const field of candidates) {
+        if (doc && doc[field]) {
+          const value = doc[field];
+          if (value instanceof Date) {
+            return value;
+          }
+          const parsed = new Date(value);
+          if (!Number.isNaN(parsed.getTime())) {
+            return parsed;
+          }
+        }
+      }
+      if (doc && doc._id && typeof doc._id.getTimestamp === 'function') {
+        return doc._id.getTimestamp();
+      }
+      return new Date();
+    };
+
+    const formatCurrency = (amount) => {
+      if (typeof amount !== 'number') {
+        return '';
+      }
+      return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        maximumFractionDigits: 0
+      }).format(amount);
+    };
+
+    const orderStatusLabels = {
+      in_progress: 'Đang xử lý',
+      completed: 'Hoàn thành',
+      cancelled: 'Đã hủy'
+    };
+
+    const activities = [
+      ...latestProducts.map(product => ({
+        category: 'Chức năng',
+        item: 'Sản phẩm',
+        name: product?.product_name || `ID: ${product?._id?.toString() ?? ''}`,
+        action: 'edit',
+        timestamp: resolveTimestamp(product),
+        meta: {
+          type: 'product',
+          id: product?._id?.toString() ?? null
+        }
+      })),
+      ...latestBlogs.map(blog => ({
+        category: 'Chức năng',
+        item: blog?.published === false ? 'Blog (nháp)' : 'Blog',
+        name: blog?.title || `ID: ${blog?._id?.toString() ?? ''}`,
+        action: 'edit',
+        timestamp: resolveTimestamp(blog),
+        meta: {
+          type: 'blog',
+          id: blog?._id?.toString() ?? null
+        }
+      })),
+      ...latestOrders.map(order => ({
+        category: 'Đơn hàng',
+        item: `#${order?._id?.toString().slice(-8) ?? ''}`,
+        name: `${orderStatusLabels[order?.status] || 'Đơn hàng'}${order?.totalPrice ? ` • ${formatCurrency(order.totalPrice)}` : ''}`,
+        action: 'view',
+        timestamp: resolveTimestamp(order),
+        meta: {
+          type: 'order',
+          id: order?._id?.toString() ?? null,
+          status: order?.status ?? null
+        }
+      })),
+      ...latestFeedback.map(feedback => ({
+        category: 'Liên hệ',
+        item: feedback?.status === 'new' ? 'Liên hệ mới' : 'Liên hệ',
+        name: feedback?.fullName || 'Khách hàng ẩn danh',
+        action: 'view',
+        timestamp: resolveTimestamp(feedback, ['submittedAt']),
+        meta: {
+          type: 'feedback',
+          id: feedback?._id?.toString() ?? null,
+          status: feedback?.status ?? null
+        }
+      }))
+    ]
+      .filter(activity => activity.name && activity.timestamp)
+      .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+      .slice(0, 12)
+      .map(activity => ({
+        ...activity,
+        timestamp: activity.timestamp instanceof Date ? activity.timestamp.toISOString() : activity.timestamp
+      }));
+
+    res.status(200).json({ activities });
+  } catch (err) {
+    console.error("Error fetching recent dashboard activities:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });

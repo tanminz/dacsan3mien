@@ -38,24 +38,44 @@
                     <i class="fa fa-angle-down"></i>
                 </div>
                 <div id="recentActivities" class="collapse show section-body">
-                    <div class="recent-activity-card" *ngFor="let activity of recentActivities">
-                        <div class="activity-icon">
-                            <i class="fa fa-edit" *ngIf="activity.action === 'edit'"></i>
-                            <i class="fa fa-eye" *ngIf="activity.action !== 'edit'"></i>
+                    <div *ngIf="loadingActivities" class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-                        <div class="activity-content">
-                            <div class="activity-meta">{{ activity.category }} · {{ activity.item }}</div>
-                            <div class="activity-name">{{ activity.name }}</div>
-                        </div>
-                        <div class="activity-time">
-                            <i class="fa fa-clock me-1"></i>Vừa cập nhật
-                        </div>
+                        <p class="text-muted mt-3 mb-0">Đang tải hoạt động gần đây...</p>
                     </div>
-                    <div class="pagination-controls d-flex justify-content-between align-items-center">
-                        <button class="btn btn-pagination"><i class="fa fa-angle-left me-1"></i>Trước</button>
-                        <span>1/10</span>
-                        <button class="btn btn-pagination">Sau<i class="fa fa-angle-right ms-1"></i></button>
+
+                    <div *ngIf="!loadingActivities && activitiesError" class="alert alert-danger mb-0">
+                        {{ activitiesError }}
                     </div>
+
+                    <ng-container *ngIf="!loadingActivities && !activitiesError">
+                        <div *ngIf="recentActivities.length === 0" class="text-center text-muted py-4">
+                            <i class="fa fa-inbox fa-2x mb-2"></i>
+                            <div>Chưa có hoạt động nào gần đây.</div>
+                        </div>
+
+                        <div class="recent-activity-card"
+                             *ngFor="let activity of recentActivities; trackBy: trackActivity"
+                             [class.clickable]="isActivityNavigable(activity)"
+                             role="button"
+                             [attr.tabindex]="isActivityNavigable(activity) ? '0' : null"
+                             (click)="onActivityClick(activity)"
+                             (keyup.enter)="onActivityKeyup($event, activity)"
+                             (keyup.space)="onActivityKeyup($event, activity)">
+                            <div class="activity-icon">
+                                <i class="fa fa-edit" *ngIf="activity.action === 'edit'"></i>
+                                <i class="fa fa-eye" *ngIf="activity.action !== 'edit'"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-meta">{{ activity.category }} · {{ activity.item }}</div>
+                                <div class="activity-name">{{ activity.name }}</div>
+                            </div>
+                            <div class="activity-time">
+                                <i class="fa fa-clock me-1"></i>{{ formatRelativeTime(activity.timestamp) }}
+                            </div>
+                        </div>
+                    </ng-container>
                 </div>
             </div>
         </div>

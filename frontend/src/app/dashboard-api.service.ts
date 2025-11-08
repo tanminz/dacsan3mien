@@ -14,5 +14,9 @@ export class DashboardAPIService {
   getDashboardStats(): Observable<any> {
     return this.http.get(`${this.baseURL}/dashboard/stats`, { withCredentials: true });
   }
+
+  getRecentActivities(): Observable<any> {
+    return this.http.get(`${this.baseURL}/dashboard/activities`, { withCredentials: true });
+  }
 }
 

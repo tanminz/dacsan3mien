@@ -177,6 +177,15 @@
   box-shadow: 0 12px 26px rgba(166, 23, 23, 0.12);
 }
 
+.recent-activity-card.clickable {
+  cursor: pointer;
+}
+
+.recent-activity-card.clickable:focus {
+  outline: 2px solid rgba(194, 30, 30, 0.4);
+  outline-offset: 2px;
+}
+
 .activity-icon {
   width: 44px;
   height: 44px;
