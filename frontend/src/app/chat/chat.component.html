@@ -14,17 +14,23 @@
         <div class="card-body overflow-auto" style="max-height: 300px;">
             <div *ngFor="let message of messages"
                 [ngClass]="{ 'text-end': message.role === 'user', 'text-start': message.role === 'assistant' }"
-                class="mb-2">
-                <span class="badge bg-primary text-wrap" *ngIf="message.role === 'user'">{{ message.content }}</span>
-                <span class="badge bg-light text-dark text-wrap" *ngIf="message.role === 'assistant'">{{ message.content
-                    }}</span>
+                class="mb-3">
+                <div class="message-bubble" 
+                     [ngClass]="{ 'user-message': message.role === 'user', 'assistant-message': message.role === 'assistant' }">
+                    <div class="message-content" [innerHTML]="formatMessage(message.content)"></div>
+                    <small class="message-time">{{ getCurrentTime() }}</small>
+                </div>
             </div>
         </div>
         <div class="card-footer">
             <div class="input-group">
-                <input type="text" class="form-control" [(ngModel)]="userMessage" placeholder="Type your message..."
-                    (keydown.enter)="sendMessage()" />
-                <button class="btn btn-primary" (click)="sendMessage()">Send</button>
+                <input type="text" class="form-control" [(ngModel)]="userMessage" placeholder="Nhập tin nhắn..."
+                    (keydown.enter)="sendMessage()" [disabled]="isSending" />
+                <button class="btn btn-primary" (click)="sendMessage()" [disabled]="isSending || userMessage.trim() === ''">
+                    <i *ngIf="!isSending" class="fa fa-paper-plane"></i>
+                    <i *ngIf="isSending" class="fa fa-spinner fa-spin"></i>
+                    {{ isSending ? 'Đang gửi...' : 'Gửi' }}
+                </button>
             </div>
         </div>
     </div>

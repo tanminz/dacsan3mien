@@ -11,13 +11,13 @@
     <div *ngIf="selectedTab === 'description'" class="tab-content">
         <ul class="product-details">
             <li><strong>Tên sản phẩm:</strong> {{ product.product_name || 'QUEENTIN' }}</li>
-            <li><strong>Chất liệu:</strong> Nhựa cao cấp</li>
-            <li><strong>Màu sắc:</strong> Transparent Grey</li>
-            <li><strong>Kích thước:</strong> 51 - 20 - 156</li>
-            <li><strong>Chiều ngang tròng (A):</strong> 51mm</li>
-            <li><strong>Chiều dọc tròng (B):</strong> 42mm</li>
-            <li><strong>Cầu mũi (C):</strong> 20mm</li>
-            <li><strong>Chiều dài càng kính:</strong> 156mm</li>
+            <li><strong>Loại sản phẩm:</strong> Đặc sản 3 miền Việt Nam </li>
+            <li><strong>Thành phần:</strong> 100% nguyên liệu tự nhiên, chọn lọc kỹ lưỡng, không chất bảo quản </li>
+            <li><strong>Khối lượng tịnh:</strong> 500g</li>
+            <li><strong>Xuất xứ:</strong>  {{ product.product_dept|| 'QUEENTIN' }}</li>
+            <li><strong>Bảo quản:</strong> Nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp</li>
+            <li><strong>Hạn sử dụng:</strong> 6 tháng kể từ ngày sản xuất</li>
+            <li><strong>Chứng nhận:</strong> Đạt tiêu chuẩn vệ sinh an toàn thực phẩm VietGAP</li>
         </ul>
 
         <div class="product-description">

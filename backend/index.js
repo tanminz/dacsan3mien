@@ -26,8 +26,8 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017",
-    dbName: process.env.DB_NAME || 'EYECONIC',
+    mongoUrl: process.env.MONGODB_URI || "mongodb://root:password@localhost:27017",
+    dbName: process.env.DB_NAME || 'dacsan3mien',
     collectionName: 'sessions',
   }),
   cookie: {
@@ -44,17 +44,18 @@ app.use((req, res, next) => {
 
 const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017";
 const client = new MongoClient(mongoUri);
-let productCollection, userCollection, orderCollection, feedbackCollection, cartCollection;
+let productCollection, userCollection, orderCollection, feedbackCollection, cartCollection, blogCollection;
 
 (async () => {
   try {
     await client.connect();
-    const database = client.db(process.env.DB_NAME || "EYECONIC");
+    const database = client.db(process.env.DB_NAME || "dacsan3mien");
     productCollection = database.collection("Product");
     userCollection = database.collection("User");
     orderCollection = database.collection("Order");
     feedbackCollection = database.collection("Feedback");
     cartCollection = database.collection("Cart");
+    blogCollection = database.collection("Blog");
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
     process.exit(1);
@@ -101,7 +102,17 @@ app.get(
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
     const productDept = req.query.dept || "";
-    const filter = productDept ? { product_dept: productDept } : {};
+    const productType = req.query.type || "";
+    
+    // Build filter object
+    let filter = {};
+    if (productDept) {
+      filter.product_dept = productDept;
+    }
+    if (productType) {
+      filter.type = productType;
+    }
+    
     try {
       const products = await productCollection
         .find(filter)
@@ -138,7 +149,7 @@ app.post(
   "/products",
   requireRoleAction("admin", ["edit all", "sales ctrl"]),
   async (req, res) => {
-    const { product_name, product_detail, stocked_quantity, unit_price, discount, product_dept, rating, image_1, image_2, image_3, image_4, image_5 } = req.body;
+    const { product_name, product_detail, stocked_quantity, unit_price, discount, product_dept, type, rating, image_1, image_2, image_3, image_4, image_5 } = req.body;
 
     if (!product_name || !unit_price) {
       return res.status(400).json({ message: "Please provide all required fields." });
@@ -167,8 +178,10 @@ app.post(
       unit_price,
       discount: discount || 0,
       product_dept: product_dept || "",
+      type: type || "food",
       rating: rating || 4,
       createdAt: new Date(),
+      updatedAt: new Date(),
       image_1: image_1 || "",
       image_2: image_2 || "",
       image_3: image_3 || "",
@@ -208,7 +221,7 @@ app.patch(
     };
 
     try {
-      const updatePayload = { ...updateData, ...updatedImages };
+      const updatePayload = { ...updateData, ...updatedImages, updatedAt: new Date() };
 
       const result = await productCollection.updateOne(
         { _id: productId },
@@ -292,7 +305,10 @@ app.post("/user/signup", async (req, res) => {
       gender,
       birthDate: { month: birthMonth, day: birthDay, year: birthYear },
       marketing: !!marketing,
-      role
+      role,
+      avatar: "",
+      memberPoints: 0,
+      memberTier: "Member"
     };
     const result = await userCollection.insertOne(newUser);
     res.status(201).json({ message: "User registered successfully", userId: result.insertedId });
@@ -359,7 +375,10 @@ app.get("/user/profile", requireAuth, async (req, res) => {
     phone: user.phone,
     address: user.address,
     marketing: user.marketing,
-    role: user.role
+    role: user.role,
+    avatar: user.avatar || "",
+    memberPoints: user.memberPoints || 0,
+    memberTier: user.memberTier || "Member"
   });
 });
 
@@ -388,6 +407,54 @@ app.patch(
     }
   }
 );
+
+// Allow authenticated users to update their own profile (e.g., avatar, profileName, phone, address, birthDate)
+app.patch("/user/profile", requireAuth, async (req, res) => {
+  try {
+    const allowed = ["profileName", "phone", "address", "birthDate", "gender", "marketing", "avatar"];
+    const updateData = {};
+    for (const key of allowed) {
+      if (req.body[key] !== undefined) updateData[key] = req.body[key];
+    }
+
+    if (updateData.avatar) {
+      if (typeof updateData.avatar !== "string" || !updateData.avatar.startsWith("data:image/")) {
+        return res.status(400).json({ message: "Invalid avatar format. Must be Base64 data URL." });
+      }
+      if (updateData.avatar.length > 2_000_000) { // ~2MB limit for safety
+        return res.status(413).json({ message: "Avatar image too large." });
+      }
+    }
+
+    const result = await userCollection.updateOne(
+      { _id: new ObjectId(req.session.userId) },
+      { $set: updateData }
+    );
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: "User not found or no changes made" });
+    }
+    const updatedUser = await userCollection.findOne({ _id: new ObjectId(req.session.userId) });
+    res.status(200).json({
+      message: "Profile updated",
+      user: {
+        _id: updatedUser?._id,
+        email: updatedUser?.email,
+        profileName: updatedUser?.profileName,
+        gender: updatedUser?.gender,
+        birthDate: updatedUser?.birthDate,
+        phone: updatedUser?.phone,
+        address: updatedUser?.address,
+        marketing: updatedUser?.marketing,
+        role: updatedUser?.role,
+        avatar: updatedUser?.avatar || '',
+        memberPoints: updatedUser?.memberPoints || 0,
+        memberTier: updatedUser?.memberTier || 'Member'
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update profile" });
+  }
+});
 
 app.delete(
   "/user/delete/:userId",
@@ -669,6 +736,7 @@ app.post("/orders", requireAuth, async (req, res) => {
       paymentMethod,
       shippingAddress,
       createdAt: new Date(),
+      updatedAt: new Date(),
       status: "in_progress",
     };
 
@@ -716,7 +784,7 @@ app.patch(
     try {
       const result = await orderCollection.updateOne(
         { _id: new ObjectId(orderId) },
-        { $set: { status } }
+        { $set: { status, updatedAt: new Date() } }
       );
 
       if (result.matchedCount === 0) {
@@ -782,6 +850,9 @@ app.get('/orders/:orderId/invoice', requireAuth, async (req, res) => {
     if (!fs.existsSync('./invoices')) {
       fs.mkdirSync('./invoices');
     }
+    
+    // Clear any cached logo
+    console.log('Generating PDF for order:', orderId);
 
     const stream = fs.createWriteStream(filePath);
     doc.pipe(stream);
@@ -791,9 +862,34 @@ app.get('/orders/:orderId/invoice', requireAuth, async (req, res) => {
       doc.font(fontPath);
     }
 
-    const logoPath = './logo.png';
-    if (fs.existsSync(logoPath)) {
-      doc.image(logoPath, 50, 30, { width: 100 });
+    // Try multiple logo paths with absolute path
+    const logoPaths = [
+      './Logo.png', 
+      './logo.png', 
+      './Logo.PNG', 
+      './logo.PNG',
+      __dirname + '/Logo.png',
+      __dirname + '/logo.png'
+    ];
+    let logoFound = false;
+    
+    for (const logoPath of logoPaths) {
+      if (fs.existsSync(logoPath)) {
+        console.log('Using logo:', logoPath);
+        try {
+          doc.image(logoPath, 50, 30, { width: 100 });
+          logoFound = true;
+          break;
+        } catch (error) {
+          console.log('Error loading logo:', error.message);
+        }
+      }
+    }
+    
+    if (!logoFound) {
+      console.log('No logo file found. Tried paths:', logoPaths);
+      // Add a placeholder text if no logo found
+      doc.fontSize(16).text('LOGO', 50, 30);
     }
 
     doc.fontSize(20).text('Hóa đơn bán hàng', 150, 50, { align: 'center' });
@@ -877,7 +973,7 @@ app.get('/orders/:orderId/invoice', requireAuth, async (req, res) => {
     doc.fontSize(12)
       .text('Cảm ơn bạn đã mua hàng!', 50, doc.y, { align: 'center' })
       .moveDown(0.5)
-      .text('Liên hệ với chúng tôi: 037 500 1528', 50, doc.y, { align: 'center' });
+      .text('Liên hệ với chúng tôi: 079 2098 518', 50, doc.y, { align: 'center' });
 
     doc.end();
 
@@ -905,12 +1001,533 @@ app.post("/feedback", async (req, res) => {
       email: email || null,
       phone: phone || null,
       message,
+      status: 'new',
       submittedAt: new Date(),
     };
     const result = await feedbackCollection.insertOne(feedbackData);
     res.status(201).json({ message: "Feedback submitted successfully", feedbackId: result.insertedId });
   } catch {
     res.status(500).json({ message: "Failed to submit feedback" });
+  }
+});
+
+// Get all feedback/contacts for admin
+app.get("/feedback", requireRoleAction("admin", ["edit all", "sales ctrl", "view"]), async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+  const search = req.query.search || "";
+  const status = req.query.status || "";
+
+  try {
+    const filter = {};
+    
+    if (search) {
+      filter.$or = [
+        { fullName: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { message: { $regex: search, $options: "i" } }
+      ];
+    }
+    
+    if (status) {
+      filter.status = status;
+    }
+
+    const feedback = await feedbackCollection
+      .find(filter)
+      .sort({ submittedAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+    
+    const total = await feedbackCollection.countDocuments(filter);
+    
+    res.status(200).json({
+      feedback,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Update feedback status
+app.patch("/feedback/:id/status", requireRoleAction("admin", ["edit all", "sales ctrl"]), async (req, res) => {
+  const feedbackId = new ObjectId(req.params.id);
+  const { status } = req.body;
+
+  if (!status || !['new', 'read', 'replied'].includes(status)) {
+    return res.status(400).json({ message: "Invalid status" });
+  }
+
+  try {
+    const result = await feedbackCollection.updateOne(
+      { _id: feedbackId },
+      { $set: { status, updatedAt: new Date() } }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: "Feedback not found" });
+    }
+
+    res.status(200).json({ message: "Status updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update status" });
+  }
+});
+
+// Delete feedback
+app.delete("/feedback/:id", requireRoleAction("admin", ["edit all", "sales ctrl"]), async (req, res) => {
+  const feedbackId = new ObjectId(req.params.id);
+  
+  try {
+    const result = await feedbackCollection.deleteOne({ _id: feedbackId });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Feedback not found" });
+    }
+    res.status(200).json({ message: "Feedback deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete feedback" });
+  }
+});
+
+// ========== DASHBOARD ENDPOINTS ==========
+
+// Get dashboard statistics
+app.get("/dashboard/stats", requireRoleAction("admin", ["edit all", "sales ctrl", "view"]), async (req, res) => {
+  try {
+    const totalProducts = await productCollection.countDocuments();
+    const totalOrders = await orderCollection.countDocuments();
+    const totalUsers = await userCollection.countDocuments();
+    const totalBlogs = await blogCollection.countDocuments();
+    const totalContacts = await feedbackCollection.countDocuments();
+    const newContacts = await feedbackCollection.countDocuments({ status: 'new' });
+    
+    // Order statistics
+    const pendingOrders = await orderCollection.countDocuments({ status: 'in_progress' });
+    const completedOrders = await orderCollection.countDocuments({ status: 'completed' });
+    const cancelledOrders = await orderCollection.countDocuments({ status: 'cancelled' });
+    
+    // Calculate total revenue
+    const revenueResult = await orderCollection.aggregate([
+      { $match: { status: 'completed' } },
+      { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+    ]).toArray();
+    const totalRevenue = revenueResult.length > 0 ? revenueResult[0].total : 0;
+    
+    // Calculate average order value
+    const avgOrderValue = completedOrders > 0 ? totalRevenue / completedOrders : 0;
+    
+    // Recent orders
+    const recentOrders = await orderCollection.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .toArray();
+    
+    // Low stock products
+    const lowStockProducts = await productCollection.find({ stocked_quantity: { $lte: 10 } })
+      .sort({ stocked_quantity: 1 })
+      .limit(5)
+      .toArray();
+    
+    // Top selling products (from orders)
+    const topProducts = await orderCollection.aggregate([
+      { $unwind: '$selectedItems' },
+      { $group: {
+        _id: '$selectedItems._id',
+        productName: { $first: '$selectedItems.product_name' },
+        totalQuantity: { $sum: '$selectedItems.quantity' },
+        totalRevenue: { $sum: { $multiply: ['$selectedItems.quantity', '$selectedItems.unit_price'] } }
+      }},
+      { $sort: { totalQuantity: -1 } },
+      { $limit: 5 }
+    ]).toArray();
+    
+    // Generate fake sales data for charts (not connected to real database)
+    const generateFakeSalesData = () => {
+      const salesData = [];
+      const weeklySalesData = [];
+      const monthlySalesData = [];
+      
+      // Generate 30 days of fake sales data
+      for (let i = 29; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dailyRevenue = Math.floor(Math.random() * 5000000) + 1000000; // 1M - 6M VND
+        const dailyOrders = Math.floor(Math.random() * 20) + 5; // 5-25 orders
+        
+        salesData.push({
+          _id: date.toISOString().split('T')[0],
+          dailyRevenue: dailyRevenue,
+          dailyOrders: dailyOrders
+        });
+      }
+      
+      // Generate 7 days of fake weekly data
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dailyRevenue = Math.floor(Math.random() * 3000000) + 500000; // 500K - 3.5M VND
+        
+        weeklySalesData.push({
+          _id: date.toISOString().split('T')[0],
+          dailyRevenue: dailyRevenue,
+          dailyOrders: Math.floor(Math.random() * 15) + 3
+        });
+      }
+      
+      // Generate 12 months of fake monthly data
+      for (let i = 11; i >= 0; i--) {
+        const date = new Date();
+        date.setMonth(date.getMonth() - i);
+        const monthlyRevenue = Math.floor(Math.random() * 50000000) + 10000000; // 10M - 60M VND
+        const monthlyOrders = Math.floor(Math.random() * 200) + 50; // 50-250 orders
+        
+        monthlySalesData.push({
+          _id: date.toISOString().substring(0, 7), // YYYY-MM format
+          monthlyRevenue: monthlyRevenue,
+          monthlyOrders: monthlyOrders
+        });
+      }
+      
+      return { salesData, weeklySalesData, monthlySalesData };
+    };
+    
+    const { salesData, weeklySalesData, monthlySalesData } = generateFakeSalesData();
+    
+    // Calculate growth rates (fake data)
+    const revenueGrowth = Math.floor(Math.random() * 40) - 10; // -10% to +30%
+    const ordersGrowth = Math.floor(Math.random() * 30) - 5; // -5% to +25%
+    
+    res.status(200).json({
+      overview: {
+        totalProducts,
+        totalOrders,
+        totalUsers,
+        totalBlogs,
+        totalContacts,
+        newContacts,
+        pendingOrders,
+        completedOrders,
+        cancelledOrders,
+        totalRevenue,
+        avgOrderValue,
+        revenueGrowth,
+        ordersGrowth
+      },
+      recentOrders,
+      lowStockProducts,
+      topProducts,
+      salesData,
+      weeklySalesData,
+      monthlySalesData
+    });
+  } catch (err) {
+    console.error("Error fetching dashboard stats:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+app.get("/dashboard/activities", requireRoleAction("admin", ["edit all", "sales ctrl", "account ctrl", "view"]), async (req, res) => {
+  try {
+    const [
+      latestProducts,
+      latestBlogs,
+      latestOrders,
+      latestFeedback
+    ] = await Promise.all([
+      productCollection
+        ? productCollection
+            .find({}, { projection: { product_name: 1, updatedAt: 1, createdAt: 1 } })
+            .sort({ updatedAt: -1, createdAt: -1, _id: -1 })
+            .limit(5)
+            .toArray()
+        : [],
+      blogCollection
+        ? blogCollection
+            .find({}, { projection: { title: 1, updatedAt: 1, createdAt: 1, published: 1 } })
+            .sort({ updatedAt: -1, createdAt: -1, _id: -1 })
+            .limit(5)
+            .toArray()
+        : [],
+      orderCollection
+        ? orderCollection
+            .find({}, { projection: { status: 1, totalPrice: 1, updatedAt: 1, createdAt: 1 } })
+            .sort({ updatedAt: -1, createdAt: -1, _id: -1 })
+            .limit(5)
+            .toArray()
+        : [],
+      feedbackCollection
+        ? feedbackCollection
+            .find({}, { projection: { fullName: 1, status: 1, message: 1, updatedAt: 1, submittedAt: 1 } })
+            .sort({ updatedAt: -1, submittedAt: -1, _id: -1 })
+            .limit(5)
+            .toArray()
+        : []
+    ]);
+
+    const resolveTimestamp = (doc, extraFields = []) => {
+      const candidates = [
+        ...extraFields,
+        'updatedAt',
+        'createdAt',
+        'submittedAt'
+      ];
+      for (const field of candidates) {
+        if (doc && doc[field]) {
+          const value = doc[field];
+          if (value instanceof Date) {
+            return value;
+          }
+          const parsed = new Date(value);
+          if (!Number.isNaN(parsed.getTime())) {
+            return parsed;
+          }
+        }
+      }
+      if (doc && doc._id && typeof doc._id.getTimestamp === 'function') {
+        return doc._id.getTimestamp();
+      }
+      return new Date();
+    };
+
+    const formatCurrency = (amount) => {
+      if (typeof amount !== 'number') {
+        return '';
+      }
+      return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        maximumFractionDigits: 0
+      }).format(amount);
+    };
+
+    const orderStatusLabels = {
+      in_progress: 'Đang xử lý',
+      completed: 'Hoàn thành',
+      cancelled: 'Đã hủy'
+    };
+
+    const activities = [
+      ...latestProducts.map(product => ({
+        category: 'Chức năng',
+        item: 'Sản phẩm',
+        name: product?.product_name || `ID: ${product?._id?.toString() ?? ''}`,
+        action: 'edit',
+        timestamp: resolveTimestamp(product),
+        meta: {
+          type: 'product',
+          id: product?._id?.toString() ?? null
+        }
+      })),
+      ...latestBlogs.map(blog => ({
+        category: 'Chức năng',
+        item: blog?.published === false ? 'Blog (nháp)' : 'Blog',
+        name: blog?.title || `ID: ${blog?._id?.toString() ?? ''}`,
+        action: 'edit',
+        timestamp: resolveTimestamp(blog),
+        meta: {
+          type: 'blog',
+          id: blog?._id?.toString() ?? null
+        }
+      })),
+      ...latestOrders.map(order => ({
+        category: 'Đơn hàng',
+        item: `#${order?._id?.toString().slice(-8) ?? ''}`,
+        name: `${orderStatusLabels[order?.status] || 'Đơn hàng'}${order?.totalPrice ? ` • ${formatCurrency(order.totalPrice)}` : ''}`,
+        action: 'view',
+        timestamp: resolveTimestamp(order),
+        meta: {
+          type: 'order',
+          id: order?._id?.toString() ?? null,
+          status: order?.status ?? null
+        }
+      })),
+      ...latestFeedback.map(feedback => ({
+        category: 'Liên hệ',
+        item: feedback?.status === 'new' ? 'Liên hệ mới' : 'Liên hệ',
+        name: feedback?.fullName || 'Khách hàng ẩn danh',
+        action: 'view',
+        timestamp: resolveTimestamp(feedback, ['submittedAt']),
+        meta: {
+          type: 'feedback',
+          id: feedback?._id?.toString() ?? null,
+          status: feedback?.status ?? null
+        }
+      }))
+    ]
+      .filter(activity => activity.name && activity.timestamp)
+      .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+      .slice(0, 12)
+      .map(activity => ({
+        ...activity,
+        timestamp: activity.timestamp instanceof Date ? activity.timestamp.toISOString() : activity.timestamp
+      }));
+
+    res.status(200).json({ activities });
+  } catch (err) {
+    console.error("Error fetching recent dashboard activities:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// ========== BLOG ENDPOINTS ==========
+
+// Get all blogs (public) with pagination
+app.get("/blogs", async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  try {
+    const filter = { published: true };
+    const blogs = await blogCollection
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+    const total = await blogCollection.countDocuments(filter);
+    
+    res.status(200).json({
+      blogs,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Get all blogs for admin (with search)
+app.get("/blogs/admin/list", requireRoleAction("admin", ["edit all", "sales ctrl", "view"]), async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+  const search = req.query.search || "";
+
+  try {
+    if (!blogCollection) {
+      console.error("Blog collection not initialized");
+      return res.status(500).json({ message: "Database not initialized" });
+    }
+
+    const filter = search
+      ? { title: { $regex: search, $options: "i" } }
+      : {};
+
+    const blogs = await blogCollection
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+    const total = await blogCollection.countDocuments(filter);
+    
+    res.status(200).json({
+      blogs,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+    });
+  } catch (err) {
+    console.error("Error fetching blogs for admin:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Get single blog by ID (public)
+app.get("/blogs/:id", async (req, res) => {
+  try {
+    const blogId = new ObjectId(req.params.id);
+    const blog = await blogCollection.findOne({ _id: blogId });
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+    res.status(200).json(blog);
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Create new blog (admin only)
+app.post("/blogs", requireRoleAction("admin", ["edit all", "sales ctrl"]), async (req, res) => {
+  const { title, description, content, image, author, published } = req.body;
+
+  if (!title || !content) {
+    return res.status(400).json({ message: "Title and content are required." });
+  }
+
+  if (image && (typeof image !== "string" || !image.startsWith("data:image/"))) {
+    return res.status(400).json({ message: "Invalid image format. Must be Base64." });
+  }
+
+  const newBlog = {
+    title,
+    description: description || "",
+    content,
+    image: image || "",
+    author: author || "Admin",
+    published: published !== undefined ? published : true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
+  try {
+    const result = await blogCollection.insertOne(newBlog);
+    res.status(201).json({ message: "Blog created successfully", blogId: result.insertedId });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to create blog" });
+  }
+});
+
+// Update blog (admin only)
+app.patch("/blogs/:id", requireRoleAction("admin", ["edit all", "sales ctrl"]), async (req, res) => {
+  const blogId = new ObjectId(req.params.id);
+  const { image, ...updateData } = req.body;
+
+  if (image && (typeof image !== "string" || !image.startsWith("data:image/"))) {
+    return res.status(400).json({ message: "Invalid image format. Must be Base64." });
+  }
+
+  try {
+    const updatePayload = {
+      ...updateData,
+      ...(image && { image }),
+      updatedAt: new Date(),
+    };
+
+    const result = await blogCollection.updateOne(
+      { _id: blogId },
+      { $set: updatePayload }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: "Blog not found or no changes made" });
+    }
+
+    res.status(200).json({ message: "Blog updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update blog" });
+  }
+});
+
+// Delete blog (admin only)
+app.delete("/blogs/:id", requireRoleAction("admin", ["edit all", "sales ctrl"]), async (req, res) => {
+  const blogId = new ObjectId(req.params.id);
+  
+  try {
+    const result = await blogCollection.deleteOne({ _id: blogId });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+    res.status(200).json({ message: "Blog deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete blog" });
   }
 });
 

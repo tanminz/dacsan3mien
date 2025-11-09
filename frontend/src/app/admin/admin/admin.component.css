@@ -50,6 +50,23 @@
   color: #1a1e40;
 }
 
+.btn-logout {
+  background: linear-gradient(135deg, #c21e1e, #8b0000);
+  color: #fff !important;
+  font-weight: 600;
+  border: none;
+  border-radius: 14px;
+  padding: 8px 20px;
+  box-shadow: 0 8px 18px rgba(142, 0, 0, 0.25);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-logout:hover {
+  background: linear-gradient(135deg, #8b0000, #710707);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
 @media (max-width: 768px) {
   .app-nav {
     width: 100%;

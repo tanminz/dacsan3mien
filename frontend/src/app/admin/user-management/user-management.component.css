@@ -2,11 +2,36 @@
     max-width: 100%;
 }
 
-.input-group {
+
+.admin-search-group {
     flex: 1;
     margin-right: 10px;
-    padding: 8px 16px;
+}
+
+.admin-search-group .form-control {
+    padding: 10px 16px;
+    border: 1px solid #f3b4b4;
+    border-right: none;
+    border-radius: 999px 0 0 999px;
+    box-shadow: none;
     font-size: 14px;
+}
+
+.btn-search {
+    background: linear-gradient(135deg, #c21e1e, #8b0000);
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 22px;
+    border-radius: 0 999px 999px 0;
+    border: none;
+    box-shadow: 0 6px 16px rgba(142, 0, 0, 0.25);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn-search:hover {
+    background: linear-gradient(135deg, #8b0000, #710707);
+    color: #fff;
+    transform: translateY(-1px);
 }
 
 .btn-primary {

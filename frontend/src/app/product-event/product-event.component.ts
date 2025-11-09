@@ -17,7 +17,7 @@ export class ProductEventComponent implements OnInit {
   ngOnInit(): void {
     this._service.getProducts(1, 100).subscribe({
       next: (data) => {
-        this.discountedProducts = data.products.filter(product => product.discount >= 0.3);
+        this.discountedProducts = data.products.filter(product => product.discount >= 0.3).slice(0, 6);
         this.isLoading = false;
       },
       error: (err) => {

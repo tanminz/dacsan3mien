@@ -6,7 +6,7 @@
     "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Eyeconic",
+  "author": "Dacsan3mien",
   "license": "ISC",
   "description": "",
   "dependencies": {
@@ -22,6 +22,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.10.0",
     "mongoose": "^8.18.2",
+    "node-fetch": "^3.3.2",
     "pdfkit": "^0.15.1"
   },
   "devDependencies": {

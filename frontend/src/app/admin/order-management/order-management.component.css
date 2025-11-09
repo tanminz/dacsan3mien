@@ -6,9 +6,11 @@
 
 .order-management h2 {
     font-size: 1.8rem;
-    font-weight: bold;
+    font-weight: 800;
     text-align: center;
     margin-bottom: 20px;
+    color: #8b0000;
+    text-transform: uppercase;
 }
 
 .order-controls {
@@ -106,6 +108,37 @@
     font-weight: 500;
     padding: 5px 15px;
     font-size: 0.9rem;
+}
+
+/* Enhanced filter button styling */
+.btn-secondary {
+    background: linear-gradient(135deg, #810000, #a71e2a) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 8px 20px !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(129, 0, 0, 0.2) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #a71e2a, #c82333) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(129, 0, 0, 0.3) !important;
+    color: white !important;
+}
+
+.btn-secondary:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 6px rgba(129, 0, 0, 0.2) !important;
+}
+
+.btn-secondary:focus {
+    box-shadow: 0 0 0 3px rgba(129, 0, 0, 0.25) !important;
+    outline: none !important;
 }
 
 .select-status {

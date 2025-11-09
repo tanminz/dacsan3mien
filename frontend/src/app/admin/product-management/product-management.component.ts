@@ -19,10 +19,16 @@ export class ProductManagementComponent implements OnInit {
   productForm: FormGroup;
   selectedProducts: string[] = [];
   loading: boolean = false;
+  uploadProgress: number = 0;
+  isUploading: boolean = false;
   filterDept: string = '';
+  filterType: string = '';
+  filterPriceRange: string = '';
+  filterStock: string = '';
   canEdit: boolean = false;
   canView: boolean = false;
   images: string[] = ['', '', '', '', ''];
+  showFilters: boolean = false;
 
   constructor(
     private productService: ProductAPIService,
@@ -36,6 +42,7 @@ export class ProductManagementComponent implements OnInit {
       unit_price: [0, [Validators.required, Validators.min(0)]],
       discount: [0, [Validators.min(0), Validators.max(1)]],
       product_dept: [''],
+      type: ['beverages', Validators.required],
       rating: [4, [Validators.min(0), Validators.max(5)]],
       image_1: [''],
       image_2: [''],
@@ -104,6 +111,18 @@ export class ProductManagementComponent implements OnInit {
       return;
     }
 
+    this.isUploading = true;
+    this.uploadProgress = 0;
+    this.loading = true;
+
+    // Simulate progress steps
+    const progressInterval = setInterval(() => {
+      if (this.uploadProgress < 90) {
+        this.uploadProgress += Math.random() * 20;
+        if (this.uploadProgress > 90) this.uploadProgress = 90;
+      }
+    }, 200);
+
     const sanitizedProduct: Record<string, any> = { ...this.productForm.value };
 
     const imageFields = ['image_1', 'image_2', 'image_3', 'image_4', 'image_5'];
@@ -115,15 +134,27 @@ export class ProductManagementComponent implements OnInit {
 
     this.productService.createProduct(sanitizedProduct).subscribe({
       next: () => {
-        this.loadProducts();
-        this.productForm.reset();
-        this.images = ['', '', '', '', ''];
-        const fileInputs = document.querySelectorAll('input[type="file"]');
-        fileInputs.forEach(input => {
-          (input as HTMLInputElement).value = '';
-        });
+        clearInterval(progressInterval);
+        this.uploadProgress = 100;
+        
+        setTimeout(() => {
+          this.loadProducts();
+          this.productForm.reset();
+          this.images = ['', '', '', '', ''];
+          const fileInputs = document.querySelectorAll('input[type="file"]');
+          fileInputs.forEach(input => {
+            (input as HTMLInputElement).value = '';
+          });
+          this.isUploading = false;
+          this.loading = false;
+          this.uploadProgress = 0;
+        }, 500);
       },
       error: (err) => {
+        clearInterval(progressInterval);
+        this.isUploading = false;
+        this.loading = false;
+        this.uploadProgress = 0;
         alert(err.message);
       },
     });
@@ -246,5 +277,80 @@ export class ProductManagementComponent implements OnInit {
     this.filterDept = dept;
     this.currentPage = 1;
     this.loadProducts();
+  }
+
+  applyTypeFilter(type: string): void {
+    this.filterType = type;
+    this.currentPage = 1;
+    this.loadProducts();
+  }
+
+  applyPriceFilter(priceRange: string): void {
+    this.filterPriceRange = priceRange;
+    this.currentPage = 1;
+    this.loadProducts();
+  }
+
+  applyStockFilter(stock: string): void {
+    this.filterStock = stock;
+    this.currentPage = 1;
+    this.loadProducts();
+  }
+
+  toggleFilters(): void {
+    this.showFilters = !this.showFilters;
+  }
+
+  clearFilters(): void {
+    this.filterDept = '';
+    this.filterType = '';
+    this.filterPriceRange = '';
+    this.filterStock = '';
+    this.currentPage = 1;
+    this.loadProducts();
+  }
+
+  getFilteredProducts(): Product[] {
+    let filtered = [...this.products];
+
+    if (this.filterDept) {
+      filtered = filtered.filter(p => p.product_dept.toLowerCase().includes(this.filterDept.toLowerCase()));
+    }
+
+    if (this.filterType) {
+      filtered = filtered.filter(p => p.type === this.filterType);
+    }
+
+    if (this.filterPriceRange) {
+      const [min, max] = this.filterPriceRange.split('-').map(Number);
+      if (max) {
+        filtered = filtered.filter(p => p.unit_price >= min && p.unit_price <= max);
+      } else {
+        filtered = filtered.filter(p => p.unit_price >= min);
+      }
+    }
+
+    if (this.filterStock) {
+      if (this.filterStock === 'in-stock') {
+        filtered = filtered.filter(p => p.stocked_quantity > 0);
+      } else if (this.filterStock === 'out-of-stock') {
+        filtered = filtered.filter(p => p.stocked_quantity === 0);
+      } else if (this.filterStock === 'low-stock') {
+        filtered = filtered.filter(p => p.stocked_quantity > 0 && p.stocked_quantity <= 10);
+      }
+    }
+
+    return filtered;
+  }
+
+  getTypeLabel(type: string): string {
+    const typeLabels: { [key: string]: string } = {
+      'beverages': 'Thức uống',
+      'dried_food': 'Thực phẩm khô',
+      'cakes_candies': 'Bánh kẹo',
+      'gift_set': 'Set quà tặng',
+      'spices': 'Gia vị'
+    };
+    return typeLabels[type] || type;
   }
 }

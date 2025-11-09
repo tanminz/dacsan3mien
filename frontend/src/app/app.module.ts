@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AuthInterceptor } from './services/auth.interceptor';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 
 import { AppComponent } from './app.component';
@@ -46,6 +47,18 @@ import { PersonalInfoComponent } from './personal-info/personal-info.component';
 import { ChatComponent } from './chat/chat.component';
 import { QrComponent } from './qr/qr.component';
 import { SupportComponent } from './support/support.component';
+import { FruitDecorComponent } from './fruit-decor/fruit-decor.component';
+import { ScrollRevealDirective } from './directives/scroll-reveal.directive';
+import { Banner2Component } from './banner-2/banner-2.component';
+import { Banner3Component } from './banner-3/banner-3.component';
+import { ProductSection2Component } from './product-section-2/product-section-2.component';
+import { ProductSection3Component } from './product-section-3/product-section-3.component';
+import { VietnamMapComponent } from './vietnam-map/vietnam-map.component';
+import { LoadingComponent } from './shared/loading/loading.component';
+import { HistoryComponent } from './history/history.component';
+import { DeliveryComponent } from './delivery/delivery.component';
+import { DeliveryMethodsComponent } from './delivery-methods/delivery-methods.component';
+import { HowToBuyComponent } from './how-to-buy/how-to-buy.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +99,19 @@ import { SupportComponent } from './support/support.component';
     PersonalInfoComponent,
     ChatComponent,
     QrComponent,
-    SupportComponent
+    SupportComponent,
+    FruitDecorComponent,
+    Banner2Component,
+    Banner3Component,
+    ProductSection2Component,
+    ProductSection3Component,
+    VietnamMapComponent,
+    ScrollRevealDirective,
+    LoadingComponent,
+    HistoryComponent,
+    DeliveryComponent,
+    DeliveryMethodsComponent,
+    HowToBuyComponent
   ],
   imports: [
     BrowserModule,
@@ -102,6 +127,12 @@ import { SupportComponent } from './support/support.component';
       useClass: AuthInterceptor,
       multi: true
     },
+    // LoadingInterceptor disabled - loading only for login/signup
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: LoadingInterceptor,
+    //   multi: true
+    // },
     AuthGuard
   ],
   bootstrap: [AppComponent],

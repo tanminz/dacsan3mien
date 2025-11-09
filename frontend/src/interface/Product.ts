@@ -14,7 +14,8 @@ export class Product {
     public image_5: string = "",
     public product_dept: string = "",
     public rating: number = 4,
-    public isNew: boolean = false
+    public isNew: boolean = false,
+    public type: string = "food"
   ) { }
 
   getDiscountedPrice(): number {

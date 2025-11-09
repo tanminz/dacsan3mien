@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-homepage',
@@ -9,7 +9,10 @@ import { ActivatedRoute } from '@angular/router';
 export class HomepageComponent implements OnInit {
   showScrollButton: boolean = false;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.route.fragment.subscribe();
@@ -22,5 +25,9 @@ export class HomepageComponent implements OnInit {
 
   scrollToTop(): void {
     window.scrollTo({ top: 680, behavior: 'smooth' });
+  }
+
+  goToDiscountProducts(): void {
+    this.router.navigate(['/catalog'], { queryParams: { discount: 'true' } });
   }
 }

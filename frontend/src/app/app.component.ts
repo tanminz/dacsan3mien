@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart, NavigationCancel, NavigationError } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { LoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -13,18 +14,37 @@ export class AppComponent implements OnInit {
   isLoggedIn: boolean = false;
   isAdminRoute: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private loadingService: LoadingService
+  ) { }
 
   ngOnInit(): void {
     this.authService.isLoggedIn$.subscribe(isLoggedIn => {
+      const wasLoggedOut = !this.isLoggedIn;
       this.isLoggedIn = isLoggedIn;
+      
+      // Show loading when user just logged in
+      if (wasLoggedOut && isLoggedIn) {
+        this.loadingService.show();
+        
+        // Navigate to homepage
+        this.router.navigate(['/']).then(() => {
+          // Hide loading after 5 seconds
+          setTimeout(() => {
+            this.loadingService.hide();
+          }, 5000); // 5 seconds
+        });
+      }
     });
 
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
+    // Handle route detection (no loading for normal navigation)
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
         this.isAdminRoute = event.url.startsWith('/admin');
-      });
+      }
+    });
   }
 
   toggleLogin(): void {

@@ -78,7 +78,7 @@ export class ProductItemComponent implements OnInit {
 
     const productUrl = `${window.location.origin}/product/${this.product._id}`;
     const quote = `Check out this amazing product: ${this.product.product_name}! It's available for just ${this.product.unit_price.toLocaleString()} VND.`;
-    const hashtag = '#AmazingProduct #EYECONIC #BeEYECONIC';
+    const hashtag = '#AmazingProduct #ĐẶC SẢN 3 MIỀN #BeĐẶC SẢN 3 MIỀN';
 
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}&quote=${encodeURIComponent(quote)}&hashtag=${encodeURIComponent(hashtag)}`;
 

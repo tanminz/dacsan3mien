@@ -1,26 +1,59 @@
 .container-fluid {
-    padding: 1rem 0;
+    padding: 2rem 0;
     max-width: 100%;
     overflow-x: hidden;
+    background: #1B1717;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+    color: #EEEBDD;
+    border-top: none;
 }
 
-.footer-section h6 {
-    font-weight: bold;
-    font-style: italic;
-    margin-bottom: 5px;
-    color: #333;
+.footer-section h6,
+.fw-bold {
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: #810000;
+    letter-spacing: 0.5px;
+    text-shadow: 0.5px 0.5px 0 #EEEBDD, -0.5px -0.5px 0 #EEEBDD, 0.5px -0.5px 0 #EEEBDD, -0.5px 0.5px 0 #EEEBDD;
 }
 
-.contact-cell h4 {
+.best-choice {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #EEEBDD;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.contact-cell h4,
+.feedback-cell h4 {
+    color: #810000;
     font-weight: bold;
     margin-bottom: 0.5rem;
-    color: #333;
+    text-shadow: 0.5px 0.5px 0 #EEEBDD, -0.5px -0.5px 0 #EEEBDD, 0.5px -0.5px 0 #EEEBDD, -0.5px 0.5px 0 #EEEBDD;
+}
+
+.contact-cell p,
+.feedback-cell p,
+.footer-section ul li {
+    color: #EEEBDD;
+    font-size: 0.9rem;
+}
+
+.contact-cell p a {
+    color: #EEEBDD;
+    text-decoration: none;
+}
+
+.contact-cell p a:hover {
+    text-decoration: underline;
 }
 
 .footer-section ul {
     list-style: none;
     padding-left: 0;
-    color: #666;
     margin-bottom: 0;
 }
 
@@ -30,13 +63,27 @@
 }
 
 .footer-section ul li a {
-    color: #666;
+    color: #EEEBDD;
     text-decoration: none;
     transition: color 0.3s;
 }
 
 .footer-section ul li a:hover {
-    color: #820000;
+    color: #EEEBDD;
+    text-decoration: underline;
+}
+
+.feedback-row-3 button {
+    background-color: #EEEBDD;
+    border: 1px solid #EEEBDD;
+    color: #EEEBDD;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.feedback-row-3 button:hover {
+    background-color: #630000;
+    color: #EEEBDD;
 }
 
 .icon {
@@ -54,24 +101,24 @@
 
 .signup-btn {
     background-color: white;
-    color: #007bff;
-    border: 1px solid #007bff;
+    color: #630000;
+    border: 1px solid #630000;
 }
 
 .signup-btn:hover {
-    background-color: #007bff;
+    background-color: #630000;
     color: white;
 }
 
 .login-btn {
-    background-color: #007bff;
+    background-color: #630000;
     color: white;
-    border: 1px solid #007bff;
+    border: 1px solid #630000;
 }
 
 .login-btn:hover {
-    background-color: #0056b3;
-    color: white;
+    background-color: white;
+    color: #630000;
 }
 
 .auth-buttons button {
@@ -135,7 +182,6 @@
 }
 
 @media (max-width: 576px) {
-
     .info-cell,
     .support-cell,
     .policy-cell {

@@ -5,6 +5,9 @@ import { MainpageComponent } from './mainpage/mainpage.component';
 import { ProductManagementComponent } from './product-management/product-management.component';
 import { OrderManagementComponent } from './order-management/order-management.component';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { BlogManagementComponent } from './blog-management/blog-management.component';
+import { ContactManagementComponent } from './contact-management/contact-management.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthGuard } from '../guards/auth.guard';
 
 const routes: Routes = [
@@ -21,6 +24,21 @@ const routes: Routes = [
         path: 'user-adm',
         component: UserManagementComponent,
         data: { title: 'Xác thực/Tài khoản' }
+      },
+      {
+        path: 'blog-adm',
+        component: BlogManagementComponent,
+        data: { title: 'Chức năng/Blog' }
+      },
+      {
+        path: 'contact-adm',
+        component: ContactManagementComponent,
+        data: { title: 'Chức năng/Liên hệ' }
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        data: { title: 'Chức năng/Biểu đồ' }
       }
     ]
   },
