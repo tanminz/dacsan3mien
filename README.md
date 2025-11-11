@@ -1,56 +1,43 @@
 # Đặc Sản 3 Miền – Ecommerce & Admin Platform
 
-Ứng dụng web quản lý và bán đặc sản ba miền Việt Nam. Dự án bao gồm **frontend Angular** và **backend Node.js/Express** với MongoDB làm database. Hệ thống hỗ trợ khách hàng đặt hàng và cung cấp bảng điều khiển dành cho admin theo dõi đơn hàng, sản phẩm, blog, liên hệ.
+Website thương mại điện tử cho đặc sản ba miền, gồm **frontend Angular** và **backend Node.js/Express** kết nối MongoDB. Repo giúp bạn chạy thử nhanh toàn bộ hệ thống (cửa hàng, dashboard admin, quản lý nội dung).
 
 ---
 
-## 📁 Cấu trúc dự án
+## Cấu trúc dự án
 
 ```
 .
 ├── backend/            # REST API (Express + MongoDB)
 │   ├── index.js        # Ứng dụng chính
-│   ├── seed_*.js       # Script seed dữ liệu mẫu
-│   ├── docs/*.md       # Hướng dẫn chuyên sâu
+│   ├── import*.js      # Script import/seed dữ liệu
 ├── frontend/           # Ứng dụng Angular
 │   ├── src/app/        # Component, service, guard ...
-│   ├── angular.json    # Cấu hình Angular
+│   ├── src/proxy.conf.json
 └── README.md
 ```
 
 ---
 
-## 🚀 Tính năng nổi bật
+## Yêu cầu môi trường
 
-- **Cửa hàng trực tuyến**: danh mục sản phẩm, chi tiết sản phẩm, giỏ hàng, thanh toán.
-- **Quản trị viên**:
-  - Dashboard thống kê đơn hàng, doanh thu, sản phẩm sắp hết hàng, hoạt động gần đây.
-  - Quản lý sản phẩm, đơn hàng, người dùng, blog, liên hệ khách hàng.
-  - Tạo/trình bày hóa đơn PDF cho đơn hàng.
-- **Xác thực & phân quyền**: session-based, hỗ trợ các quyền `edit all`, `sales ctrl`, `account ctrl`, `just view`.
-- **Hệ sinh thái script**: seed dữ liệu mẫu, kiểm tra kết nối MongoDB, cập nhật trường `type` cho sản phẩm.
+- Node.js ≥ 18, npm ≥ 9
+- MongoDB local hoặc MongoDB Atlas
+- Angular CLI cài global: `npm install -g @angular/cli`
+- Git LFS (để lấy media lớn): `git lfs install`
 
 ---
 
-## 🛠 Yêu cầu môi trường
+## Thiết lập nhanh
 
-- Node.js ≥ 18
-- npm ≥ 9
-- MongoDB Community Server ≥ 6 (chạy tại `mongodb://127.0.0.1:27017`)
-- Angular CLI (cài đặt global): `npm install -g @angular/cli`
-
----
-
-## ⚙️ Thiết lập nhanh
-
-### 1. Clone dự án
+### Clone dự án
 
 ```bash
 git clone https://github.com/<username>/dacsan3mien.git
 cd dacsan3mien
 ```
 
-### 2. Backend
+### Backend
 
 ```bash
 cd backend
@@ -62,8 +49,9 @@ Tạo file `.env` (nếu chưa có):
 ```
 PORT=3002
 MONGODB_URI=mongodb://127.0.0.1:27017
-DB_NAME=dacsan3mien
-SESSION_SECRET=supersecret
+DB_NAME=DACSAN3MIEN
+JWT_SECRET=your-secret
+SESSION_SECRET=your-session-secret
 ```
 
 Khởi động server:
@@ -72,7 +60,9 @@ Khởi động server:
 node index.js
 ```
 
-### 3. Frontend
+Server chạy tại `http://localhost:3002`.
+
+### Frontend
 
 ```bash
 cd frontend
@@ -80,106 +70,84 @@ npm install
 ng serve
 ```
 
-Frontend chạy tại `http://localhost:4200`.
-
-Backend chạy tại `http://localhost:3002`.
+Proxy mặc định `src/proxy.conf.json` chuyển tiếp `/user`, `/products`, `/orders`, `/feedback`, `/cart` sang backend `http://localhost:3002`. Ứng dụng chạy tại `http://localhost:4200`.
 
 ---
 
-## 🌱 Seed dữ liệu mẫu
+## Cấu hình MongoDB
 
-Trong thư mục `backend/`:
+- Dùng database `DACSAN3MIEN` (chữ hoa). Nếu muốn đổi tên, cập nhật lại `DB_NAME` và các script import.
+- Có thể import dữ liệu mẫu bằng `mongoimport` hoặc script trong `backend/`.
+  ```bash
+  mongoimport --db DACSAN3MIEN --collection User --file path/to/users.json --jsonArray
+  ```
 
-| Lệnh | Mục đích |
+---
+
+## Chạy ứng dụng
+
+1. Start MongoDB (local hoặc Atlas).
+2. Chạy backend: `node index.js` (hoặc `npm start` nếu muốn dùng nodemon).
+3. Ở cửa sổ khác, chạy frontend: `ng serve`.
+4. Mở `http://localhost:4200`.
+
+---
+
+## Dữ liệu mẫu và script hỗ trợ
+
+| Script | Chức năng |
 | --- | --- |
-| `node seed_blogs.js` | Thêm blog mẫu |
-| `node seed_contacts.js` | Thêm liên hệ/feedback mẫu |
-| `node update_mongodb_products.js` | Chuẩn hóa trường `type` cho Product |
-| `node verify_mongodb_update.js` | Kiểm tra kết quả cập nhật |
-| `node checkMongo.js` | Kiểm tra kết nối & thống kê DB |
+| `backend/importAllJSON_fixed.js` | Import toàn bộ JSON vào MongoDB |
+| `backend/seed_blogs.js` | Seed blog mẫu |
+| `backend/seed_contacts.js` | Seed liên hệ mẫu |
+| `backend/update_mongodb_products.js` | Chuẩn hóa trường `type` của sản phẩm |
+| `backend/checkMongo.js` | Kiểm tra kết nối và thống kê DB |
 
-> ⚠️ Các script hỏi trước khi xoá dữ liệu cũ – đọc kỹ prompt và xác nhận khi chạy trên môi trường thực.
-
----
-
-## 🔑 Quyền và tài khoản demo
-
-Hệ thống lưu user trong collection `User`. Sau khi seed hoặc import dữ liệu, đảm bảo có tài khoản admin với các trường:
-
-```json
-{
-  "role": "admin",
-  "action": "edit all"
-}
-```
-
-Đăng nhập admin tại `http://localhost:4200/login`.
+Đọc kỹ cảnh báo trước khi chạy các script có thao tác xóa/ghi đè dữ liệu.
 
 ---
 
-## 📡 API chính (trích)
+## Tài khoản mặc định
 
-- `POST /user/login` – đăng nhập (session)
-- `GET /dashboard/stats` – số liệu tổng quan dashboard
-- `GET /dashboard/activities` – hoạt động gần đây (12 bản ghi mới nhất)
-- `GET /products`, `POST /products`, `PATCH /products/:id`, ...
-- `GET /orders`, `POST /orders`
-- `GET /blogs`, `POST /blogs`, `PATCH /blogs/:id`
-- `GET /feedback`, `PATCH /feedback/:id/status`
+Nếu dùng dataset gốc:
 
-Cấu hình CORS cho phép frontend chạy tại `http://localhost:4200`.
+- Admin: `admin@uel.edu.vn` / `112233`
+- User: `user@uel.edu.vn` / `112233`
+- Các tài khoản khác có thể thay phần local-part, mật khẩu giữ nguyên.
+
+Truy cập trang đăng nhập tại `/login`. Đăng nhập admin để dùng dashboard `/admin`.
 
 ---
 
-## ✅ Kiểm tra & lint
+## Các công nghệ chính
 
-- Frontend: `ng lint`, `ng test`
-- Backend: sử dụng `npm run lint` (nếu cấu hình), hoặc `node --check index.js`
-- Sau khi cập nhật Angular component/service, chạy lại `ng serve` để kiểm tra UI.
-
----
-
-## 📦 Build & Deploy
-
-### Frontend
-
-```bash
-cd frontend
-ng build --configuration production
-```
-
-Output tại `frontend/dist/`. Có thể deploy bằng bất kỳ static host nào (Netlify, Vercel, S3...).
-
-### Backend
-
-- Cấu hình biến môi trường (PORT, MONGODB_URI, SESSION_SECRET, DB_NAME).
-- Dùng process manager (PM2, forever) hoặc container hoá để chạy Node server.
-- Mở port 3002 (hoặc port custom) và thiết lập reverse proxy (Nginx/Apache).
-
-### MongoDB
-
-- Sử dụng service managed (Atlas) hoặc cài đặt On-premises.
-- Nhớ cập nhật `MONGODB_URI` và `DB_NAME` tương ứng.
+- Backend: Node.js, Express, MongoDB, Mongoose, bcrypt, jsonwebtoken, multer, cors, express-session.
+- Frontend: Angular, RxJS, Bootstrap, FontAwesome, ngx-cookie-service, ngx-spinner.
 
 ---
 
-## 🤝 Đóng góp
+## Lỗi thường gặp
 
-1. Fork repository, tạo branch mới (ví dụ: `feature/recent-activity`).
-2. Commit theo chuẩn: `feat: ...`, `fix: ...`, `docs: ...`.
-3. Mở Pull Request kèm mô tả, screenshot (nếu có).
-
----
-
-## 📄 License
-
-Dự án phục vụ mục đích học tập và demo nội bộ. Tùy chỉnh trước khi đưa vào sản phẩm thực tế.
+| Lỗi | Cách xử lý |
+| --- | --- |
+| Không kết nối MongoDB | Kiểm tra `MONGODB_URI`, `DB_NAME` và chắc chắn MongoDB đang chạy. |
+| CORS/401 trên frontend | Bắt đầu frontend bằng `ng serve` để dùng proxy `src/proxy.conf.json`. |
+| Git LFS báo “file should have been a pointer” | Chạy `git lfs install`, sau đó `git lfs pull`. |
+| Đăng nhập báo sai mật khẩu | Đảm bảo backend trỏ đúng DB `DACSAN3MIEN`, seed lại user nếu cần. |
 
 ---
 
-## 📬 Liên hệ
+## Kiểm tra và build
+
+- Frontend lint/test: `ng lint`, `ng test`.
+- Build production: `ng build --configuration production`.
+- Backend có thể chạy `node --check index.js` để kiểm tra syntax.
+
+---
+
+## Liên hệ
 
 - Email: support@dacsan3mien.vn
 - Hotline: 079 2098 518
 
-Chúc bạn trải nghiệm tốt cùng **Đặc Sản 3 Miền**! 🇻🇳🍜🍵
+Chúc bạn triển khai thành công dự án Đặc Sản 3 Miền.
