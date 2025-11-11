@@ -1,153 +1,64 @@
-# Đặc Sản 3 Miền – Ecommerce & Admin Platform
+Giới thiệu
+Chào mừng bạn đến với dự án website Đặc Sản 3 Miền được xây dựng bằng Angular Framework kết nối đến MongoDB. Dự án bao gồm một backend Node.js sử dụng MongoDB làm cơ sở dữ liệu và một frontend được xây dựng bằng Angular. Các file JSON được dùng để import dữ liệu cấu hình hệ thống.
 
-Website thương mại điện tử cho đặc sản ba miền, gồm **frontend Angular** và **backend Node.js/Express** kết nối MongoDB. Repo giúp bạn chạy thử nhanh toàn bộ hệ thống (cửa hàng, dashboard admin, quản lý nội dung).
+Thông tin đăng nhập
+*Tài khoản admin của website: admin@uel.edu.vn
+*Tài khoản user của website: user@uel.edu.vn                                                                     
+Các tài khoản khác có thể thay phần local-part, password giữ nguyên
+*Mật khẩu: 112233
 
----
+Cấu hình môi trường
+*Yêu cầu hệ thống
+- Node.js phiên bản 14.x trở lên
+- MongoDB cài đặt local hoặc sử dụng dịch vụ MongoDB Atlas
+- Angular CLI phiên bản 14.x trở lên
+- Git LFS dùng để quản lý file media dung lượng lớn: chạy git lfs install trước khi git clone.
 
-## Cấu trúc dự án
+*Cài đặt các gói phụ thuộc
+Trước tiên, cần cài đặt các gói phụ thuộc cho cả frontend và backend. Đảm bảo rằng máy tính của bạn đã cài Node.js và npm (Node Package Manager).
 
-```
-.
-├── backend/            # REST API (Express + MongoDB)
-│   ├── index.js        # Ứng dụng chính
-│   ├── import*.js      # Script import/seed dữ liệu
-├── frontend/           # Ứng dụng Angular
-│   ├── src/app/        # Component, service, guard ...
-│   ├── src/proxy.conf.json
-└── README.md
-```
+*Cài đặt gói cho backend (Node.js)
+Mở terminal hoặc command prompt và điều hướng đến thư mục backend của dự án.
+Chạy lệnh sau để cài đặt các package:
+	cd backend
+	npm install
 
----
+*Cài đặt gói cho frontend (Angular)
+Điều hướng đến thư mục frontend của dự án.
+Chạy lệnh sau:
+	cd frontend
+	npm install
 
-## Yêu cầu môi trường
+*Cấu hình MongoDB
+Trong file backend/.env, thiết lập chuỗi kết nối MongoDB phù hợp với môi trường của bạn. Ví dụ:
+MONGO_URI=mongodb://localhost:27017/DACSAN3MIEN
+JWT_SECRET=<tuy_chon>
+Nếu sử dụng MongoDB Atlas, thay localhost bằng URI của Atlas.
 
-- Node.js ≥ 18, npm ≥ 9
-- MongoDB local hoặc MongoDB Atlas
-- Angular CLI cài global: `npm install -g @angular/cli`
-- Git LFS (để lấy media lớn): `git lfs install`
+Cách chạy ứng dụng
+1. Chạy backend (Node.js)
+- Di chuyển đến thư mục backend và chạy lệnh:
+	node index.js
+- Server mặc định chạy tại địa chỉ: http://localhost:3000/
 
----
+2. Chạy frontend (Angular)
+- Di chuyển đến thư mục frontend và chạy lệnh:
+	ng serve
+- Ứng dụng hiển thị tại địa chỉ: http://localhost:4200/
 
-## Thiết lập nhanh
+*Import dữ liệu mẫu
+Dự án hỗ trợ import dữ liệu từ các file JSON mẫu trong thư mục GROUP 5_ DATA của drive nhóm. Đảm bảo rằng bạn đã có các file JSON cần thiết và import chúng vào MongoDB. Bạn có thể sử dụng các công cụ như mongoimport hoặc viết mã để tự động nhập dữ liệu từ file JSON vào cơ sở dữ liệu.
 
-### Clone dự án
+*Công nghệ sử dụng
+Backend: Node.js, Express, Mongoose, JWT, bcrypt, multer, dotenv, cors
+Frontend: Angular, RxJS, Bootstrap, FontAwesome, ngx-cookie-service, ngx-spinner
 
-```bash
-git clone https://github.com/<username>/dacsan3mien.git
-cd dacsan3mien
-```
+*Lỗi thường gặp
+Không kết nối được MongoDB: Kiểm tra MONGO_URI trong file .env, đảm bảo MongoDB đang chạy.
+Lỗi CORS: Dùng proxy.conf.json trong Angular hoặc bật middleware cors trong Express.
+Git clone báo “file should have been a pointer”: Cài đặt Git LFS bằng lệnh git lfs install trước khi clone repo.
+Thiếu phụ thuộc khi chạy ng serve: Vào thư mục frontend, chạy npm install để cài lại gói.
 
-### Backend
-
-```bash
-cd backend
-npm install
-```
-
-Tạo file `.env` (nếu chưa có):
-
-```
-PORT=3002
-MONGODB_URI=mongodb://127.0.0.1:27017
-DB_NAME=DACSAN3MIEN
-JWT_SECRET=your-secret
-SESSION_SECRET=your-session-secret
-```
-
-Khởi động server:
-
-```bash
-node index.js
-```
-
-Server chạy tại `http://localhost:3002`.
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-ng serve
-```
-
-Proxy mặc định `src/proxy.conf.json` chuyển tiếp `/user`, `/products`, `/orders`, `/feedback`, `/cart` sang backend `http://localhost:3002`. Ứng dụng chạy tại `http://localhost:4200`.
-
----
-
-## Cấu hình MongoDB
-
-- Dùng database `DACSAN3MIEN` (chữ hoa). Nếu muốn đổi tên, cập nhật lại `DB_NAME` và các script import.
-- Có thể import dữ liệu mẫu bằng `mongoimport` hoặc script trong `backend/`.
-  ```bash
-  mongoimport --db DACSAN3MIEN --collection User --file path/to/users.json --jsonArray
-  ```
-
----
-
-## Chạy ứng dụng
-
-1. Start MongoDB (local hoặc Atlas).
-2. Chạy backend: `node index.js` (hoặc `npm start` nếu muốn dùng nodemon).
-3. Ở cửa sổ khác, chạy frontend: `ng serve`.
-4. Mở `http://localhost:4200`.
-
----
-
-## Dữ liệu mẫu và script hỗ trợ
-
-| Script | Chức năng |
-| --- | --- |
-| `backend/importAllJSON_fixed.js` | Import toàn bộ JSON vào MongoDB |
-| `backend/seed_blogs.js` | Seed blog mẫu |
-| `backend/seed_contacts.js` | Seed liên hệ mẫu |
-| `backend/update_mongodb_products.js` | Chuẩn hóa trường `type` của sản phẩm |
-| `backend/checkMongo.js` | Kiểm tra kết nối và thống kê DB |
-
-Đọc kỹ cảnh báo trước khi chạy các script có thao tác xóa/ghi đè dữ liệu.
-
----
-
-## Tài khoản mặc định
-
-Nếu dùng dataset gốc:
-
-- Admin: `admin@uel.edu.vn` / `112233`
-- User: `user@uel.edu.vn` / `112233`
-- Các tài khoản khác có thể thay phần local-part, mật khẩu giữ nguyên.
-
-Truy cập trang đăng nhập tại `/login`. Đăng nhập admin để dùng dashboard `/admin`.
-
----
-
-## Các công nghệ chính
-
-- Backend: Node.js, Express, MongoDB, Mongoose, bcrypt, jsonwebtoken, multer, cors, express-session.
-- Frontend: Angular, RxJS, Bootstrap, FontAwesome, ngx-cookie-service, ngx-spinner.
-
----
-
-## Lỗi thường gặp
-
-| Lỗi | Cách xử lý |
-| --- | --- |
-| Không kết nối MongoDB | Kiểm tra `MONGODB_URI`, `DB_NAME` và chắc chắn MongoDB đang chạy. |
-| CORS/401 trên frontend | Bắt đầu frontend bằng `ng serve` để dùng proxy `src/proxy.conf.json`. |
-| Git LFS báo “file should have been a pointer” | Chạy `git lfs install`, sau đó `git lfs pull`. |
-| Đăng nhập báo sai mật khẩu | Đảm bảo backend trỏ đúng DB `DACSAN3MIEN`, seed lại user nếu cần. |
-
----
-
-## Kiểm tra và build
-
-- Frontend lint/test: `ng lint`, `ng test`.
-- Build production: `ng build --configuration production`.
-- Backend có thể chạy `node --check index.js` để kiểm tra syntax.
-
----
-
-## Liên hệ
-
-- Email: support@dacsan3mien.vn
-- Hotline: 079 2098 518
-
-Chúc bạn triển khai thành công dự án Đặc Sản 3 Miền.
+Liên hệ
+Hy vọng bạn sẽ thành công khi triển khai dự án này. Nếu có bất kỳ câu hỏi nào, vui lòng liên hệ qua hotline: 0792 098 510.
+Chúc bạn làm việc hiệu quả!
